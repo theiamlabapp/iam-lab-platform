@@ -8,8 +8,8 @@ interface BrandLogoProps {
 
 export function BrandLogo({
   priority = false,
-  surface = "plain",
-  className = "w-[118px] sm:w-[136px]",
+  surface = "card",
+  className = "w-[88px] sm:w-[104px]",
 }: BrandLogoProps) {
   const image = (
     <Image
@@ -19,13 +19,13 @@ export function BrandLogo({
       height={764}
       priority={priority}
       className={`h-auto select-none ${className}`}
-      sizes="(max-width: 640px) 128px, 148px"
+      sizes="(max-width: 640px) 96px, 112px"
     />
   );
 
   if (surface === "card") {
     return (
-      <span className="inline-flex items-center rounded-xl bg-[#fefefe] px-3.5 py-2.5 shadow-sm ring-1 ring-white/10">
+      <span className="inline-flex items-center rounded-xl bg-[#fefefe]/95 px-3 py-1.5 shadow-[0_8px_28px_rgba(0,0,0,0.35)] ring-1 ring-white/25 backdrop-blur-sm sm:px-3.5 sm:py-2">
         {image}
       </span>
     );

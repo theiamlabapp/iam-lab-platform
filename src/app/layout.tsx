@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 const SITE_URL = "https://theiamlab.com";
-const PAGE_TITLE = "The IAM Lab | Identity & Access Management Consulting";
+const PAGE_TITLE = "The IAM Lab | Coming Soon";
 const PAGE_DESCRIPTION =
-  "The IAM Lab helps organisations strengthen identity security through IAM consulting and solutions while empowering individuals through professional learning and career development.";
+  "The IAM Lab is preparing a new platform for Identity and Access Management consulting, identity security and professional learning.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -28,11 +28,7 @@ export const metadata: Metadata = {
     "Identity and Access Management",
     "IAM Consulting",
     "Identity Security",
-    "Access Governance",
-    "Identity Lifecycle Management",
     "IAM Academy",
-    "IAM Training",
-    "IAM Career Development",
     "The IAM Lab",
   ],
   alternates: {
@@ -58,9 +54,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0b1320",
+  themeColor: "#050a14",
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -73,7 +70,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-[#fefefe] text-[#111111]">
+      <body className="min-h-full bg-[#050a14] text-[#fefefe]">
         {children}
       </body>
     </html>

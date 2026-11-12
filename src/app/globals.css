@@ -1,14 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fefefe;
-  --foreground: #111111;
-  --surface-alabaster: #f8f6f1;
+  --background: #050a14;
+  --foreground: #fefefe;
+  --surface-midnight: #050a14;
   --surface-navy: #0b1320;
-  --surface-navy-elevated: #111c2f;
   --brand-gold: #b27936;
-  --brand-gold-text: #8c5c23;
   --brand-gold-light: #d6a15c;
+  --brand-blue-glow: #3b82f6;
 }
 
 @theme inline {
@@ -18,9 +17,46 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@keyframes iamAmbientDrift {
+  0%,
+  100% {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.06) translate3d(-0.8%, -0.5%, 0);
+  }
+}
+
+@keyframes iamHeadlineReveal {
+  from {
+    opacity: 0.9;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
+  }
+
+  .animate-ambient-bg {
+    animation: iamAmbientDrift 24s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  .animate-headline-reveal {
+    animation: iamHeadlineReveal 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ambient-bg,
+  .animate-headline-reveal {
+    animation: none;
   }
 }
 
@@ -33,20 +69,6 @@ body {
 }
 
 ::selection {
-  background-color: rgba(178, 121, 54, 0.2);
-  color: #111111;
-}
-
-.bg-architectural-grid {
-  background-image:
-    linear-gradient(to right, rgba(17, 17, 17, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(17, 17, 17, 0.045) 1px, transparent 1px);
-  background-size: 56px 56px;
-}
-
-.bg-architectural-grid-dark {
-  background-image:
-    linear-gradient(to right, rgba(254, 254, 254, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(254, 254, 254, 0.045) 1px, transparent 1px);
-  background-size: 56px 56px;
+  background-color: rgba(214, 161, 92, 0.28);
+  color: #fefefe;
 }
