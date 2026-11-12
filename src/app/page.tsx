@@ -46,9 +46,15 @@ export default function Home() {
             </p>
           </div>
 
-          <h1 className="animate-headline-reveal mt-5 bg-gradient-to-b from-white via-white to-slate-300 bg-clip-text text-[clamp(2.85rem,10.5vw,7.25rem)] font-semibold tracking-[-0.04em] leading-[0.94] text-transparent sm:mt-6">
-            COMING SOON.
-          </h1>
+          <div className="relative">
+            <div
+              className="animate-glow-aura pointer-events-none absolute -top-6 -left-8 h-36 w-72 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.22)_0%,rgba(214,161,92,0.14)_45%,transparent_75%)] blur-2xl sm:h-48 sm:w-[30rem]"
+              aria-hidden="true"
+            />
+            <h1 className="headline-glow animate-headline-glow relative mt-5 bg-clip-text text-[clamp(2.85rem,10.5vw,7.25rem)] font-semibold tracking-[-0.04em] leading-[0.94] text-transparent transition-[filter] duration-500 hover:drop-shadow-[0_0_38px_rgba(214,161,92,0.45)] sm:mt-6">
+              COMING SOON.
+            </h1>
+          </div>
 
           <p className="mt-5 max-w-2xl text-base font-normal tracking-[-0.01em] leading-relaxed text-slate-200/95 sm:mt-7 sm:text-xl lg:text-2xl">
             Secure identities. Simplify access. Strengthen your business.

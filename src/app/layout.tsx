@@ -14,10 +14,11 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-const SITE_URL = "https://theiamlab.com";
+const SITE_URL = "https://www.theiamlab.com";
 const PAGE_TITLE = "The IAM Lab | Coming Soon";
 const PAGE_DESCRIPTION =
   "The IAM Lab is preparing a new platform for Identity and Access Management consulting, identity security and professional learning.";
+const OG_IMAGE_URL = `${SITE_URL}/brand/og-image.jpg`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -41,11 +42,22 @@ export const metadata: Metadata = {
     siteName: "The IAM Lab",
     locale: "en_GB",
     type: "website",
+    images: [
+      {
+        url: OG_IMAGE_URL,
+        secureUrl: OG_IMAGE_URL,
+        width: 1200,
+        height: 630,
+        alt: "The IAM Lab — Identity & Access Management",
+        type: "image/jpeg",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
+    images: [OG_IMAGE_URL],
   },
   robots: {
     index: true,

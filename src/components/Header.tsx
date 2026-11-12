@@ -141,39 +141,39 @@ export function Header() {
         />
 
         <aside
-          className={`absolute top-0 right-0 flex h-full w-full max-w-md flex-col justify-between border-l border-white/12 bg-[#07101f]/95 p-6 text-slate-200 shadow-2xl backdrop-blur-2xl transition-transform duration-300 ease-out sm:p-9 ${
+          className={`absolute top-0 right-0 flex h-dvh max-h-dvh w-full max-w-md flex-col border-l border-white/12 bg-[#07101f]/95 text-slate-200 shadow-2xl backdrop-blur-2xl transition-transform duration-300 ease-out ${
             open ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          <div>
-            <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-6">
-              <BrandLogo surface="card" className="w-[84px]" />
+          <div className="flex shrink-0 items-center justify-between gap-4 border-b border-white/10 px-6 py-5 sm:px-9 sm:py-6">
+            <BrandLogo surface="card" className="w-[84px]" />
 
-              <button
-                ref={closeRef}
-                type="button"
-                onClick={() => setOpen(false)}
-                tabIndex={open ? 0 : -1}
-                aria-label="Close menu"
-                className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/15 bg-white/[0.05] text-white transition-colors hover:border-[#d6a15c]/55 hover:bg-white/[0.1] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d6a15c]"
+            <button
+              ref={closeRef}
+              type="button"
+              onClick={() => setOpen(false)}
+              tabIndex={open ? 0 : -1}
+              aria-label="Close menu"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/15 bg-white/[0.05] text-white transition-colors hover:border-[#d6a15c]/55 hover:bg-white/[0.1] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d6a15c]"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                className="h-5 w-5"
+                aria-hidden="true"
               >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  className="h-5 w-5"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M6 6l12 12M18 6 6 18"
-                    stroke="currentColor"
-                    strokeWidth="1.75"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </button>
-            </div>
+                <path
+                  d="M6 6l12 12M18 6 6 18"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          </div>
 
-            <div className="mt-8 space-y-6">
+          <div className="drawer-scroll flex min-h-0 flex-1 flex-col justify-between overflow-y-auto overscroll-contain px-6 py-6 sm:px-9 sm:py-8">
+            <div className="space-y-6">
               <div>
                 <p className="font-mono text-[11px] font-semibold tracking-[0.24em] text-[#d6a15c] uppercase">
                   About The IAM Lab
@@ -251,13 +251,13 @@ export function Header() {
                 </p>
               </div>
             </div>
-          </div>
 
-          <div className="flex items-center justify-between border-t border-white/10 pt-5 text-xs text-slate-400">
-            <span>theiamlab.com</span>
-            <span className="font-mono text-[11px] text-[#d6a15c]">
-              COMING SOON
-            </span>
+            <div className="mt-8 flex shrink-0 items-center justify-between border-t border-white/10 pt-5 text-xs text-slate-400">
+              <span>theiamlab.com</span>
+              <span className="font-mono text-[11px] text-[#d6a15c]">
+                COMING SOON
+              </span>
+            </div>
           </div>
         </aside>
       </div>
