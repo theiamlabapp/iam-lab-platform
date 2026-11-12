@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fefefe;
+  --foreground: #111111;
+  --surface-alabaster: #f8f6f1;
+  --surface-navy: #0b1320;
+  --surface-navy-elevated: #111c2f;
+  --brand-gold: #b27936;
+  --brand-gold-text: #8c5c23;
+  --brand-gold-light: #d6a15c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    sans-serif;
+  overflow-x: clip;
+}
+
+::selection {
+  background-color: rgba(178, 121, 54, 0.2);
+  color: #111111;
+}
+
+.bg-architectural-grid {
+  background-image:
+    linear-gradient(to right, rgba(17, 17, 17, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(17, 17, 17, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+.bg-architectural-grid-dark {
+  background-image:
+    linear-gradient(to right, rgba(254, 254, 254, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(254, 254, 254, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
