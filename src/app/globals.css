@@ -1,13 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050a14;
-  --foreground: #fefefe;
-  --surface-midnight: #050a14;
+  --background: #fefefe;
+  --foreground: #0b1320;
+  --surface-canvas: #fefefe;
+  --surface-subtle: #f8f9fa;
+  --surface-alabaster: #f8f6f1;
+  --surface-card: #ffffff;
   --surface-navy: #0b1320;
+  --surface-navy-elevated: #111c2f;
+  --surface-obsidian: #050a14;
   --brand-gold: #b27936;
+  --brand-gold-text: #8c5c23;
   --brand-gold-light: #d6a15c;
-  --brand-blue-glow: #3b82f6;
+  --brand-gold-subtle: rgba(178, 121, 54, 0.08);
+  --brand-blue: #3b82f6;
+  --border-light: rgba(11, 19, 32, 0.08);
+  --border-dark: rgba(255, 255, 255, 0.1);
 }
 
 @theme inline {
@@ -15,27 +24,6 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@keyframes iamAmbientDrift {
-  0%,
-  100% {
-    transform: scale(1.02) translate3d(0, 0, 0);
-  }
-  50% {
-    transform: scale(1.06) translate3d(-0.8%, -0.5%, 0);
-  }
-}
-
-@keyframes iamHeadlineReveal {
-  from {
-    opacity: 0.9;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 @keyframes iamHeadlineGlowSweep {
@@ -64,6 +52,17 @@
   }
 }
 
+@keyframes iamFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .headline-glow {
   background-image: linear-gradient(
     105deg,
@@ -81,31 +80,23 @@
     scroll-behavior: smooth;
   }
 
-  .animate-ambient-bg {
-    animation: iamAmbientDrift 24s ease-in-out infinite;
-    will-change: transform;
-  }
-
-  .animate-headline-reveal {
-    animation: iamHeadlineReveal 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-
   .animate-headline-glow {
-    animation:
-      iamHeadlineReveal 0.55s cubic-bezier(0.22, 1, 0.36, 1) both,
-      iamHeadlineGlowSweep 7.5s ease-in-out infinite;
+    animation: iamHeadlineGlowSweep 7.5s ease-in-out infinite;
   }
 
   .animate-glow-aura {
     animation: iamAuraPulse 7.5s ease-in-out infinite;
   }
+
+  .animate-fade-up {
+    animation: iamFadeInUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-ambient-bg,
-  .animate-headline-reveal,
   .animate-headline-glow,
-  .animate-glow-aura {
+  .animate-glow-aura,
+  .animate-fade-up {
     animation: none;
   }
 }
@@ -132,6 +123,20 @@
   background-color: rgba(214, 161, 92, 0.7);
 }
 
+.bg-architectural-grid {
+  background-image:
+    linear-gradient(to right, rgba(11, 19, 32, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(11, 19, 32, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.bg-architectural-grid-dark {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
@@ -141,6 +146,6 @@ body {
 }
 
 ::selection {
-  background-color: rgba(214, 161, 92, 0.28);
-  color: #fefefe;
+  background-color: rgba(178, 121, 54, 0.22);
+  color: #0b1320;
 }

@@ -6,13 +6,21 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed:admin": "node scripts/seed-admin.mjs"
   },
   "dependencies": {
+    "@payloadcms/db-postgres": "^3.93.0",
+    "@payloadcms/next": "^3.93.0",
+    "@payloadcms/richtext-lexical": "^3.93.0",
+    "graphql": "^16.15.0",
     "next": "16.4.6",
     "nodemailer": "^10.5.0",
+    "payload": "^3.93.0",
+    "pg": "^8.13.3",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "4.3.3",
