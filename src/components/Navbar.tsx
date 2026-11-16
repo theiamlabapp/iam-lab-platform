@@ -53,10 +53,10 @@ export function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-[#0b1320]/8 bg-[#fefefe]/95 backdrop-blur-md transition-colors">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#030712]/85 backdrop-blur-xl transition-colors">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:bg-[#0b1320] focus:px-4 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:bg-[#d6a15c] focus:px-4 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-[#050a14]"
         >
           Skip to main content
         </a>
@@ -65,9 +65,9 @@ export function Navbar() {
           <Link
             href="/"
             aria-label="The IAM Lab — Return to homepage"
-            className="inline-flex shrink-0 items-center rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#b27936]"
+            className="inline-flex shrink-0 items-center rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d6a15c]"
           >
-            <BrandLogo priority surface="plain" className="w-[108px] sm:w-[124px]" />
+            <BrandLogo priority surface="card" className="w-[84px] sm:w-[98px]" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -86,14 +86,14 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   aria-current={isActive ? "page" : undefined}
-                  className={`relative text-sm font-medium transition-colors hover:text-[#8c5c23] focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#b27936] ${
-                    isActive ? "font-semibold text-[#0b1320]" : "text-[#475569]"
+                  className={`relative text-sm font-medium transition-colors hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d6a15c] ${
+                    isActive ? "font-semibold text-white" : "text-slate-300"
                   }`}
                 >
                   {link.label}
                   {isActive && (
                     <span
-                      className="absolute -bottom-[19px] left-0 right-0 h-[2.5px] rounded-full bg-[#b27936]"
+                      className="absolute -bottom-[21px] left-0 right-0 h-[2px] rounded-full bg-[#d6a15c] shadow-[0_0_8px_rgba(214,161,92,0.6)]"
                       aria-hidden="true"
                     />
                   )}
@@ -105,15 +105,15 @@ export function Navbar() {
           {/* Action CTAs */}
           <div className="flex items-center gap-3">
             <Link
-              href="/contact"
-              className="hidden items-center justify-center rounded-lg bg-[#0b1320] px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#16243b] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b27936] sm:inline-flex sm:text-sm"
+              href="/contact?type=enterprise_consulting"
+              className="hidden items-center justify-center rounded-lg bg-[#d6a15c] px-4 py-2.5 text-xs font-semibold text-[#050a14] shadow-sm transition-all hover:bg-[#e4b26f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d6a15c] sm:inline-flex sm:text-sm"
             >
               Talk to an IAM Specialist
             </Link>
 
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center rounded-lg bg-[#0b1320] px-3.5 py-2 text-xs font-semibold text-white sm:hidden"
+              className="inline-flex items-center justify-center rounded-lg bg-[#d6a15c] px-3.5 py-2 text-xs font-semibold text-[#050a14] sm:hidden"
             >
               Contact
             </Link>
@@ -126,7 +126,7 @@ export function Navbar() {
               aria-label="Open navigation menu"
               aria-expanded={mobileOpen}
               aria-controls="mobile-nav-drawer"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[#0b1320]/12 bg-[#f8f6f1] text-[#0b1320] transition-colors hover:border-[#b27936]/40 hover:bg-[#f3eee4] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b27936] lg:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 bg-white/[0.06] text-white transition-colors hover:border-[#d6a15c]/55 hover:bg-white/[0.12] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d6a15c] lg:hidden"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -160,19 +160,19 @@ export function Navbar() {
         }`}
       >
         <div
-          className="absolute inset-0 bg-[#02050c]/70 backdrop-blur-sm"
+          className="absolute inset-0 bg-[#02050c]/75 backdrop-blur-sm"
           onClick={() => setMobileOpen(false)}
           aria-hidden="true"
         />
 
         <aside
-          className={`absolute top-0 right-0 flex h-dvh max-h-dvh w-full max-w-sm flex-col border-l border-[#1e293b] bg-[#07101f] text-slate-200 shadow-2xl transition-transform duration-300 ease-out ${
+          className={`absolute top-0 right-0 flex h-dvh max-h-dvh w-full max-w-sm flex-col border-l border-white/12 bg-[#07101f]/98 text-slate-200 shadow-2xl backdrop-blur-2xl transition-transform duration-300 ease-out ${
             mobileOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
           {/* Drawer Top */}
           <div className="flex shrink-0 items-center justify-between border-b border-white/10 px-6 py-4">
-            <BrandLogo surface="card" className="w-[84px]" />
+            <BrandLogo surface="card" className="w-[80px]" />
 
             <button
               ref={closeBtnRef}
@@ -198,7 +198,7 @@ export function Navbar() {
             </button>
           </div>
 
-          {/* Drawer Content */}
+          {/* Drawer Content with full scrollability */}
           <div className="drawer-scroll flex min-h-0 flex-1 flex-col justify-between overflow-y-auto px-6 py-6">
             <nav className="space-y-1.5" aria-label="Mobile Navigation Links">
               {NAV_LINKS.map((link) => {
@@ -229,9 +229,9 @@ export function Navbar() {
 
             <div className="mt-8 border-t border-white/10 pt-6">
               <Link
-                href="/contact"
+                href="/contact?type=enterprise_consulting"
                 tabIndex={mobileOpen ? 0 : -1}
-                className="inline-flex min-h-[46px] w-full items-center justify-center rounded-xl bg-[#d6a15c] px-4 py-3 text-sm font-semibold text-[#050a14] shadow-sm transition-all hover:bg-[#e2b372]"
+                className="inline-flex min-h-[46px] w-full items-center justify-center rounded-xl bg-[#d6a15c] px-4 py-3 text-sm font-semibold text-[#050a14] shadow-sm transition-all hover:bg-[#e4b26f]"
               >
                 Talk to an IAM Specialist
               </Link>

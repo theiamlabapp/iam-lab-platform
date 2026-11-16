@@ -48,6 +48,7 @@ export default buildConfig({
           ? { rejectUnauthorized: false }
           : undefined,
     },
+    push: true,
   }),
   sharp,
 });

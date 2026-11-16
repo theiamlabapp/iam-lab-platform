@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,22 +17,31 @@ const geistMono = Geist_Mono({
 });
 
 const SITE_URL = "https://www.theiamlab.com";
-const PAGE_TITLE = "The IAM Lab | Coming Soon";
+const PAGE_TITLE = "The IAM Lab — Enterprise Identity Security & Professional Learning";
 const PAGE_DESCRIPTION =
-  "The IAM Lab is preparing a new platform for Identity and Access Management consulting, identity security and professional learning.";
+  "The IAM Lab helps organisations secure digital identities and manage access with greater clarity, control and efficiency, while equipping professionals with practical IAM capability.";
 const OG_IMAGE_URL = `${SITE_URL}/brand/og-image.jpg`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: PAGE_TITLE,
+  title: {
+    default: PAGE_TITLE,
+    template: "%s | The IAM Lab",
+  },
   description: PAGE_DESCRIPTION,
   applicationName: "The IAM Lab",
   keywords: [
     "Identity and Access Management",
     "IAM Consulting",
-    "Identity Security",
+    "Identity Governance",
+    "IGA",
+    "PAM",
+    "Privileged Access Management",
+    "Microsoft Entra ID",
+    "Cloud IAM",
     "IAM Academy",
     "The IAM Lab",
+    "Chiemezie Uzoma",
   ],
   alternates: {
     canonical: "/",
@@ -66,13 +77,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#050a14",
+  themeColor: "#030712",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
 };
 
-export default function RootLayout({
+export default function FrontendRootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -80,10 +91,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
     >
-      <body className="min-h-full bg-[#050a14] text-[#fefefe]">
-        {children}
+      <body className="min-h-full flex flex-col bg-[#030712] text-slate-100 selection:bg-[#d6a15c]/30 selection:text-[#d6a15c]">
+        <Navbar />
+        <main id="main-content" className="flex-1">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );

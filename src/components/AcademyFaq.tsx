@@ -16,7 +16,7 @@ const FAQS: FaqItem[] = [
   {
     question: "Do I need prior cybersecurity experience to enroll?",
     answer:
-      "While foundational understanding of basic networking, operating systems, and client-server concepts is helpful, you do not need years of security experience. Our 'IAM Fundamentals' pathway starts with core principles before progressing to advanced IGA, PAM, and cloud identity engineering.",
+      "While foundational understanding of basic networking, operating systems, and client-server concepts is helpful, you do not need years of security experience. Our 'IAM Foundation' pathway starts with core principles before progressing to advanced IGA, PAM, and cloud identity engineering.",
   },
   {
     question: "What is the format and time commitment for cohorts?",
@@ -31,7 +31,7 @@ const FAQS: FaqItem[] = [
   {
     question: "Does The IAM Lab offer corporate training for enterprise IT teams?",
     answer:
-      "Yes. We design and deliver customized corporate workshops tailored to your organization's specific identity architecture, tooling stack (e.g. Entra ID, CyberArk, SailPoint), and internal standard operating procedures. Contact us through our consultation form to discuss team training.",
+      "Yes. We design and deliver customized corporate workshops tailored to your organization's specific identity architecture, tooling stack (e.g. Microsoft Entra ID, CyberArk, SailPoint), and internal standard operating procedures. Contact us through our consultation form to discuss team training.",
   },
 ];
 
@@ -49,18 +49,18 @@ export function AcademyFaq() {
         return (
           <div
             key={idx}
-            className="rounded-xl border border-slate-800 bg-slate-900/50 backdrop-blur-sm transition-colors hover:border-slate-700"
+            className="rounded-xl border border-white/10 bg-[#07101f]/70 backdrop-blur-sm transition-colors hover:border-[#d6a15c]/40"
           >
             <button
               type="button"
               onClick={() => toggle(idx)}
-              className="flex w-full items-center justify-between p-5 text-left focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-inset"
+              className="flex w-full items-center justify-between p-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d6a15c] focus-visible:ring-inset"
               aria-expanded={isOpen}
             >
               <span className="text-base font-semibold text-white sm:text-lg">
                 {faq.question}
               </span>
-              <span className="ml-4 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-800 text-sky-400">
+              <span className="ml-4 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#d6a15c]">
                 <svg
                   className={`h-4 w-4 transform transition-transform duration-200 ${
                     isOpen ? "rotate-180" : ""
@@ -79,7 +79,7 @@ export function AcademyFaq() {
               </span>
             </button>
             {isOpen && (
-              <div className="border-t border-slate-800/80 px-5 pb-5 pt-3">
+              <div className="border-t border-white/10 px-5 pb-5 pt-3">
                 <p className="text-sm leading-relaxed text-slate-300">
                   {faq.answer}
                 </p>
