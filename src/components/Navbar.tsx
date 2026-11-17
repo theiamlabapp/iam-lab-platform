@@ -53,27 +53,27 @@ export function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#030712]/85 backdrop-blur-xl transition-colors">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#030712]/90 backdrop-blur-xl transition-colors">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:bg-[#d6a15c] focus:px-4 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-[#050a14]"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-[#d6a15c] focus:px-4 focus:py-2.5 focus:text-xs focus:font-bold focus:uppercase focus:text-[#030712]"
         >
           Skip to main content
         </a>
 
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 py-3.5 sm:px-8 lg:px-10">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 py-4 sm:px-8 lg:px-12">
           <Link
             href="/"
-            aria-label="The IAM Lab — Return to homepage"
-            className="inline-flex shrink-0 items-center rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d6a15c]"
+            aria-label="The IAM Lab — Home"
+            className="inline-flex shrink-0 items-center focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d6a15c]"
           >
-            <BrandLogo priority surface="card" className="w-[84px] sm:w-[98px]" />
+            <BrandLogo priority surface="card" className="w-[84px] sm:w-[96px]" />
           </Link>
 
           {/* Desktop Navigation */}
           <nav
             aria-label="Main Navigation"
-            className="hidden items-center gap-7 lg:flex xl:gap-8"
+            className="hidden items-center gap-8 lg:flex xl:gap-9"
           >
             {NAV_LINKS.map((link) => {
               const isActive =
@@ -86,14 +86,14 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   aria-current={isActive ? "page" : undefined}
-                  className={`relative text-sm font-medium transition-colors hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d6a15c] ${
-                    isActive ? "font-semibold text-white" : "text-slate-300"
+                  className={`relative text-xs font-semibold tracking-wider uppercase transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d6a15c] ${
+                    isActive ? "text-[#d6a15c]" : "text-slate-300"
                   }`}
                 >
                   {link.label}
                   {isActive && (
                     <span
-                      className="absolute -bottom-[21px] left-0 right-0 h-[2px] rounded-full bg-[#d6a15c] shadow-[0_0_8px_rgba(214,161,92,0.6)]"
+                      className="absolute -bottom-[23px] left-0 right-0 h-[2px] bg-[#d6a15c]"
                       aria-hidden="true"
                     />
                   )}
@@ -106,14 +106,14 @@ export function Navbar() {
           <div className="flex items-center gap-3">
             <Link
               href="/contact?type=enterprise_consulting"
-              className="hidden items-center justify-center rounded-lg bg-[#d6a15c] px-4 py-2.5 text-xs font-semibold text-[#050a14] shadow-sm transition-all hover:bg-[#e4b26f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d6a15c] sm:inline-flex sm:text-sm"
+              className="hidden items-center justify-center border border-[#d6a15c] bg-[#d6a15c] px-5 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-[#030712] shadow-sm transition-all hover:bg-[#e4b26f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d6a15c] sm:inline-flex"
             >
               Talk to an IAM Specialist
             </Link>
 
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center rounded-lg bg-[#d6a15c] px-3.5 py-2 text-xs font-semibold text-[#050a14] sm:hidden"
+              className="inline-flex items-center justify-center border border-[#d6a15c] bg-[#d6a15c] px-3.5 py-2 font-mono text-xs font-bold uppercase text-[#030712] sm:hidden"
             >
               Contact
             </Link>
@@ -126,7 +126,7 @@ export function Navbar() {
               aria-label="Open navigation menu"
               aria-expanded={mobileOpen}
               aria-controls="mobile-nav-drawer"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 bg-white/[0.06] text-white transition-colors hover:border-[#d6a15c]/55 hover:bg-white/[0.12] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d6a15c] lg:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center border border-white/15 bg-white/[0.06] text-white transition-colors hover:border-[#d6a15c] hover:bg-white/[0.12] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d6a15c] lg:hidden"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -146,7 +146,7 @@ export function Navbar() {
         </div>
       </header>
 
-      {/* Mobile Navigation Drawer */}
+      {/* Mobile Navigation Drawer with Full Scrollability */}
       <div
         id="mobile-nav-drawer"
         role="dialog"
@@ -160,18 +160,18 @@ export function Navbar() {
         }`}
       >
         <div
-          className="absolute inset-0 bg-[#02050c]/75 backdrop-blur-sm"
+          className="absolute inset-0 bg-[#02050c]/80 backdrop-blur-sm"
           onClick={() => setMobileOpen(false)}
           aria-hidden="true"
         />
 
         <aside
-          className={`absolute top-0 right-0 flex h-dvh max-h-dvh w-full max-w-sm flex-col border-l border-white/12 bg-[#07101f]/98 text-slate-200 shadow-2xl backdrop-blur-2xl transition-transform duration-300 ease-out ${
+          className={`absolute top-0 right-0 flex h-dvh max-h-dvh w-full max-w-sm flex-col border-l border-white/12 bg-[#07101f] text-slate-200 shadow-2xl transition-transform duration-300 ease-out ${
             mobileOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
           {/* Drawer Top */}
-          <div className="flex shrink-0 items-center justify-between border-b border-white/10 px-6 py-4">
+          <div className="flex shrink-0 items-center justify-between border-b border-white/10 px-6 py-5">
             <BrandLogo surface="card" className="w-[80px]" />
 
             <button
@@ -180,7 +180,7 @@ export function Navbar() {
               onClick={() => setMobileOpen(false)}
               tabIndex={mobileOpen ? 0 : -1}
               aria-label="Close navigation menu"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 bg-white/[0.05] text-white transition-colors hover:border-[#d6a15c]/55 hover:bg-white/[0.1] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d6a15c]"
+              className="inline-flex h-10 w-10 items-center justify-center border border-white/15 bg-white/[0.05] text-white transition-colors hover:border-[#d6a15c] hover:bg-white/[0.1]"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -198,9 +198,9 @@ export function Navbar() {
             </button>
           </div>
 
-          {/* Drawer Content with full scrollability */}
-          <div className="drawer-scroll flex min-h-0 flex-1 flex-col justify-between overflow-y-auto px-6 py-6">
-            <nav className="space-y-1.5" aria-label="Mobile Navigation Links">
+          {/* Drawer Content with Full Vertical Scroll */}
+          <div className="flex min-h-0 flex-1 flex-col justify-between overflow-y-auto px-6 py-8">
+            <nav className="space-y-2" aria-label="Mobile Navigation Links">
               {NAV_LINKS.map((link) => {
                 const isActive =
                   link.href === "/"
@@ -212,10 +212,10 @@ export function Navbar() {
                     key={link.href}
                     href={link.href}
                     tabIndex={mobileOpen ? 0 : -1}
-                    className={`flex items-center justify-between rounded-lg px-3.5 py-3 text-base font-medium transition-colors ${
+                    className={`flex items-center justify-between border-b border-white/5 py-4 font-mono text-sm uppercase tracking-wider transition-colors ${
                       isActive
-                        ? "bg-[#111c2f] font-semibold text-[#d6a15c]"
-                        : "text-slate-300 hover:bg-white/[0.04] hover:text-white"
+                        ? "text-[#d6a15c] font-bold"
+                        : "text-slate-300 hover:text-white"
                     }`}
                   >
                     <span>{link.label}</span>
@@ -231,21 +231,21 @@ export function Navbar() {
               <Link
                 href="/contact?type=enterprise_consulting"
                 tabIndex={mobileOpen ? 0 : -1}
-                className="inline-flex min-h-[46px] w-full items-center justify-center rounded-xl bg-[#d6a15c] px-4 py-3 text-sm font-semibold text-[#050a14] shadow-sm transition-all hover:bg-[#e4b26f]"
+                className="inline-flex min-h-[48px] w-full items-center justify-center border border-[#d6a15c] bg-[#d6a15c] px-4 py-3 font-mono text-xs font-bold uppercase tracking-wider text-[#030712] shadow-sm transition-all hover:bg-[#e4b26f]"
               >
                 Talk to an IAM Specialist
               </Link>
 
               <div className="mt-6 space-y-2 text-xs text-slate-400">
-                <p className="font-semibold text-slate-300">Direct Inquiries:</p>
+                <p className="font-mono text-[11px] font-bold uppercase text-slate-300">Direct Inquiries:</p>
                 <a
                   href="mailto:info@theiamlab.com"
                   tabIndex={mobileOpen ? 0 : -1}
-                  className="inline-flex items-center gap-1.5 text-sm text-[#d6a15c] hover:underline"
+                  className="inline-flex items-center gap-1.5 font-mono text-xs text-[#d6a15c] hover:underline"
                 >
                   info@theiamlab.com
                 </a>
-                <p className="mt-3 text-[11px] leading-relaxed text-slate-500">
+                <p className="mt-3 font-mono text-[10px] leading-relaxed text-slate-500 uppercase">
                   &ldquo;Secure identities. Simplify access. Strengthen your
                   business.&rdquo;
                 </p>

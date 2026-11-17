@@ -83,35 +83,31 @@ export async function POST(req: Request) {
   const timestamp = new Date().toISOString();
 
   // 1. Persist to PostgreSQL if DATABASE_URI is available
-  if (process.env.DATABASE_URI) {
+  const rawDbUri = (process.env.DATABASE_URI || "").trim().replace(/^["']|["']$/g, "");
+  if (rawDbUri) {
     try {
       const client = new Client({
-        connectionString: process.env.DATABASE_URI,
+        connectionString: rawDbUri,
         ssl: { rejectUnauthorized: false },
       });
       await client.connect();
 
-      // Ensure enquiries table exists
-      await client.query(`
-        CREATE TABLE IF NOT EXISTS enquiries (
-          id SERIAL PRIMARY KEY,
-          enquiry_type VARCHAR(64) NOT NULL,
-          name VARCHAR(255) NOT NULL,
-          email VARCHAR(255) NOT NULL,
-          organisation VARCHAR(255),
-          phone VARCHAR(64),
-          service_or_pathway VARCHAR(128),
-          message TEXT NOT NULL,
-          status VARCHAR(32) DEFAULT 'new',
-          created_at TIMESTAMPTZ DEFAULT NOW()
-        );
-      `);
+      const validEnquiryTypes = [
+        "enterprise_consulting",
+        "corporate_training",
+        "individual_learning",
+        "partnership",
+        "general",
+      ];
+      const safeType = validEnquiryTypes.includes(cleanType)
+        ? cleanType
+        : "general";
 
       await client.query(
-        `INSERT INTO enquiries (enquiry_type, name, email, organisation, phone, service_or_pathway, message, status, created_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        `INSERT INTO enquiries (enquiry_type, name, email, organisation, phone, service_or_pathway, message, status, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $9)`,
         [
-          cleanType,
+          safeType,
           cleanName,
           cleanEmail,
           cleanOrg,

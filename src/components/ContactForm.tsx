@@ -134,9 +134,9 @@ export function ContactForm() {
       <div
         role="status"
         aria-live="polite"
-        className="rounded-2xl border border-emerald-500/30 bg-emerald-950/30 p-8 text-center text-slate-100 backdrop-blur-xl sm:p-10"
+        className="border border-[#d6a15c]/40 bg-[#07101f] p-8 sm:p-12 text-center text-slate-100"
       >
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center border border-[#d6a15c] bg-[#d6a15c]/10 text-[#d6a15c]">
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -153,17 +153,15 @@ export function ContactForm() {
           </svg>
         </div>
 
-        <h3 className="mt-5 text-2xl font-semibold text-white">
+        <h3 className="mt-6 text-2xl font-bold text-white">
           Enquiry Received
         </h3>
 
-        <p className="mx-auto mt-3 max-w-md text-base leading-relaxed text-slate-300">
-          Thank you for contacting The IAM Lab. Your enquiry has been received.
-          Our team will review your message and respond using the contact
-          details provided within 24 to 48 business hours.
+        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-slate-300">
+          Thank you for contacting The IAM Lab. Your enquiry has been logged directly into our system. Our team will review your message and respond within 24 to 48 business hours.
         </p>
 
-        <div className="mt-6 border-t border-white/10 pt-6">
+        <div className="mt-8 border-t border-white/10 pt-6">
           <button
             type="button"
             onClick={() => {
@@ -180,9 +178,9 @@ export function ContactForm() {
                 company_hp: "",
               });
             }}
-            className="inline-flex items-center text-sm font-semibold text-[#d6a15c] underline underline-offset-4 hover:text-[#ebd0a3]"
+            className="font-mono text-xs font-bold text-[#d6a15c] uppercase underline underline-offset-4 hover:text-white"
           >
-            Submit Another Enquiry
+            Submit Another Enquiry &rarr;
           </button>
         </div>
       </div>
@@ -193,13 +191,22 @@ export function ContactForm() {
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="space-y-6 rounded-2xl border border-white/10 bg-[#07101f]/90 p-6 shadow-2xl backdrop-blur-xl sm:p-8 lg:p-10"
+      className="space-y-6 border border-white/10 bg-[#07101f] p-8 sm:p-12 shadow-2xl"
     >
+      <div className="border-b border-white/10 pb-4">
+        <span className="font-mono text-xs font-bold tracking-widest text-[#d6a15c] uppercase">
+          Transmission Protocol // Form Intake
+        </span>
+        <h2 className="mt-1 text-xl font-bold text-white">
+          Direct Consultation Request
+        </h2>
+      </div>
+
       {/* Enquiry Type Selector */}
       <div>
         <label
           htmlFor="enquiryType"
-          className="block text-sm font-medium text-slate-200"
+          className="block font-mono text-xs font-semibold uppercase tracking-wider text-slate-300"
         >
           Enquiry Type <span className="text-[#d6a15c]">*</span>
         </label>
@@ -209,7 +216,7 @@ export function ContactForm() {
           onChange={(e) =>
             setFormData({ ...formData, enquiryType: e.target.value })
           }
-          className="mt-2 block w-full rounded-xl border border-white/15 bg-[#030712]/80 px-3.5 py-3 text-sm font-medium text-white transition-colors focus:border-[#d6a15c] focus:outline-none focus:ring-1 focus:ring-[#d6a15c]"
+          className="mt-2 block w-full rounded-none border border-white/15 bg-[#030712] px-4 py-3 text-sm font-medium text-white transition-colors focus:border-[#d6a15c] focus:outline-none"
         >
           {ENQUIRY_TYPES.map((t) => (
             <option key={t.value} value={t.value} className="bg-[#07101f] text-slate-100">
@@ -227,7 +234,7 @@ export function ContactForm() {
         <div>
           <label
             htmlFor="name"
-            className="block text-sm font-medium text-slate-200"
+            className="block font-mono text-xs font-semibold uppercase tracking-wider text-slate-300"
           >
             Full Name <span className="text-[#d6a15c]">*</span>
           </label>
@@ -241,7 +248,7 @@ export function ContactForm() {
               setFormData({ ...formData, name: e.target.value })
             }
             placeholder="e.g. Alex Morgan"
-            className="mt-2 block w-full rounded-xl border border-white/15 bg-[#030712]/80 px-3.5 py-3 text-sm text-white placeholder:text-slate-500 focus:border-[#d6a15c] focus:outline-none focus:ring-1 focus:ring-[#d6a15c]"
+            className="mt-2 block w-full rounded-none border border-white/15 bg-[#030712] px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-[#d6a15c] focus:outline-none"
           />
           {errors.name && (
             <p className="mt-1.5 text-xs text-rose-400">{errors.name}</p>
@@ -251,9 +258,9 @@ export function ContactForm() {
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-slate-200"
+            className="block font-mono text-xs font-semibold uppercase tracking-wider text-slate-300"
           >
-            Email Address <span className="text-[#d6a15c]">*</span>
+            Work Email Address <span className="text-[#d6a15c]">*</span>
           </label>
           <input
             id="email"
@@ -265,7 +272,7 @@ export function ContactForm() {
               setFormData({ ...formData, email: e.target.value })
             }
             placeholder="alex@organisation.com"
-            className="mt-2 block w-full rounded-xl border border-white/15 bg-[#030712]/80 px-3.5 py-3 text-sm text-white placeholder:text-slate-500 focus:border-[#d6a15c] focus:outline-none focus:ring-1 focus:ring-[#d6a15c]"
+            className="mt-2 block w-full rounded-none border border-white/15 bg-[#030712] px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-[#d6a15c] focus:outline-none"
           />
           {errors.email && (
             <p className="mt-1.5 text-xs text-rose-400">{errors.email}</p>
@@ -278,12 +285,10 @@ export function ContactForm() {
         <div>
           <label
             htmlFor="organisation"
-            className="block text-sm font-medium text-slate-200"
+            className="block font-mono text-xs font-semibold uppercase tracking-wider text-slate-300"
           >
             Organisation / Company{" "}
-            <span className="text-xs font-normal text-slate-400">
-              (Optional)
-            </span>
+            <span className="text-[10px] text-slate-500">(Optional)</span>
           </label>
           <input
             id="organisation"
@@ -294,19 +299,17 @@ export function ContactForm() {
               setFormData({ ...formData, organisation: e.target.value })
             }
             placeholder="Organisation Name"
-            className="mt-2 block w-full rounded-xl border border-white/15 bg-[#030712]/80 px-3.5 py-3 text-sm text-white placeholder:text-slate-500 focus:border-[#d6a15c] focus:outline-none focus:ring-1 focus:ring-[#d6a15c]"
+            className="mt-2 block w-full rounded-none border border-white/15 bg-[#030712] px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-[#d6a15c] focus:outline-none"
           />
         </div>
 
         <div>
           <label
             htmlFor="phone"
-            className="block text-sm font-medium text-slate-200"
+            className="block font-mono text-xs font-semibold uppercase tracking-wider text-slate-300"
           >
             Phone / WhatsApp{" "}
-            <span className="text-xs font-normal text-slate-400">
-              (Optional)
-            </span>
+            <span className="text-[10px] text-slate-500">(Optional)</span>
           </label>
           <input
             id="phone"
@@ -317,7 +320,7 @@ export function ContactForm() {
               setFormData({ ...formData, phone: e.target.value })
             }
             placeholder="+44 7... or +234..."
-            className="mt-2 block w-full rounded-xl border border-white/15 bg-[#030712]/80 px-3.5 py-3 text-sm text-white placeholder:text-slate-500 focus:border-[#d6a15c] focus:outline-none focus:ring-1 focus:ring-[#d6a15c]"
+            className="mt-2 block w-full rounded-none border border-white/15 bg-[#030712] px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-[#d6a15c] focus:outline-none"
           />
         </div>
       </div>
@@ -326,10 +329,10 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="serviceOrPathway"
-          className="block text-sm font-medium text-slate-200"
+          className="block font-mono text-xs font-semibold uppercase tracking-wider text-slate-300"
         >
           Specific Service or Learning Pathway{" "}
-          <span className="text-xs font-normal text-slate-400">(Optional)</span>
+          <span className="text-[10px] text-slate-500">(Optional)</span>
         </label>
         <select
           id="serviceOrPathway"
@@ -337,7 +340,7 @@ export function ContactForm() {
           onChange={(e) =>
             setFormData({ ...formData, serviceOrPathway: e.target.value })
           }
-          className="mt-2 block w-full rounded-xl border border-white/15 bg-[#030712]/80 px-3.5 py-3 text-sm text-white focus:border-[#d6a15c] focus:outline-none focus:ring-1 focus:ring-[#d6a15c]"
+          className="mt-2 block w-full rounded-none border border-white/15 bg-[#030712] px-4 py-3 text-sm text-white focus:border-[#d6a15c] focus:outline-none"
         >
           {SERVICE_PATHWAY_OPTIONS.map((opt, i) => (
             <option
@@ -356,9 +359,9 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="message"
-          className="block text-sm font-medium text-slate-200"
+          className="block font-mono text-xs font-semibold uppercase tracking-wider text-slate-300"
         >
-          Your Message <span className="text-[#d6a15c]">*</span>
+          Project Details / Requirements <span className="text-[#d6a15c]">*</span>
         </label>
         <textarea
           id="message"
@@ -368,15 +371,15 @@ export function ContactForm() {
           onChange={(e) =>
             setFormData({ ...formData, message: e.target.value })
           }
-          placeholder="Please describe your current IAM challenge, project objectives, or training requirements..."
-          className="mt-2 block w-full rounded-xl border border-white/15 bg-[#030712]/80 px-3.5 py-3 text-sm text-white placeholder:text-slate-500 focus:border-[#d6a15c] focus:outline-none focus:ring-1 focus:ring-[#d6a15c]"
+          placeholder="Please describe your current IAM challenge, architecture objectives, compliance deadlines, or training cohort requirements..."
+          className="mt-2 block w-full rounded-none border border-white/15 bg-[#030712] px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-[#d6a15c] focus:outline-none"
         />
         {errors.message && (
           <p className="mt-1.5 text-xs text-rose-400">{errors.message}</p>
         )}
       </div>
 
-      {/* Honeypot field (hidden from users) */}
+      {/* Honeypot field (hidden from humans) */}
       <input
         type="text"
         name="company_hp"
@@ -399,11 +402,11 @@ export function ContactForm() {
             onChange={(e) =>
               setFormData({ ...formData, privacyAccepted: e.target.checked })
             }
-            className="mt-1 h-4 w-4 rounded border-white/20 bg-[#030712] text-[#d6a15c] focus:ring-[#d6a15c]"
+            className="mt-1 h-4 w-4 rounded-none border-white/20 bg-[#030712] text-[#d6a15c] focus:ring-[#d6a15c]"
           />
           <span className="text-xs leading-relaxed text-slate-300">
             I acknowledge that The IAM Lab will process the details submitted
-            strictly to respond to this enquiry. Marketing opt-in remains
+            strictly to respond to this enquiry. Marketing communications remain
             independent and optional.
           </span>
         </label>
@@ -415,7 +418,7 @@ export function ContactForm() {
       {serverError && (
         <div
           role="alert"
-          className="rounded-xl border border-rose-500/30 bg-rose-950/40 p-3.5 text-xs text-rose-300"
+          className="border border-rose-500/30 bg-rose-950/40 p-4 text-xs text-rose-300"
         >
           {serverError}
         </div>
@@ -425,9 +428,9 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="inline-flex min-h-[48px] w-full items-center justify-center rounded-xl bg-[#d6a15c] px-7 py-3.5 text-sm font-semibold text-[#050a14] shadow-md transition-all hover:bg-[#e4b26f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d6a15c] disabled:cursor-wait disabled:opacity-70 sm:w-auto"
+        className="inline-flex min-h-[52px] w-full items-center justify-center border border-[#d6a15c] bg-[#d6a15c] px-8 py-3.5 font-mono text-xs font-bold uppercase tracking-wider text-[#030712] shadow-xl transition-all hover:bg-[#e4b26f] disabled:cursor-wait disabled:opacity-70 sm:w-auto"
       >
-        {isSubmitting ? "Sending Enquiry..." : "Submit Enquiry"}
+        {isSubmitting ? "Transmitting..." : "Submit Enquiry Request"}
       </button>
     </form>
   );

@@ -13,6 +13,14 @@ import { SiteSettings } from "./src/payload/globals/SiteSettings";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
+const rawDbUri = (process.env.DATABASE_URI || "").trim().replace(/^["']|["']$/g, "");
+const rawSecret = (
+  process.env.PAYLOAD_SECRET ||
+  "the-iam-lab-enterprise-production-payload-secret-key-32chars"
+)
+  .trim()
+  .replace(/^["']|["']$/g, "");
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -33,22 +41,20 @@ export default buildConfig({
   collections: [Users, Media, Enquiries, Pages],
   globals: [SiteSettings],
   editor: lexicalEditor(),
-  secret:
-    process.env.PAYLOAD_SECRET ||
-    "the-iam-lab-enterprise-production-payload-secret-key-32chars",
+  secret: rawSecret,
   typescript: {
     outputFile: path.resolve(dirname, "src/payload/payload-types.ts"),
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || "",
+      connectionString: rawDbUri,
       ssl:
-        process.env.DATABASE_URI?.includes("supabase") ||
+        rawDbUri.includes("supabase") ||
         process.env.NODE_ENV === "production"
           ? { rejectUnauthorized: false }
           : undefined,
     },
-    push: true,
+    push: false,
   }),
   sharp,
 });

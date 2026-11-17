@@ -1,160 +1,235 @@
+import Image from "next/image";
 import Link from "next/link";
 import { HomeHero } from "@/components/HomeHero";
-import { SectionHeader } from "@/components/SectionHeader";
 
-const CHALLENGE_POINTS = [
+const CHALLENGE_BREAKDOWN = [
   {
+    code: "SEC-01",
     num: "01",
-    tag: "Access Complexity",
-    title: "Identity Sprawl & Cloud Growth",
-    description:
-      "As organisations adopt multi-cloud architectures and fragmented SaaS applications, tracking who holds access to what systems becomes opaque and difficult to verify.",
+    title: "Identity Sprawl & Cloud Proliferation",
+    context: "SaaS & Multi-Cloud Complexity",
+    friction:
+      "As enterprises adopt hybrid cloud and distributed SaaS suites, access permissions fragment across uncoordinated directories. Security teams lose authoritative visibility into who possesses what access.",
+    resolution:
+      "Centralized identity orchestration, directory consolidation, and authoritative Single Source of Truth architecture.",
   },
   {
+    code: "SEC-02",
     num: "02",
-    tag: "Privilege Creep",
-    title: "Excessive & Stale Permissions",
-    description:
-      "Users accumulate unreviewed entitlements over time. Orphaned administrative accounts and stale service principals expand your attack surface and invite audit failures.",
+    title: "Privilege Creep & Orphan Tokens",
+    context: "Stale Entitlements & Shadow Admins",
+    friction:
+      "Employees change projects and accumulate lingering permissions over time. Unmonitored service principals and orphaned admin credentials expand the enterprise attack surface exponentially.",
+    resolution:
+      "Automated periodic recertification campaigns, toxic combination detection, and Just-in-Time (JIT) access elevation.",
   },
   {
+    code: "SEC-03",
     num: "03",
-    tag: "Audit Risk",
-    title: "Inconsistent Review & Approval Gaps",
-    description:
-      "Spreadsheet-driven access reviews and ad-hoc email sign-offs lack auditability, slowing down operations while leaving critical regulatory requirements unmet.",
+    title: "Inconsistent Review & Audit Debt",
+    context: "Compliance & Governance Friction",
+    friction:
+      "Manual spreadsheet audits and informal manager sign-offs fail regulatory standards under SOX, ISO 27001, and NIS2, exposing organisations to compliance penalties and operational delays.",
+    resolution:
+      "Immutable audit trails, automated compliance reporting, and verifiable segregation of duties (SoD) policies.",
   },
   {
+    code: "SEC-04",
     num: "04",
-    tag: "Lifecycle Friction",
     title: "Manual Joiner-Mover-Leaver Latency",
-    description:
-      "Slow user onboarding hinders productivity, while delayed or partial deprovisioning upon employee departure leaves sensitive corporate data dangerously exposed.",
+    context: "Lifecycle Bottlenecks",
+    friction:
+      "New hires wait days for essential application access, while departures fail to be cleanly deprovisioned across peripheral systems, leaving active entry points for departed contractors.",
+    resolution:
+      "HR-driven event-based provisioning via SCIM connectors, immediate automated termination, and zero-latency onboarding.",
   },
 ] as const;
 
-const SERVICE_HIGHLIGHTS = [
+const SERVICES_LEDGER = [
   {
     num: "01",
+    code: "ADV-01",
     title: "IAM Strategy, Assessment & Advisory",
+    tagline: "Risk Discovery • Maturity Scoring • Transformation Roadmap",
     description:
-      "Evaluate existing identity architecture, identify security gaps and privileged risks, and deliver an actionable, risk-prioritised roadmap aligned with your business goals.",
-    href: "/services",
+      "Comprehensive evaluation of your current identity footprint, privileged posture, and access policies. We deliver an executive risk report and a prioritized 12-to-24-month vendor-neutral architecture roadmap.",
+    deliverables: "Maturity Heatmap • Target State Architecture • Investment Prioritisation",
   },
   {
     num: "02",
+    code: "IGA-02",
     title: "Identity Governance & Access Management (IGA)",
+    tagline: "Access Reviews • Role Mining • Segregation of Duties",
     description:
-      "Establish structured access request workflows, automated periodic certification campaigns, role mining, and verifiable segregation-of-duties (SoD) policies.",
-    href: "/services",
+      "Enterprise governance platforms configured to eliminate entitlement bloat. Automated periodic certification campaigns, role mining for least-privilege enforcement, and audit-ready reporting.",
+    deliverables: "Campaign Automation • Role Engineering • Compliance Dashboards",
   },
   {
     num: "03",
+    code: "AUT-03",
     title: "Identity Lifecycle & Provisioning Automation",
+    tagline: "Joiner-Mover-Leaver • SCIM 2.0 • HR-to-Cloud Sync",
     description:
-      "Implement end-to-end Joiner, Mover and Leaver automation connected to HR systems and cloud directories, ensuring prompt access activation and immediate revocation.",
-    href: "/services",
+      "End-to-end automation connecting HR systems (Workday, SuccessFactors) directly to enterprise directories. Ensure immediate Day-1 productivity and instantaneous, verifiable revocation upon employee departure.",
+    deliverables: "JML Pipelines • SCIM Connectors • Directory Hygiene Automation",
   },
   {
     num: "04",
+    code: "SSO-04",
     title: "Authentication, SSO & Access Modernisation",
+    tagline: "SAML 2.0 • OIDC • FIDO2 Passwordless • Zero-Trust",
     description:
-      "Modernise legacy sign-ins with robust Single Sign-On (SAML/OIDC), risk-based Multi-Factor Authentication (MFA), passwordless access, and Zero-Trust Conditional Access.",
-    href: "/services",
+      "Modernize sign-in experiences and eliminate password vulnerabilities. We deploy phishing-resistant Multi-Factor Authentication (MFA), FIDO2 security keys, and adaptive Zero-Trust Conditional Access policies.",
+    deliverables: "SSO Federation • Adaptive Policies • Passwordless Deployment",
   },
   {
     num: "05",
+    code: "PAM-05",
     title: "Privileged Access Management (PAM)",
+    tagline: "Credential Vaulting • Session Isolation • JIT Elevation",
     description:
-      "Secure administrative credentials, implement session recording, vault critical keys, and establish Just-in-Time (JIT) least-privilege elevation for sensitive environments.",
-    href: "/services",
+      "Zero permanent administrative privileges. Secure vaulting of root credentials, automated password rotation, session isolation with keystroke recording, and emergency break-glass procedure validation.",
+    deliverables: "Vault Architecture • Privileged Session Proxying • JIT Access Rules",
   },
 ] as const;
 
-const DELIVERY_PHASES = [
+const DELIVERY_STEPS = [
   {
     step: "01",
-    title: "Discovery & Assessment",
-    description:
-      "We inspect your current identity footprint, directory structure, privileged accounts, and compliance obligations through focused technical interviews.",
+    name: "Discovery & Maturity Audit",
+    phase: "Investigation",
+    desc: "Rigorous technical inspection of your directories, privileged roles, SaaS apps, and compliance requirements through structured stakeholder sessions.",
   },
   {
     step: "02",
-    title: "Scope & Requirements",
-    description:
-      "Together we define clear technical scope, governance boundaries, integration dependencies, and measurable target outcomes.",
+    name: "Scope & Target Architecture",
+    phase: "Specification",
+    desc: "Formal definition of technical boundaries, integration dependencies, governance guardrails, and quantifiable security success metrics.",
   },
   {
     step: "03",
-    title: "Architecture & Proposal",
-    description:
-      "We deliver a formal solution design, statement of work, milestone schedule, and transparent commercial structure tailored to your enterprise.",
+    name: "Engineering & Pilot Staging",
+    phase: "Execution",
+    desc: "Hands-on platform deployment, connector development, policy tuning, and controlled pilot validation in dedicated staging environments.",
   },
   {
     step: "04",
-    title: "Delivery & Knowledge Transfer",
-    description:
-      "Hands-on implementation, validation testing, runbook documentation, and thorough upskilling of your internal engineering and operations team.",
+    name: "Production Rollout & Enablement",
+    phase: "Operationalisation",
+    desc: "Phased enterprise deployment, runbook delivery, operational hypercare, and comprehensive knowledge transfer to your internal engineering team.",
   },
 ] as const;
 
-const ACADEMY_PATHWAYS = [
-  { name: "IAM Foundation", audience: "Career switchers & IT beginners", focus: "Core identity, directories, AAA, protocol basics" },
-  { name: "IAM Analyst", audience: "IT support & early security roles", focus: "Access operations, troubleshooting, audit & GRC" },
-  { name: "IAM Engineer", audience: "Engineers & sysadmins", focus: "SSO, provisioning, SAML/OIDC, SCIM, lifecycle" },
-  { name: "Senior IAM Engineer", audience: "Experienced IAM engineers", focus: "Platform resilience, PAM engineering, CI/CD, automation" },
-  { name: "IAM Architect", audience: "Senior engineers & leads", focus: "Enterprise architecture, zero-trust design, multi-cloud" },
-  { name: "IAM Consultant & Lead", audience: "Practice leads & specialists", focus: "Advisory, stakeholder delivery, business alignment" },
+const ACADEMY_PATHWAYS_MATRIX = [
+  {
+    pathway: "IAM Foundation",
+    level: "Tier 1 // Entry",
+    audience: "Career switchers & IT beginners",
+    core: "Core identity concepts, AD / LDAP directories, AAA principles, SAML & OIDC fundamentals.",
+  },
+  {
+    pathway: "IAM Analyst",
+    level: "Tier 2 // Operational",
+    audience: "Helpdesk, IT support, early practitioners",
+    core: "Access request workflows, entitlement troubleshooting, recertification campaigns, GRC audit basics.",
+  },
+  {
+    pathway: "IAM Engineer",
+    level: "Tier 3 // Engineering",
+    audience: "Systems administrators & security engineers",
+    core: "SSO integration, SCIM provisioning pipelines, API automation, hybrid directory synchronization.",
+  },
+  {
+    pathway: "Senior IAM Engineer",
+    level: "Tier 4 // Advanced",
+    audience: "Experienced IAM & infrastructure engineers",
+    core: "Platform resilience, PAM vaulting & session isolation, CI/CD pipeline governance, emerging AI security.",
+  },
+  {
+    pathway: "IAM Architect",
+    level: "Tier 5 // Strategic",
+    audience: "Tech leads & aspiring security architects",
+    core: "Zero-Trust enterprise architecture, multi-cloud governance (AWS/Azure/GCP), compliance frameworks.",
+  },
+  {
+    pathway: "IAM Consultant & Lead",
+    level: "Tier 6 // Advisory",
+    audience: "Practice leaders & senior specialists",
+    core: "Client advisory methodology, C-suite risk translation, commercial scoping, steering governance.",
+  },
 ] as const;
 
 export default function HomePage() {
   return (
     <>
-      {/* 1. Cinematic Hero Section */}
+      {/* 1. Cinematic Hero with Photographic Layer */}
       <HomeHero />
 
-      {/* 2. The Enterprise Challenge */}
-      <section className="relative border-t border-white/10 bg-[#050a14] py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-            <div className="lg:col-span-5">
-              <SectionHeader
-                theme="dark"
-                eyebrow="The Identity Challenge"
-                title="Access management shouldn't be an operational bottleneck or security liability."
-                description="As organisations grow, managing the right access for the right people at the right time becomes exponentially harder. Fragmented tools, manual reviews, and accumulated permissions invite breach exposure and audit findings."
-              />
+      {/* 2. Asymmetric Technical Breakdown: The Enterprise Challenge */}
+      <section className="relative border-b border-white/10 bg-[#050a14] py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+          <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-20">
+            {/* Left Column: Context & Architectural Directive */}
+            <div className="lg:col-span-5 lg:sticky lg:top-28 lg:self-start">
+              <div className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.25em] text-[#d6a15c] uppercase">
+                <span className="h-px w-6 bg-[#d6a15c]" aria-hidden="true" />
+                <span>The Identity Problem Space</span>
+              </div>
 
-              <div className="mt-8 rounded-2xl border border-amber-500/20 bg-amber-500/[0.04] p-6 backdrop-blur-sm">
-                <p className="text-sm font-semibold tracking-wide text-amber-300 uppercase">
-                  Our Approach
+              <h2 className="mt-6 text-3xl font-extrabold tracking-[-0.025em] text-white sm:text-4xl lg:text-5xl lg:leading-[1.12]">
+                Access management is the primary attack surface of the modern cloud enterprise.
+              </h2>
+
+              <p className="mt-6 text-base leading-relaxed text-slate-300">
+                As organisations scale across multi-cloud environments and distributed workforces, managing who holds access to what systems becomes opaque. Fragmented approvals, orphaned credentials, and unmanaged privileges invite catastrophic breach exposure and crippling audit findings.
+              </p>
+
+              {/* Technical Telemetry Panel */}
+              <div className="mt-10 border-l-2 border-[#d6a15c] bg-[#07101f] p-6 shadow-xl">
+                <p className="font-mono text-[11px] font-bold tracking-[0.2em] text-[#d6a15c] uppercase">
+                  Enterprise Operational Standard
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-slate-300">
-                  We balance strict zero-trust identity controls with real-world business agility. A well-designed IAM architecture makes access automated, traceable, and frictionless for legitimate users.
+                  We replace spreadsheet-driven access management with continuous, policy-governed automation. Every entitlement is verified, every privileged session is audited, and every joiner or leaver state is instantaneous.
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:col-span-7">
-              {CHALLENGE_POINTS.map((item) => (
+            {/* Right Column: Architectural Ledger (No generic cards!) */}
+            <div className="lg:col-span-7 divide-y divide-white/10 border-t border-b border-white/10">
+              {CHALLENGE_BREAKDOWN.map((item) => (
                 <div
-                  key={item.num}
-                  className="group relative rounded-2xl border border-white/10 bg-[#07101f]/80 p-6 backdrop-blur-md transition-all hover:border-amber-400/30 hover:bg-[#07101f]"
+                  key={item.code}
+                  className="group py-8 sm:py-10 transition-colors hover:bg-white/[0.02]"
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-semibold tracking-wider text-amber-400 uppercase">
-                      {item.tag}
-                    </span>
-                    <span className="font-mono text-xs text-slate-500">
-                      {item.num}
-                    </span>
+                  <div className="flex items-center justify-between font-mono text-xs text-[#d6a15c]">
+                    <span className="font-semibold tracking-widest">{item.code} {"//"} {item.context}</span>
+                    <span className="text-slate-500 font-bold">{item.num}</span>
                   </div>
-                  <h3 className="mt-4 text-lg font-semibold text-white group-hover:text-amber-200">
+
+                  <h3 className="mt-3 text-xl font-bold text-white group-hover:text-[#ebd0a3] transition-colors sm:text-2xl">
                     {item.title}
                   </h3>
-                  <p className="mt-2.5 text-sm leading-relaxed text-slate-400">
-                    {item.description}
-                  </p>
+
+                  <div className="mt-4 grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
+                    <div>
+                      <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-rose-400/90">
+                        Operational Friction
+                      </p>
+                      <p className="mt-1 text-slate-400 leading-relaxed text-xs sm:text-sm">
+                        {item.friction}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-emerald-400/90">
+                        Target Architecture
+                      </p>
+                      <p className="mt-1 text-slate-300 leading-relaxed text-xs sm:text-sm">
+                        {item.resolution}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -162,83 +237,135 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. Solutions & Services Showcase */}
-      <section className="relative border-t border-white/10 bg-[#030712] py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-            <SectionHeader
-              theme="dark"
-              eyebrow="Solutions & Consulting"
-              title="Enterprise IAM Services built for depth, compliance and speed."
-              description="From governance roadmaps to complex PAM deployments, we provide hands-on technical execution across leading identity platforms."
-            />
+      {/* 3. Solutions Showcase with Background Image & Architectural Ledger */}
+      <section className="relative overflow-hidden border-b border-white/10 bg-[#030712] py-24 sm:py-32">
+        {/* Background Image Layer with Heavy Dark Gradient Overlay */}
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <Image
+            src="/brand/corporate-hero.jpg"
+            alt="Corporate Identity Architecture"
+            fill
+            className="object-cover object-center opacity-20 mix-blend-luminosity scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#030712] via-[#030712]/95 to-[#030712]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#030712] via-transparent to-[#030712]" />
+        </div>
+
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+          <div className="flex flex-col items-start justify-between gap-6 border-b border-white/10 pb-10 md:flex-row md:items-end">
+            <div>
+              <div className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.25em] text-[#d6a15c] uppercase">
+                <span className="h-px w-6 bg-[#d6a15c]" aria-hidden="true" />
+                <span>Enterprise Consulting Pillars</span>
+              </div>
+              <h2 className="mt-4 text-3xl font-extrabold tracking-[-0.03em] text-white sm:text-4xl lg:text-5xl">
+                Engineering depth across the full identity lifecycle.
+              </h2>
+            </div>
+
             <Link
               href="/services"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-slate-200 transition-all hover:border-amber-400/40 hover:text-white"
+              className="inline-flex items-center gap-2 border border-white/20 bg-white/[0.04] px-6 py-3 font-mono text-xs font-semibold tracking-wider text-slate-200 uppercase transition-all hover:border-[#d6a15c] hover:text-white"
             >
-              <span>View All 6 Solutions</span>
+              <span>Explore All 6 Solutions</span>
               <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
 
-          <div className="mt-12 space-y-4">
-            {SERVICE_HIGHLIGHTS.map((svc) => (
+          {/* Full-Width Capability Ledger (NOT cards) */}
+          <div className="mt-12 divide-y divide-white/10 border-b border-white/10">
+            {SERVICES_LEDGER.map((svc) => (
               <div
-                key={svc.num}
-                className="group flex flex-col justify-between gap-6 rounded-2xl border border-white/10 bg-[#07101f]/70 p-6 transition-all hover:border-amber-400/30 hover:bg-[#07101f] sm:p-8 md:flex-row md:items-center"
+                key={svc.code}
+                className="group py-8 sm:py-10 transition-colors hover:bg-white/[0.02]"
               >
-                <div className="flex items-start gap-5 sm:items-center sm:gap-6">
-                  <span className="font-mono text-2xl font-bold text-amber-400/70 sm:text-3xl">
-                    {svc.num}
-                  </span>
-                  <div>
-                    <h3 className="text-lg font-semibold text-white group-hover:text-amber-200 sm:text-xl">
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-center">
+                  {/* Left Column: Number & Code */}
+                  <div className="flex items-baseline gap-4 lg:col-span-2 font-mono">
+                    <span className="text-3xl font-bold text-[#d6a15c] sm:text-4xl">
+                      {svc.num}
+                    </span>
+                    <span className="text-xs text-slate-500 uppercase tracking-widest">
+                      {svc.code}
+                    </span>
+                  </div>
+
+                  {/* Center Column: Core Content */}
+                  <div className="lg:col-span-7">
+                    <h3 className="text-xl font-bold text-white group-hover:text-[#ebd0a3] transition-colors sm:text-2xl">
                       {svc.title}
                     </h3>
-                    <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-slate-400">
+                    <p className="mt-1 font-mono text-xs font-medium text-[#d6a15c]">
+                      {svc.tagline}
+                    </p>
+                    <p className="mt-3 text-sm leading-relaxed text-slate-300">
                       {svc.description}
                     </p>
                   </div>
+
+                  {/* Right Column: Deliverables & Action */}
+                  <div className="flex flex-col justify-between gap-4 border-t border-white/5 pt-4 lg:col-span-3 lg:border-t-0 lg:border-l lg:border-white/10 lg:pl-8 lg:pt-0">
+                    <div>
+                      <p className="font-mono text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                        Key Deliverables
+                      </p>
+                      <p className="mt-1 font-mono text-xs text-slate-300">
+                        {svc.deliverables}
+                      </p>
+                    </div>
+
+                    <Link
+                      href="/services"
+                      className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-[#d6a15c] uppercase transition-colors hover:text-white"
+                    >
+                      <span>Service Architecture</span>
+                      <span aria-hidden="true">&rarr;</span>
+                    </Link>
+                  </div>
                 </div>
-
-                <Link
-                  href={svc.href}
-                  className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold tracking-wider text-amber-300 uppercase transition-colors hover:text-amber-200"
-                >
-                  <span>Learn more</span>
-                  <span aria-hidden="true">&rarr;</span>
-                </Link>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 4. 4-Phase Delivery Framework */}
-      <section className="relative border-t border-white/10 bg-[#050a14] py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-          <SectionHeader
-            theme="dark"
-            align="center"
-            eyebrow="Engagement Methodology"
-            title="A structured, predictable delivery lifecycle"
-            description="Every enterprise consultation follows our tested four-phase engagement framework, ensuring accountability, technical rigor, and seamless knowledge transfer."
-          />
+      {/* 4. Delivery Methodology: Horizontal Process Ribbon */}
+      <section className="relative border-b border-white/10 bg-[#050a14] py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.25em] text-[#d6a15c] uppercase">
+              <span className="h-px w-6 bg-[#d6a15c]" aria-hidden="true" />
+              <span>Engagement Framework</span>
+            </div>
+            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+              Predictable, milestone-governed project delivery.
+            </h2>
+            <p className="mt-4 text-base leading-relaxed text-slate-300">
+              We eliminate enterprise project risk through our four-phase implementation discipline, ensuring transparent scoping, technical validation, and lasting internal team handover.
+            </p>
+          </div>
 
-          <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {DELIVERY_PHASES.map((phase) => (
+          <div className="mt-16 grid grid-cols-1 border-t border-white/10 sm:grid-cols-2 lg:grid-cols-4">
+            {DELIVERY_STEPS.map((s, idx) => (
               <div
-                key={phase.step}
-                className="relative rounded-2xl border border-white/10 bg-[#07101f]/70 p-6 backdrop-blur-sm"
+                key={s.step}
+                className={`relative py-8 sm:py-10 ${
+                  idx > 0 ? "lg:border-l lg:border-white/10 lg:pl-8" : ""
+                } ${idx % 2 === 1 ? "sm:border-l sm:border-white/10 sm:pl-8 lg:border-l-0 lg:pl-0" : ""} pr-6`}
               >
-                <span className="inline-block rounded-lg bg-amber-500/10 px-3 py-1 font-mono text-xs font-bold text-amber-400">
-                  Phase {phase.step}
-                </span>
-                <h3 className="mt-4 text-base font-semibold text-white">
-                  {phase.title}
+                <div className="flex items-center justify-between font-mono">
+                  <span className="text-2xl font-bold text-[#d6a15c]">
+                    {s.step}
+                  </span>
+                  <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+                    {s.phase}
+                  </span>
+                </div>
+                <h3 className="mt-4 text-lg font-bold text-white">
+                  {s.name}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-400">
-                  {phase.description}
+                <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                  {s.desc}
                 </p>
               </div>
             ))}
@@ -246,105 +373,138 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. IAM Academy & Selar Storefront Spotlight */}
-      <section className="relative overflow-hidden border-t border-white/10 bg-[#030712] py-20 sm:py-28">
-        <div
-          className="pointer-events-none absolute bottom-0 left-1/3 -z-10 h-[400px] w-[500px] rounded-full bg-amber-500/10 blur-[130px]"
-          aria-hidden="true"
-        />
+      {/* 5. IAM Academy & Selar Storefront Feature with Photographic Backdrop */}
+      <section className="relative overflow-hidden border-b border-white/10 bg-[#030712] py-24 sm:py-32">
+        {/* Photographic Background Layer */}
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <Image
+            src="/brand/academy-hero.jpg"
+            alt="IAM Academy Training Background"
+            fill
+            className="object-cover object-center opacity-25 mix-blend-luminosity scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#030712] via-[#030712]/95 to-[#030712]/80" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-[#030712]" />
+        </div>
 
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-            <div className="space-y-6 lg:col-span-5">
-              <SectionHeader
-                theme="dark"
-                eyebrow="The IAM Academy"
-                title="Learn IAM. Practise with purpose. Build capability."
-                description="We bridge the gap between academic cybersecurity theory and real enterprise identity engineering. Our curriculum covers the entire career trajectory from fundamentals to principal advisory."
-              />
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+          <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-20">
+            {/* Left Column: Educational Manifesto & Bookstore */}
+            <div className="space-y-8 lg:col-span-5">
+              <div>
+                <div className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.25em] text-[#d6a15c] uppercase">
+                  <span className="h-px w-6 bg-[#d6a15c]" aria-hidden="true" />
+                  <span>The IAM Academy</span>
+                </div>
+                <h2 className="mt-4 text-3xl font-extrabold tracking-[-0.03em] text-white sm:text-4xl lg:text-5xl">
+                  Learn IAM. <br />
+                  Practise with purpose. <br />
+                  Build capability.
+                </h2>
+                <p className="mt-6 text-base leading-relaxed text-slate-300">
+                  Most cybersecurity certifications focus on rote memorization. The IAM Academy focuses on production-ready engineering: configuring real cloud tenants, debugging SAML assertions, automating SCIM flows, and hardening privileged access.
+                </p>
+              </div>
 
-              <div className="rounded-2xl border border-amber-400/25 bg-amber-400/[0.04] p-6">
-                <p className="font-mono text-xs font-semibold tracking-wider text-amber-300 uppercase">
-                  Digital Bookstore &amp; Manuals
+              {/* Selar Bookstore Callout Box */}
+              <div className="border border-[#d6a15c]/40 bg-[#07101f]/90 p-8 shadow-2xl backdrop-blur-md">
+                <span className="font-mono text-xs font-bold tracking-widest text-[#d6a15c] uppercase">
+                  Official Publications &amp; Guides
+                </span>
+                <h3 className="mt-3 text-xl font-bold text-white">
+                  Authored IAM Books &amp; Study Resources
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-slate-300">
+                  Written by Chiemezie Uzoma. Explore practical reference guides, engineering runbooks, and certification preparation playbooks on our official Selar storefront.
                 </p>
-                <p className="mt-2 text-sm leading-relaxed text-slate-300">
-                  Access authored IAM study guides, implementation playbooks, and architectural reference manuals directly from our official Selar store.
-                </p>
-                <div className="mt-4">
+                <div className="mt-6">
                   <a
                     href="https://selar.com/m/chiemezie-uzoma1"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-xl bg-amber-400 px-4 py-2.5 text-xs font-semibold text-[#050a14] shadow-sm transition-all hover:bg-amber-300"
+                    className="inline-flex items-center gap-3 bg-[#d6a15c] px-6 py-3 font-mono text-xs font-bold tracking-wider text-[#030712] uppercase transition-all hover:bg-[#e4b26f]"
                   >
-                    <span>Visit Official Selar Store</span>
-                    <svg
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      className="h-3.5 w-3.5"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M4.25 5.5a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75v-4a.75.75 0 0 1 1.5 0v4A2.25 2.25 0 0 1 12.75 17h-8.5A2.25 2.25 0 0 1 2 14.75v-8.5A2.25 2.25 0 0 1 4.25 4h4a.75.75 0 0 1 0 1.5h-4Z"
-                        clipRule="evenodd"
-                      />
-                      <path
-                        fillRule="evenodd"
-                        d="M6.194 12.753a.75.75 0 0 0 1.06.053L16.5 4.44v2.81a.75.75 0 0 0 1.5 0v-4.5a.75.75 0 0 0-.75-.75h-4.5a.75.75 0 0 0 0 1.5h2.553l-9.156 8.194a.75.75 0 0 0-.053 1.06Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <span>Visit Store on Selar</span>
+                    <span aria-hidden="true">&rarr;</span>
                   </a>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-7">
-              {ACADEMY_PATHWAYS.map((path) => (
-                <div
-                  key={path.name}
-                  className="rounded-2xl border border-white/10 bg-[#07101f]/70 p-5 transition-all hover:border-amber-400/30"
-                >
-                  <p className="font-mono text-xs text-amber-400 uppercase">
-                    {path.audience}
-                  </p>
-                  <h4 className="mt-1 text-base font-semibold text-white">
-                    {path.name}
-                  </h4>
-                  <p className="mt-2 text-xs leading-relaxed text-slate-400">
-                    {path.focus}
+            {/* Right Column: Progressive Pathway Matrix (Tabular structure) */}
+            <div className="lg:col-span-7">
+              <div className="border border-white/10 bg-[#07101f]/80 backdrop-blur-md">
+                <div className="border-b border-white/10 px-6 py-4 bg-white/[0.02]">
+                  <p className="font-mono text-xs font-bold tracking-widest text-[#d6a15c] uppercase">
+                    Career Curriculum Matrix // 6 Progressive Tiers
                   </p>
                 </div>
-              ))}
+
+                <div className="divide-y divide-white/10">
+                  {ACADEMY_PATHWAYS_MATRIX.map((tier) => (
+                    <div key={tier.pathway} className="p-6 transition-colors hover:bg-white/[0.02]">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                        <h4 className="text-lg font-bold text-white">
+                          {tier.pathway}
+                        </h4>
+                        <span className="font-mono text-xs font-semibold text-[#d6a15c]">
+                          {tier.level}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs font-medium text-slate-400">
+                        Target Audience: {tier.audience}
+                      </p>
+                      <p className="mt-3 text-xs leading-relaxed text-slate-300 border-t border-white/5 pt-3">
+                        <strong className="text-white">Curriculum Focus:</strong> {tier.core}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="border-t border-white/10 p-6 bg-white/[0.02] flex items-center justify-between">
+                  <span className="font-mono text-xs text-slate-400">
+                    Live Cohorts &bull; 1-on-1 Mentorship &bull; Real Enterprise Labs
+                  </span>
+                  <Link
+                    href="/academy"
+                    className="font-mono text-xs font-bold text-[#d6a15c] uppercase hover:underline"
+                  >
+                    View Syllabus &rarr;
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 6. Dual-Audience Conversion Banner */}
-      <section className="relative border-t border-white/10 bg-gradient-to-b from-[#050a14] to-[#02050c] py-20 sm:py-28">
+      {/* 6. Executive Conversion Section */}
+      <section className="relative border-b border-white/10 bg-[#050a14] py-24 sm:py-32">
         <div className="mx-auto max-w-5xl px-5 text-center sm:px-8">
-          <span className="inline-block rounded-full border border-amber-400/25 bg-amber-400/10 px-4 py-1.5 text-xs font-semibold tracking-wider text-amber-300 uppercase">
-            Start Your Journey
-          </span>
-          <h2 className="mt-6 text-3xl font-extrabold text-white sm:text-5xl">
-            Ready to strengthen your enterprise identity posture?
+          <div className="flex items-center justify-center gap-3 font-mono text-xs font-semibold tracking-[0.25em] text-[#d6a15c] uppercase">
+            <span className="h-px w-8 bg-[#d6a15c]" aria-hidden="true" />
+            <span>Consultation &amp; Enquiries</span>
+            <span className="h-px w-8 bg-[#d6a15c]" aria-hidden="true" />
+          </div>
+
+          <h2 className="mt-6 text-3xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+            Strengthen your enterprise identity security today.
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base text-slate-300 sm:text-lg">
-            Whether your organisation requires an independent IAM maturity assessment or your team needs practitioner-grade technical training, we are ready to assist.
+
+          <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
+            Schedule an initial consultation with our senior identity specialists to assess your access posture, plan your migration, or enroll your technical team.
           </p>
 
-          <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               href="/contact?type=enterprise_consulting"
-              className="inline-flex min-h-[50px] w-full items-center justify-center rounded-xl bg-gradient-to-r from-[#d6a15c] to-[#e4b26f] px-8 py-3.5 text-sm font-semibold text-[#050a14] shadow-lg transition-all hover:brightness-110 sm:w-auto"
+              className="inline-flex min-h-[52px] w-full items-center justify-center border border-[#d6a15c] bg-[#d6a15c] px-8 py-3.5 text-sm font-semibold tracking-wide text-[#030712] shadow-xl transition-all hover:bg-[#e4b26f] sm:w-auto"
             >
               Talk to an IAM Specialist
             </Link>
             <Link
               href="/contact?type=individual_learning"
-              className="inline-flex min-h-[50px] w-full items-center justify-center rounded-xl border border-white/15 bg-white/[0.04] px-7 py-3.5 text-sm font-semibold text-slate-200 transition-all hover:border-amber-400/40 hover:text-white sm:w-auto"
+              className="inline-flex min-h-[52px] w-full items-center justify-center border border-white/20 bg-white/[0.04] px-8 py-3.5 text-sm font-semibold tracking-wide text-slate-200 transition-all hover:border-[#d6a15c] hover:text-white sm:w-auto"
             >
               Enquire About Academy Programs
             </Link>

@@ -25,7 +25,7 @@ export function BrandLogo({
 
   if (surface === "card") {
     return (
-      <span className="inline-flex items-center rounded-xl bg-[#fefefe]/95 px-3 py-1.5 shadow-[0_8px_28px_rgba(0,0,0,0.35)] ring-1 ring-white/25 backdrop-blur-sm sm:px-3.5 sm:py-2">
+      <span className="inline-flex items-center rounded bg-white px-3 py-1.5 shadow-md border border-white/20">
         {image}
       </span>
     );
