@@ -3,21 +3,59 @@ import React from "react";
 
 export function Logo() {
   return (
-    <div className="flex items-center gap-3 py-2">
-      <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-slate-700/80 bg-slate-900/90 p-1">
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "12px",
+        padding: "8px 0",
+      }}
+    >
+      <div
+        style={{
+          width: "40px",
+          height: "40px",
+          position: "relative",
+          borderRadius: "8px",
+          overflow: "hidden",
+          backgroundColor: "#ffffff",
+          padding: "4px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+        }}
+      >
         <Image
           src="/brand/the-iam-lab-logo.png"
           alt="The IAM Lab"
-          fill
-          className="object-contain p-0.5"
+          width={32}
+          height={32}
+          style={{ objectFit: "contain", width: "100%", height: "100%" }}
         />
       </div>
-      <div className="flex flex-col">
-        <span className="font-sans text-sm font-bold tracking-tight text-white">
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <span
+          style={{
+            fontFamily: "system-ui, sans-serif",
+            fontSize: "14px",
+            fontWeight: "700",
+            letterSpacing: "-0.01em",
+            color: "#ffffff",
+          }}
+        >
           THE IAM LAB
         </span>
-        <span className="text-[10px] font-medium tracking-wider text-slate-400 uppercase">
-          Administrative Console
+        <span
+          style={{
+            fontFamily: "monospace",
+            fontSize: "10px",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "#d6a15c",
+          }}
+        >
+          Enterprise Console
         </span>
       </div>
     </div>

@@ -3,12 +3,26 @@ import React from "react";
 
 export function Icon() {
   return (
-    <div className="relative h-6 w-6 shrink-0 overflow-hidden rounded bg-slate-900">
+    <div
+      style={{
+        width: "28px",
+        height: "28px",
+        position: "relative",
+        borderRadius: "6px",
+        overflow: "hidden",
+        backgroundColor: "#ffffff",
+        padding: "3px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Image
         src="/brand/the-iam-lab-logo.png"
         alt="The IAM Lab"
-        fill
-        className="object-contain"
+        width={22}
+        height={22}
+        style={{ objectFit: "contain", width: "100%", height: "100%" }}
       />
     </div>
   );
