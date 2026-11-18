@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { HomeHero } from "@/components/HomeHero";
 import { FadeIn, IdentityNetworkVisual } from "@/components/MotionWrappers";
+import { getPageData } from "@/lib/getPageData";
 
 const CHALLENGES = [
   {
@@ -116,11 +117,16 @@ const DELIVERY_STEPS = [
   },
 ] as const;
 
-export default function HomePage() {
+export default async function HomePage() {
+  const pageData = await getPageData("home");
+
   return (
     <>
       {/* 1. Cinematic Hero */}
-      <HomeHero />
+      <HomeHero
+        headline={pageData?.hero_headline}
+        subheadline={pageData?.hero_subheadline}
+      />
 
       {/* 2. Identity Security Challenges — Asymmetric Technical Ledger */}
       <section className="border-b border-white/10 bg-[#0B1424] py-24 sm:py-32">

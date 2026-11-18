@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { AcademyFaq } from "@/components/AcademyFaq";
+import { getPageData } from "@/lib/getPageData";
 
 export const metadata: Metadata = {
   title: "IAM Academy | Professional Identity Security Learning & Mentorship",
@@ -106,7 +107,9 @@ const FORMATS = [
   },
 ] as const;
 
-export default function AcademyPage() {
+export default async function AcademyPage() {
+  const pageData = await getPageData("academy");
+
   return (
     <>
       {/* 1. Photographic Academy Hero */}
@@ -133,11 +136,12 @@ export default function AcademyPage() {
             </div>
 
             <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              The IAM Academy.
+              {pageData?.hero_headline || "The IAM Academy."}
             </h1>
 
             <p className="mt-6 text-lg leading-relaxed text-slate-300">
-              Practical, practitioner-led Identity and Access Management education. From foundational principles to enterprise architecture and privileged access engineering.
+              {pageData?.hero_subheadline ||
+                "Practical, practitioner-led Identity and Access Management education. From foundational principles to enterprise architecture and privileged access engineering."}
             </p>
 
             <div className="mt-10 flex flex-wrap gap-4">

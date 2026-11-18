@@ -1,7 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export function HomeHero() {
+interface HomeHeroProps {
+  headline?: string;
+  subheadline?: string;
+}
+
+export function HomeHero({ headline, subheadline }: HomeHeroProps = {}) {
+  const displayHeadline = headline || "Secure identities. Simplify access. Strengthen your business.";
+  const displaySubheadline =
+    subheadline ||
+    "The IAM Lab provides independent Identity and Access Management advisory, architecture engineering, and capability development for high-assurance enterprises.";
+
   return (
     <section className="relative overflow-hidden border-b border-white/10 bg-[#0B1424] py-24 sm:py-32 lg:py-40">
       {/* Full-width realistic photographic background */}
@@ -29,13 +39,12 @@ export function HomeHero() {
 
           {/* Headline */}
           <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-            Secure identities. Simplify access. Strengthen your business.
+            {displayHeadline}
           </h1>
 
           {/* Concise supporting copy */}
           <p className="mt-6 text-lg leading-relaxed text-slate-300 sm:text-xl">
-            The IAM Lab provides independent Identity and Access Management advisory,
-            architecture engineering, and capability development for high-assurance enterprises.
+            {displaySubheadline}
           </p>
 
           {/* One clear primary CTA */}

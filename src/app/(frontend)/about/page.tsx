@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { getPageData } from "@/lib/getPageData";
 
 export const metadata: Metadata = {
   title: "About Us | Enterprise Identity Security & Practical Learning",
@@ -93,7 +94,9 @@ const INDUSTRIES = [
   },
 ] as const;
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const pageData = await getPageData("about");
+
   return (
     <>
       {/* 1. Large Photographic Introduction */}
@@ -120,11 +123,12 @@ export default function AboutPage() {
             </div>
 
             <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Engineering Trust Across the Modern Enterprise.
+              {pageData?.hero_headline || "Engineering Trust Across the Modern Enterprise."}
             </h1>
 
             <p className="mt-6 text-lg leading-relaxed text-slate-300">
-              The IAM Lab was established to address the critical shortage of specialist Identity and Access Management capability in modern enterprise security programmes.
+              {pageData?.hero_subheadline ||
+                "The IAM Lab was established to address the critical shortage of specialist Identity and Access Management capability in modern enterprise security programmes."}
             </p>
           </div>
         </div>

@@ -91,6 +91,15 @@ export const Enquiries: CollectionConfig = {
       },
       label: "Internal Team Notes",
     },
+    {
+      name: "replies",
+      type: "json",
+      defaultValue: [],
+      label: "Communication History",
+      admin: {
+        description: "Log of responses and outreach sent to this client enquiry.",
+      },
+    },
   ],
   timestamps: true,
 };

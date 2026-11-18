@@ -51,6 +51,36 @@ export const Pages: CollectionConfig = {
       type: "richText",
       label: "Page Content",
     },
+    {
+      name: "status",
+      type: "select",
+      defaultValue: "published",
+      options: [
+        { label: "Published (Live on Website)", value: "published" },
+        { label: "Draft (Internal Review)", value: "draft" },
+      ],
+      admin: {
+        position: "sidebar",
+      },
+      label: "Publishing Status",
+    },
+    {
+      name: "publishedAt",
+      type: "date",
+      admin: {
+        position: "sidebar",
+      },
+      label: "Publication Date",
+    },
+    {
+      name: "sections",
+      type: "json",
+      label: "Structured Page Sections",
+      admin: {
+        description:
+          "Section-by-section editable JSON configuration (Hero, Challenges, Services, Process, Pathways, CTA, Map).",
+      },
+    },
   ],
   timestamps: true,
 };

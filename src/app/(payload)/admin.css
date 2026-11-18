@@ -330,12 +330,261 @@ body:has(.iam-login-split) {
 }
 
 /* --------------------------------------------------------------------------
-   2. PAYLOAD CMS SIDEBAR STYLING
+   2. PAYLOAD CMS CORE TEMPLATE & SIDEBAR STYLING
    Midnight Navy: #0B1424, Royal Navy: #14243B, Restrained Gold: #D89A43
    -------------------------------------------------------------------------- */
+body:has(.template-default) {
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: #F8FAFC !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  color: #0B1424 !important;
+  overflow-x: hidden !important;
+}
+
+/* DESKTOP LAYOUT (>= 1025px): Eliminates floating hamburger and fixes sidebar overlap */
+@media (min-width: 1025px) {
+  /* Permanently hide Payload's floating hamburger toggler on desktop */
+  .template-default__nav-toggler-wrapper,
+  .template-default__nav-toggler-container,
+  .template-default__nav-toggler,
+  #nav-toggler,
+  .iam-nav-mobile-toggle {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    opacity: 0 !important;
+  }
+
+  /* Force template-default to a clean two-column flex container */
+  .template-default,
+  .template-default--nav-open,
+  .template-default--nav-hydrated,
+  .template-default--nav-animate {
+    display: flex !important;
+    flex-direction: row !important;
+    grid-template-columns: none !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    position: relative !important;
+    background-color: #F8FAFC !important;
+  }
+
+  /* Fixed 260px sidebar container */
+  .template-default > nav,
+  .template-default > .nav,
+  .template-default .nav,
+  .iam-sidebar {
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+    flex: 0 0 260px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #0B1424 !important;
+    position: sticky !important;
+    top: 0 !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
+    z-index: 50 !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+
+  /* Main content occupies remainder cleanly without overlap */
+  .template-default__wrap,
+  .template-default .template-default__wrap {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: calc(100vw - 260px) !important;
+    max-width: calc(100vw - 260px) !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    box-sizing: border-box !important;
+    background-color: #F8FAFC !important;
+    overflow-x: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+/* MOBILE & TABLET LAYOUT (<= 1024px) */
+@media (max-width: 1024px) {
+  .template-default__nav-toggler-wrapper,
+  .template-default__nav-toggler-container,
+  .template-default__nav-toggler,
+  #nav-toggler {
+    display: none !important;
+  }
+
+  .template-default {
+    display: block !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    position: relative !important;
+  }
+
+  .template-default__wrap,
+  .template-default .template-default__wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding-top: 56px !important;
+    box-sizing: border-box !important;
+  }
+
+  .iam-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 280px !important;
+    min-width: 280px !important;
+    max-width: 280px !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    z-index: 9999 !important;
+    box-shadow: 0 0 35px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .iam-sidebar.iam-sidebar-open {
+    transform: translateX(0) !important;
+  }
+
+  .iam-nav-mobile-toggle {
+    display: flex !important;
+    position: fixed !important;
+    top: 12px !important;
+    left: 12px !important;
+    z-index: 10000 !important;
+    background: #0B1424 !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 6px !important;
+    padding: 8px !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25) !important;
+    cursor: pointer !important;
+  }
+
+  .iam-nav-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    background-color: rgba(11, 20, 36, 0.6) !important;
+    z-index: 9998 !important;
+    backdrop-filter: blur(4px) !important;
+  }
+}
+
+/* App Header (Top utility bar) */
+.app-header {
+  background-color: #FFFFFF !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+  height: 56px !important;
+  min-height: 56px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  padding: 0 28px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+
+/* Collection List Views (Pages, Media, Enquiries, Users) */
+.collection-list {
+  padding: 24px 32px 48px 32px !important;
+  max-width: 1300px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.collection-list__header {
+  border-bottom: 1px solid #E2E8F0 !important;
+  padding-bottom: 18px !important;
+  margin-bottom: 24px !important;
+}
+
+.collection-list__header h1 {
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #0B1424 !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* Primary buttons in admin (Create New, Save, etc.) */
+.btn--style-primary,
+button.btn--style-primary,
+a.btn--style-primary {
+  background-color: #0B1424 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #14243B !important;
+  border-radius: 6px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  transition: all 0.15s ease !important;
+}
+
+.btn--style-primary:hover,
+button.btn--style-primary:hover,
+a.btn--style-primary:hover {
+  background-color: #14243B !important;
+  border-color: #D89A43 !important;
+  color: #FFFFFF !important;
+}
+
+/* Tables inside collection lists */
+.table,
+.table table {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  width: 100% !important;
+}
+
+.table th {
+  background-color: #F8FAFC !important;
+  color: #718096 !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+  padding: 12px 16px !important;
+}
+
+.table td {
+  border-bottom: 1px solid #F1F5F9 !important;
+  padding: 14px 16px !important;
+  font-size: 13px !important;
+  color: #1E293B !important;
+}
+
+.table tr:hover td {
+  background-color: #F8FAFC !important;
+}
+
+/* Edit Document View */
+.collection-edit,
+.global-edit {
+  padding: 24px 32px 64px 32px !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.collection-edit__header,
+.global-edit__header {
+  border-bottom: 1px solid #E2E8F0 !important;
+  padding-bottom: 16px !important;
+  margin-bottom: 24px !important;
+}
+
+/* Fallback default nav links if ever rendered */
 .nav,
-.nav__wrap,
-aside.app-header {
+.nav__wrap {
   background-color: #0B1424 !important;
   border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
@@ -1010,49 +1259,4 @@ aside.app-header {
 .iam-sidebar-logout-btn:hover {
   background-color: rgba(239, 68, 68, 0.16);
   border-color: rgba(239, 68, 68, 0.4);
-}
-
-.iam-nav-mobile-toggle {
-  display: none;
-  position: fixed;
-  top: 14px;
-  left: 14px;
-  z-index: 100;
-  background: #0B1424;
-  color: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 6px;
-  padding: 8px;
-  cursor: pointer;
-}
-
-@media (max-width: 1024px) {
-  .iam-nav-mobile-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .iam-sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    transform: translateX(-100%);
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 99;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-  }
-
-  .iam-sidebar-open {
-    transform: translateX(0);
-  }
-
-  .iam-nav-backdrop {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.6);
-    z-index: 98;
-    backdrop-filter: blur(2px);
-  }
 }

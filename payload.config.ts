@@ -41,11 +41,6 @@ export default buildConfig({
         dashboard: {
           Component: "/src/payload/views/DashboardView#DashboardView",
         },
-        login: {
-          Component: "/src/payload/views/LoginView#LoginView",
-          path: "/login",
-          exact: true,
-        },
       },
     },
   },
@@ -57,13 +52,7 @@ export default buildConfig({
     process.env.NEXT_PUBLIC_SERVER_URL ||
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://www.theiamlab.com"),
   cors: "*",
-  csrf: [
-    "https://www.theiamlab.com",
-    "https://theiamlab.com",
-    "https://iam-lab-platform.vercel.app",
-    process.env.NEXT_PUBLIC_SERVER_URL,
-    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined,
-  ].filter(Boolean) as string[],
+  csrf: [],
   typescript: {
     outputFile: path.resolve(dirname, "src/payload/payload-types.ts"),
   },

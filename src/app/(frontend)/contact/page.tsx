@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ContactForm } from "@/components/ContactForm";
+import { getPageData } from "@/lib/getPageData";
 
 export const metadata: Metadata = {
   title: "Contact & Consultation | Enterprise Advisory & Academy Admissions",
@@ -10,7 +11,9 @@ export const metadata: Metadata = {
     "Schedule an executive IAM consultation or apply for upcoming IAM Academy learning cohorts. Operating globally from London, United Kingdom.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const pageData = await getPageData("contact");
+
   return (
     <>
       {/* 1. Premium Photographic Introduction */}
@@ -37,11 +40,12 @@ export default function ContactPage() {
             </div>
 
             <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Connect with The IAM Lab.
+              {pageData?.hero_headline || "Connect with The IAM Lab."}
             </h1>
 
             <p className="mt-6 text-lg leading-relaxed text-slate-300">
-              Direct access to senior identity architects for corporate advisory reviews, vendor evaluations, or academy enrollment enquiries.
+              {pageData?.hero_subheadline ||
+                "Direct access to senior identity architects for corporate advisory reviews, vendor evaluations, or academy enrollment enquiries."}
             </p>
           </div>
         </div>
@@ -127,26 +131,42 @@ export default function ContactPage() {
                   <span className="text-slate-800">Mon &ndash; Fri &middot; 09:00 &ndash; 17:30 UTC</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="font-mono text-xs text-slate-500 w-24">Publications:</span>
-                  <a
-                    href="https://selar.com/m/chiemezie-uzoma1"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-semibold text-[#0B1424] hover:text-[#D89A43]"
-                  >
-                    Selar Bookstore &rarr;
-                  </a>
+                  <span className="font-mono text-xs text-slate-500 w-24">Address:</span>
+                  <span className="text-slate-800">128 City Road, London, EC1V 2NX, United Kingdom</span>
                 </div>
               </div>
 
-              {/* Confidentiality Commitment */}
-              <div className="border border-white/10 bg-[#0B1424] p-6 text-slate-300">
-                <span className="font-mono text-[11px] font-bold text-[#D89A43] uppercase">
-                  Confidentiality Commitment
-                </span>
-                <p className="mt-2 text-xs leading-relaxed text-slate-400">
-                  All communications, architecture scopes, and discovery materials are treated under strict professional non-disclosure. We never disclose client identities, tenancy details, or project scopes without prior written consent.
-                </p>
+              {/* Embedded Interactive Google Map */}
+              <div className="border border-slate-200 bg-[#FFFFFF] p-4 shadow-sm overflow-hidden">
+                <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-[#D89A43]" aria-hidden="true" />
+                    <span className="font-mono text-[11px] font-bold text-[#0B1424] uppercase tracking-wider">
+                      London Headquarters
+                    </span>
+                  </div>
+                  <a
+                    href="https://maps.google.com/?q=128+City+Road,+London,+EC1V+2NX,+United+Kingdom"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] font-semibold text-[#D89A43] hover:underline"
+                  >
+                    Open in Maps &rarr;
+                  </a>
+                </div>
+                <div className="relative w-full h-[220px] rounded overflow-hidden border border-slate-200 bg-slate-100">
+                  <iframe
+                    title="The IAM Lab London Headquarters"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.4093836881775!2d-0.09138762381987588!3d51.528574171817935!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48761ca78326e031%3A0xb35a3962b9a7852a!2s128%20City%20Rd%2C%20London%20EC1V%202NX!5e0!3m2!1sen!2suk!4v1700000000000!5m2!1sen!2suk"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen={false}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="w-full h-full"
+                  />
+                </div>
               </div>
             </div>
 

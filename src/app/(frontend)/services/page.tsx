@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { getPageData } from "@/lib/getPageData";
 
 export const metadata: Metadata = {
   title: "Services & Solutions | Enterprise IAM Consulting",
@@ -144,7 +145,9 @@ const WORKFLOW = [
   },
 ] as const;
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const pageData = await getPageData("services");
+
   return (
     <>
       {/* 1. Photographic Hero */}
@@ -171,11 +174,12 @@ export default function ServicesPage() {
             </div>
 
             <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Architectural Rigour. Zero-Trust Certainty.
+              {pageData?.hero_headline || "Architectural Rigour. Zero-Trust Certainty."}
             </h1>
 
             <p className="mt-6 text-lg leading-relaxed text-slate-300">
-              Six specialised consulting service pillars engineered to eliminate standing privileges, streamline identity lifecycles, and maintain continuous regulatory audit-readiness.
+              {pageData?.hero_subheadline ||
+                "Six specialised consulting service pillars engineered to eliminate standing privileges, streamline identity lifecycles, and maintain continuous regulatory audit-readiness."}
             </p>
           </div>
         </div>
