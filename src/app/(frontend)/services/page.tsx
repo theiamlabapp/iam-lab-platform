@@ -184,7 +184,7 @@ export default function ServicesPage() {
       {/* 2. Distinct Editorial Service Sections */}
       <section className="border-b border-slate-200 bg-[#F7F6F2] py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 space-y-20">
-          {SIX_SERVICES.map((s, idx) => (
+          {SIX_SERVICES.map((s) => (
             <div
               key={s.id}
               id={s.id}

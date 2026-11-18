@@ -36,6 +36,7 @@ export default buildConfig({
         Logo: "/src/payload/components/Logo#Logo",
         Icon: "/src/payload/components/Icon#Icon",
       },
+      Nav: "/src/payload/components/AdminNav#AdminNav",
       views: {
         dashboard: {
           Component: "/src/payload/views/DashboardView#DashboardView",
@@ -52,6 +53,17 @@ export default buildConfig({
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: rawSecret,
+  serverURL:
+    process.env.NEXT_PUBLIC_SERVER_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://www.theiamlab.com"),
+  cors: "*",
+  csrf: [
+    "https://www.theiamlab.com",
+    "https://theiamlab.com",
+    "https://iam-lab-platform.vercel.app",
+    process.env.NEXT_PUBLIC_SERVER_URL,
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined,
+  ].filter(Boolean) as string[],
   typescript: {
     outputFile: path.resolve(dirname, "src/payload/payload-types.ts"),
   },
@@ -64,6 +76,7 @@ export default buildConfig({
           ? { rejectUnauthorized: false }
           : undefined,
     },
+    transactionOptions: false,
     push: false,
   }),
   sharp,

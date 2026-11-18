@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { HomeHero } from "@/components/HomeHero";
+import { FadeIn, IdentityNetworkVisual } from "@/components/MotionWrappers";
 
 const CHALLENGES = [
   {
@@ -138,6 +139,11 @@ export default function HomePage() {
               Modern enterprises operate across hybrid cloud directories, hundreds of SaaS tools, and distributed workforces. Without unified governance, access risk escalates silently.
             </p>
           </div>
+
+          {/* Technical Identity Architecture Visualizer */}
+          <FadeIn className="mt-12 max-w-4xl">
+            <IdentityNetworkVisual />
+          </FadeIn>
 
           <div className="mt-16 divide-y divide-white/10 border-t border-b border-white/10">
             {CHALLENGES.map((item) => (

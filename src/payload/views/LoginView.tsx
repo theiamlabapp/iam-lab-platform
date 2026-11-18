@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { loginAdminAction } from "../actions/loginAction";
 
 export function LoginView() {
   const router = useRouter();
@@ -46,21 +47,14 @@ export function LoginView() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          email: cleanEmail,
-          password,
-        }),
+      // 1. Primary Authentication: Next.js Direct Server Action
+      // Sets the payload-token HTTP-only cookie natively in Vercel server response headers
+      const actionResult = await loginAdminAction({
+        email: cleanEmail,
+        password,
       });
 
-      const data = await res.json();
-
-      if (res.ok && data?.user) {
+      if (actionResult.success) {
         if (rememberMe) {
           try {
             localStorage.setItem("iam_lab_remembered_admin_email", cleanEmail);
@@ -83,19 +77,67 @@ export function LoginView() {
           } else {
             router.push(redirectParam);
           }
-        }, 500);
-      } else {
-        const errorText =
-          data?.errors?.[0]?.message ||
-          data?.message ||
-          "The email or password provided is incorrect. Please verify your credentials.";
-        setErrorMessage(errorText);
+        }, 400);
+        return;
+      }
+
+      // If Server Action reported credential mismatch or user lock
+      if (actionResult.error) {
+        setErrorMessage(actionResult.error);
+        setLoading(false);
+        return;
+      }
+    } catch (serverActionErr) {
+      console.warn("[LoginView] Server Action fallback triggered:", serverActionErr);
+      // 2. Secondary Fallback: REST endpoint
+      try {
+        const res = await fetch("/api/users/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            email: cleanEmail,
+            password,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data?.user) {
+          if (rememberMe) {
+            try {
+              localStorage.setItem("iam_lab_remembered_admin_email", cleanEmail);
+            } catch {
+              // ignore
+            }
+          }
+
+          setSuccessMessage("Authentication verified. Redirecting...");
+
+          setTimeout(() => {
+            if (typeof window !== "undefined") {
+              window.location.href = redirectParam;
+            } else {
+              router.push(redirectParam);
+            }
+          }, 400);
+          return;
+        } else {
+          const errorText =
+            data?.errors?.[0]?.message ||
+            data?.message ||
+            "The email or password provided is incorrect. Please verify your credentials.";
+          setErrorMessage(errorText);
+          setLoading(false);
+          return;
+        }
+      } catch (err) {
+        console.error("[LoginView] Request error:", err);
+        setErrorMessage("A network error occurred. Please check your connection and try again.");
         setLoading(false);
       }
-    } catch (err) {
-      console.error("[LoginView] Request error:", err);
-      setErrorMessage("A network error occurred. Please check your connection and try again.");
-      setLoading(false);
     }
   };
 

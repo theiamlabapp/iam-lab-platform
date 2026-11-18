@@ -761,3 +761,298 @@ aside.app-header {
 .iam-link-public:hover {
   text-decoration: underline;
 }
+
+
+/* --------------------------------------------------------------------------
+   4. BESPOKE MIDNIGHT NAVY SIDEBAR (.iam-sidebar)
+   Midnight Navy: #0B1424, Royal Navy: #14243B, Restrained Gold: #D99A3D
+   -------------------------------------------------------------------------- */
+.iam-sidebar {
+  width: 260px;
+  min-width: 260px;
+  background-color: #0B1424;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.iam-sidebar-brand {
+  padding: 24px 20px 20px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.iam-sidebar-brand-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+.iam-sidebar-logo-box {
+  width: 40px;
+  height: 40px;
+  background: #FFFFFF;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.iam-sidebar-logo {
+  object-fit: contain;
+  width: 30px;
+  height: 30px;
+}
+
+.iam-sidebar-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.iam-sidebar-brand-title {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+
+.iam-sidebar-brand-sub {
+  font-size: 11px;
+  color: #D99A3D;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.iam-sidebar-nav {
+  flex: 1;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overflow-y: auto;
+}
+
+.iam-nav-group-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #64748B;
+  padding: 0 10px;
+  margin-bottom: 6px;
+}
+
+.iam-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.iam-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #94A3B8;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.iam-nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #FFFFFF;
+}
+
+.iam-nav-link-active {
+  background-color: rgba(217, 154, 61, 0.14) !important;
+  color: #FFFFFF !important;
+  font-weight: 600;
+  border-left: 3px solid #D99A3D;
+}
+
+.iam-nav-link-active .iam-nav-icon {
+  color: #D99A3D;
+}
+
+.iam-nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8293A8;
+  flex-shrink: 0;
+  transition: color 0.15s ease;
+}
+
+.iam-nav-link:hover .iam-nav-icon {
+  color: #FFFFFF;
+}
+
+.iam-nav-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.iam-nav-active-pill {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #D99A3D;
+  box-shadow: 0 0 6px rgba(217, 154, 61, 0.6);
+}
+
+.iam-sidebar-footer {
+  padding: 16px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: #070D18;
+}
+
+.iam-sidebar-public-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #D99A3D;
+  text-decoration: none;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: background-color 0.15s;
+}
+
+.iam-sidebar-public-link:hover {
+  background-color: rgba(217, 154, 61, 0.1);
+  text-decoration: underline;
+}
+
+.iam-sidebar-user-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+}
+
+.iam-sidebar-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #14243B;
+  color: #D99A3D;
+  border: 1px solid rgba(217, 154, 61, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.iam-sidebar-user-meta {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.iam-sidebar-user-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.iam-sidebar-user-email {
+  font-size: 11px;
+  color: #718096;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.iam-sidebar-logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #EF4444;
+  background-color: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.iam-sidebar-logout-btn:hover {
+  background-color: rgba(239, 68, 68, 0.16);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.iam-nav-mobile-toggle {
+  display: none;
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 100;
+  background: #0B1424;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .iam-nav-mobile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .iam-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 99;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .iam-sidebar-open {
+    transform: translateX(0);
+  }
+
+  .iam-nav-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 98;
+    backdrop-filter: blur(2px);
+  }
+}
