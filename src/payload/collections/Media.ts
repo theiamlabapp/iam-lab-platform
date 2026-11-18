@@ -23,6 +23,13 @@ export const Media: CollectionConfig = {
   },
   admin: {
     group: "Content Management",
+    components: {
+      views: {
+        list: {
+          Component: "/src/payload/views/MediaLibraryView#MediaLibraryView",
+        },
+      },
+    },
   },
   access: {
     read: () => true, // Public read for uploaded brand assets & images

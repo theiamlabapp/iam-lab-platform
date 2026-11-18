@@ -18,19 +18,19 @@ export default async function ContactPage() {
     <>
       {/* 1. Premium Photographic Introduction */}
       <section className="relative overflow-hidden border-b border-white/10 bg-[#0B1424] py-24 sm:py-32 lg:py-36">
-        <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="pointer-events-none absolute inset-0 z-0">
           <Image
             src="/brand/team-collaboration.jpg"
             alt="The IAM Lab consultation and advisory team"
             fill
             priority
             sizes="100vw"
-            className="object-cover object-center opacity-30"
+            className="object-cover object-center opacity-40"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0B1424] via-[#0B1424]/90 to-[#14243B]/80" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0B1424]/90 via-[#0B1424]/80 to-[#14243B]/70" />
         </div>
 
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="max-w-3xl">
             <div className="flex items-center gap-3">
               <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
@@ -55,8 +55,8 @@ export default async function ContactPage() {
       <section className="border-b border-slate-200 bg-[#F7F6F2] py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-            {/* Left Column: Two Pathways & Company Details */}
-            <div className="space-y-10 lg:col-span-5">
+            {/* Left Column: Two Pathways & Direct Inbound Contact */}
+            <div className="space-y-8 lg:col-span-5">
               <div>
                 <span className="font-mono text-xs font-bold text-[#D89A43] uppercase">
                   TWO DEDICATED TRACKS
@@ -112,7 +112,7 @@ export default async function ContactPage() {
               </div>
 
               {/* Verified Company Information */}
-              <div className="border-t border-slate-200 pt-8 space-y-4 text-sm text-slate-700">
+              <div className="border-t border-slate-200 pt-6 space-y-3 text-sm text-slate-700">
                 <h4 className="font-mono text-xs font-bold text-[#0B1424] uppercase">
                   Direct Inbound Contact
                 </h4>
@@ -133,39 +133,6 @@ export default async function ContactPage() {
                 <div className="flex items-start gap-3">
                   <span className="font-mono text-xs text-slate-500 w-24">Address:</span>
                   <span className="text-slate-800">128 City Road, London, EC1V 2NX, United Kingdom</span>
-                </div>
-              </div>
-
-              {/* Embedded Interactive Google Map */}
-              <div className="border border-slate-200 bg-[#FFFFFF] p-4 shadow-sm overflow-hidden">
-                <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
-                  <div className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-[#D89A43]" aria-hidden="true" />
-                    <span className="font-mono text-[11px] font-bold text-[#0B1424] uppercase tracking-wider">
-                      London Headquarters
-                    </span>
-                  </div>
-                  <a
-                    href="https://maps.google.com/?q=128+City+Road,+London,+EC1V+2NX,+United+Kingdom"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[11px] font-semibold text-[#D89A43] hover:underline"
-                  >
-                    Open in Maps &rarr;
-                  </a>
-                </div>
-                <div className="relative w-full h-[220px] rounded overflow-hidden border border-slate-200 bg-slate-100">
-                  <iframe
-                    title="The IAM Lab London Headquarters"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.4093836881775!2d-0.09138762381987588!3d51.528574171817935!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48761ca78326e031%3A0xb35a3962b9a7852a!2s128%20City%20Rd%2C%20London%20EC1V%202NX!5e0!3m2!1sen!2suk!4v1700000000000!5m2!1sen!2suk"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen={false}
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    className="w-full h-full"
-                  />
                 </div>
               </div>
             </div>
@@ -196,6 +163,56 @@ export default async function ContactPage() {
                 </Suspense>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Dedicated Full-Width Headquarters Map Section (Below the Form, Before Footer) */}
+      <section className="border-b border-slate-200 bg-[#FFFFFF] py-20 sm:py-24">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 pb-8 border-b border-slate-200 mb-10">
+            <div>
+              <div className="flex items-center gap-3">
+                <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
+                <span className="font-mono text-xs font-semibold tracking-[0.25em] text-[#D89A43] uppercase">
+                  Global Advisory Base
+                </span>
+              </div>
+              <h2 className="mt-4 text-3xl font-bold tracking-tight text-[#0B1424]">
+                London Headquarters
+              </h2>
+              <p className="mt-2 text-base text-slate-600 max-w-2xl">
+                The IAM Lab operates from the United Kingdom, delivering high-assurance Identity and Access Management advisory, system engineering, and professional enablement to global enterprises.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:items-end gap-2 flex-shrink-0">
+              <span className="text-xs font-mono text-slate-500">128 City Road, London, EC1V 2NX</span>
+              <a
+                href="https://maps.google.com/?q=128+City+Road,+London,+EC1V+2NX,+United+Kingdom"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-[#0B1424] hover:bg-[#14243B] text-white px-5 py-2.5 rounded text-xs font-bold tracking-wider uppercase transition-colors"
+              >
+                <span>Get Directions in Google Maps</span>
+                <span>&rarr;</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Full-width responsive map presentation */}
+          <div className="relative w-full h-[400px] sm:h-[480px] rounded-lg overflow-hidden border border-slate-300 shadow-lg bg-slate-100">
+            <iframe
+              title="The IAM Lab London Headquarters"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.4093836881775!2d-0.09138762381987588!3d51.528574171817935!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48761ca78326e031%3A0xb35a3962b9a7852a!2s128%20City%20Rd%2C%20London%20EC1V%202NX!5e0!3m2!1sen!2suk!4v1700000000000!5m2!1sen!2suk"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen={false}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="w-full h-full"
+            />
           </div>
         </div>
       </section>

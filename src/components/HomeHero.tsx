@@ -14,20 +14,20 @@ export function HomeHero({ headline, subheadline }: HomeHeroProps = {}) {
 
   return (
     <section className="relative overflow-hidden border-b border-white/10 bg-[#0B1424] py-24 sm:py-32 lg:py-40">
-      {/* Full-width realistic photographic background */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
+      {/* Full-width realistic photographic background layer */}
+      <div className="pointer-events-none absolute inset-0 z-0">
         <Image
           src="/brand/hero-enterprise.jpg"
           alt="Enterprise cybersecurity and identity leadership in modern corporate boardroom"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center opacity-45"
+          className="object-cover object-center opacity-40"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1424] via-[#0B1424]/90 to-[#14243B]/80" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1424]/90 via-[#0B1424]/80 to-[#14243B]/70" />
       </div>
 
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+      <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
         <div className="max-w-3xl">
           {/* Restrained index line */}
           <div className="flex items-center gap-3">

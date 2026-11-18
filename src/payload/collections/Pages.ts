@@ -77,8 +77,10 @@ export const Pages: CollectionConfig = {
       type: "json",
       label: "Structured Page Sections",
       admin: {
-        description:
-          "Section-by-section editable JSON configuration (Hero, Challenges, Services, Process, Pathways, CTA, Map).",
+        description: "Visual section editor: headings, copy, images, and call-to-actions.",
+        components: {
+          Field: "/src/payload/components/SectionsVisualEditor#SectionsVisualEditor",
+        },
       },
     },
   ],

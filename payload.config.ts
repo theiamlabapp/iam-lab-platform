@@ -41,6 +41,12 @@ export default buildConfig({
         dashboard: {
           Component: "/src/payload/views/DashboardView#DashboardView",
         },
+        account: {
+          Component: "/src/payload/views/AccountView#AccountView",
+        },
+        login: {
+          Component: "/src/payload/views/LoginView#LoginView",
+        },
       },
     },
   },
@@ -64,6 +70,8 @@ export default buildConfig({
         process.env.NODE_ENV === "production"
           ? { rejectUnauthorized: false }
           : undefined,
+      connectionTimeoutMillis: 10000,
+      max: 10,
     },
     transactionOptions: false,
     push: false,

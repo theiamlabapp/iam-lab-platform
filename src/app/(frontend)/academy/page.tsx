@@ -114,19 +114,19 @@ export default async function AcademyPage() {
     <>
       {/* 1. Photographic Academy Hero */}
       <section className="relative overflow-hidden border-b border-white/10 bg-[#0B1424] py-24 sm:py-32 lg:py-36">
-        <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="pointer-events-none absolute inset-0 z-0">
           <Image
             src="/brand/academy-classroom.jpg"
             alt="The IAM Academy professional learning masterclass"
             fill
             priority
             sizes="100vw"
-            className="object-cover object-center opacity-30"
+            className="object-cover object-center opacity-40"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0B1424] via-[#0B1424]/90 to-[#14243B]/80" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0B1424]/90 via-[#0B1424]/80 to-[#14243B]/70" />
         </div>
 
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="max-w-3xl">
             <div className="flex items-center gap-3">
               <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />

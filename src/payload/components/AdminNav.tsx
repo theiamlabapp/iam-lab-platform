@@ -226,7 +226,12 @@ export function AdminNav(props: AdminNavProps) {
             <span>Live Website</span>
           </Link>
 
-          <div className="iam-sidebar-user-card">
+          <Link
+            href="/admin/account"
+            onClick={() => setMobileOpen(false)}
+            className="iam-sidebar-user-card"
+            title="Manage Administrator Profile"
+          >
             <div className="iam-sidebar-avatar">A</div>
             <div className="iam-sidebar-user-meta">
               <span className="iam-sidebar-user-name">
@@ -236,7 +241,7 @@ export function AdminNav(props: AdminNavProps) {
                 {props.user?.email || "info@theiamlab.com"}
               </span>
             </div>
-          </div>
+          </Link>
 
           <Link href="/admin/logout" className="iam-sidebar-logout-btn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

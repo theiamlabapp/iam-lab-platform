@@ -98,6 +98,9 @@ export const Enquiries: CollectionConfig = {
       label: "Communication History",
       admin: {
         description: "Log of responses and outreach sent to this client enquiry.",
+        components: {
+          Field: "/src/payload/components/EnquiryCommunicationWorkspace#EnquiryCommunicationWorkspace",
+        },
       },
     },
   ],
