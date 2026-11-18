@@ -21,6 +21,9 @@ export const Media: CollectionConfig = {
     adminThumbnail: "thumbnail",
     mimeTypes: ["image/*", "application/pdf"],
   },
+  admin: {
+    group: "Content Management",
+  },
   access: {
     read: () => true, // Public read for uploaded brand assets & images
     create: ({ req: { user } }) => Boolean(user),

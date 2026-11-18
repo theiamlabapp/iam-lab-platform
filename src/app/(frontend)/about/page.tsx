@@ -5,13 +5,12 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "About Us | Enterprise Identity Security & Practical Learning",
   description:
-    "Learn about The IAM Lab, our mission, core guiding principles, and executive leadership led by Co-Founders Chiemezie Uzoma and Jennifer Uzoma.",
+    "Learn about The IAM Lab, our founding mission, operating principles, and executive leadership led by Co-Founders Chiemezie Uzoma and Jennifer Uzoma.",
 };
 
 const PRINCIPLES = [
   {
     num: "01",
-    code: "VAL-PURPOSE",
     title: "Security with Purpose",
     rule: "Access controls must enable business agility, never create administrative inertia.",
     description:
@@ -19,7 +18,6 @@ const PRINCIPLES = [
   },
   {
     num: "02",
-    code: "VAL-PRACTICAL",
     title: "Practical Learning",
     rule: "Theory without enterprise tenant execution builds fragile, false confidence.",
     description:
@@ -27,7 +25,6 @@ const PRINCIPLES = [
   },
   {
     num: "03",
-    code: "VAL-INTEGRITY",
     title: "Integrity & Clarity",
     rule: "Transparent assessments, honest capability roadmaps, zero buzzword inflation.",
     description:
@@ -35,7 +32,6 @@ const PRINCIPLES = [
   },
   {
     num: "04",
-    code: "VAL-EVOLUTION",
     title: "Continuous Improvement",
     rule: "Identity threat vectors and cloud ecosystems evolve continuously; so must capability.",
     description:
@@ -47,7 +43,7 @@ const LEADERSHIP = [
   {
     name: "Chiemezie Uzoma",
     role: "Co-Founder & Chief Executive Officer",
-    remit: "Technical Strategy • Enterprise IAM • Academy Curriculum",
+    remit: "Technical Strategy • Enterprise IAM Architecture • Academy Curriculum",
     initials: "CU",
     bio: "Leads IAM consulting, technical strategy, identity security initiatives, and professional learning. His background spans enterprise identity administration, governance, privileged access, Microsoft Entra ID, Okta, SailPoint, CyberArk, and identity lifecycle automation.",
     competencies: [
@@ -74,7 +70,7 @@ const LEADERSHIP = [
   },
 ] as const;
 
-const SECTOR_MATRIX = [
+const INDUSTRIES = [
   {
     sector: "Financial Services & Banking",
     vulnerability: "Audit findings, privilege creep, manual recertification delays, SOX & PCI-DSS compliance exposure.",
@@ -100,149 +96,92 @@ const SECTOR_MATRIX = [
 export default function AboutPage() {
   return (
     <>
-      {/* 1. Cinematic Hero with Photographic Layer */}
-      <section className="relative overflow-hidden border-b border-white/10 bg-[#030712] py-24 sm:py-32 lg:py-40">
+      {/* 1. Large Photographic Introduction */}
+      <section className="relative overflow-hidden border-b border-white/10 bg-[#0B1424] py-24 sm:py-32 lg:py-36">
         <div className="pointer-events-none absolute inset-0 -z-10">
           <Image
-            src="/brand/corporate-hero.jpg"
-            alt="The IAM Lab Headquarters"
+            src="/brand/office-architecture.jpg"
+            alt="The IAM Lab corporate headquarters architecture"
             fill
             priority
-            className="object-cover object-center opacity-25 mix-blend-luminosity scale-105"
+            sizes="100vw"
+            className="object-cover object-center opacity-35"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#030712] via-[#030712]/92 to-[#030712]/75" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-[#030712]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0B1424] via-[#0B1424]/90 to-[#14243B]/80" />
         </div>
 
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-          <div className="max-w-4xl">
-            <div className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.28em] text-[#d6a15c] uppercase">
-              <span className="h-px w-8 bg-[#d6a15c]" aria-hidden="true" />
-              <span>Corporate Profile &bull; London &bull; Global Operations</span>
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3">
+              <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
+              <span className="font-mono text-xs font-semibold tracking-[0.25em] text-[#D89A43] uppercase">
+                Corporate Profile
+              </span>
             </div>
 
-            <h1 className="mt-8 text-4xl font-extrabold tracking-[-0.035em] text-white sm:text-6xl lg:text-7xl lg:leading-[1.08]">
-              Building identity resilience. <br />
-              <span className="bg-gradient-to-r from-[#ebd0a3] via-[#d6a15c] to-amber-200 bg-clip-text text-transparent">
-                Developing practitioner capability.
-              </span>
+            <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+              Engineering Trust Across the Modern Enterprise.
             </h1>
 
-            <p className="mt-8 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg sm:leading-relaxed">
-              The IAM Lab is an Identity and Access Management consulting, identity security, and professional learning brand headquartered in London, supporting international enterprise organisations and developing practitioners worldwide.
+            <p className="mt-6 text-lg leading-relaxed text-slate-300">
+              The IAM Lab was established to address the critical shortage of specialist Identity and Access Management capability in modern enterprise security programmes.
             </p>
           </div>
         </div>
       </section>
 
-      {/* 2. Panoramic Asymmetric Split: Mission & Vision */}
-      <section className="relative border-b border-white/10 bg-[#050a14] py-24 sm:py-32">
+      {/* 2. Mission & Vision — Asymmetric Editorial Split */}
+      <section className="border-b border-slate-200 bg-[#F7F6F2] py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-          <div className="grid grid-cols-1 border border-white/10 bg-[#07101f] lg:grid-cols-2">
-            {/* Mission */}
-            <div className="p-8 sm:p-12 lg:p-16 border-b border-white/10 lg:border-b-0 lg:border-r">
-              <span className="font-mono text-xs font-bold tracking-[0.2em] text-[#d6a15c] uppercase">
-                Mission Statement // 01
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+            <div className="lg:col-span-6">
+              <span className="font-mono text-xs font-bold tracking-widest text-[#D89A43] uppercase">
+                OUR MISSION
               </span>
-              <h2 className="mt-4 text-2xl font-bold text-white sm:text-3xl">
-                Practical, Workable Security Architecture
+              <h2 className="mt-4 text-3xl font-extrabold text-[#0B1424] sm:text-4xl">
+                Demystifying identity security to safeguard enterprise resilience.
               </h2>
-              <p className="mt-4 text-base leading-relaxed text-slate-300">
-                To help organisations secure digital identities and manage access with greater clarity, control, and efficiency &mdash; while equipping ambitious technology professionals with practical, industry-grade IAM capability.
+              <p className="mt-5 text-base leading-relaxed text-slate-700">
+                To simplify and strengthen identity security for businesses, demystify complex access controls, and build genuine practitioner capability through practical, real-world learning.
               </p>
-              <div className="mt-8 border-t border-white/10 pt-6 font-mono text-xs text-slate-400">
-                Strategic Focus: Zero-Trust Engineering • Enterprise Access Governance
-              </div>
+              <p className="mt-4 text-base leading-relaxed text-slate-700">
+                We believe that robust identity architecture should liberate employees to work smoothly while ensuring administrative privileges are auditable, ephemeral, and strictly controlled.
+              </p>
             </div>
 
-            {/* Vision */}
-            <div className="p-8 sm:p-12 lg:p-16">
-              <span className="font-mono text-xs font-bold tracking-[0.2em] text-[#d6a15c] uppercase">
-                Vision Statement // 02
+            <div className="lg:col-span-6">
+              <span className="font-mono text-xs font-bold tracking-widest text-[#D89A43] uppercase">
+                OUR VISION
               </span>
-              <h2 className="mt-4 text-2xl font-bold text-white sm:text-3xl">
-                The Trusted Standard in IAM Authority
+              <h2 className="mt-4 text-3xl font-extrabold text-[#0B1424] sm:text-4xl">
+                Setting the benchmark for high-assurance identity practices.
               </h2>
-              <p className="mt-4 text-base leading-relaxed text-slate-300">
-                To become the definitive international authority in enterprise identity architecture and career enablement, recognised for engineering excellence, zero-hype clarity, and transformative career impact.
+              <p className="mt-5 text-base leading-relaxed text-slate-700">
+                To become a trusted, go-to brand for Identity and Access Management consulting, identity security advisory, and professional IAM education globally.
               </p>
-              <div className="mt-8 border-t border-white/10 pt-6 font-mono text-xs text-slate-400">
-                Global Benchmark: Operational Integrity • Defensible Security Outcomes
-              </div>
+              <p className="mt-4 text-base leading-relaxed text-slate-700">
+                By uniting executive advisory with hands-on technical bootcamps, we are actively cultivating the next generation of enterprise cybersecurity leaders.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. Guiding Principles Specification Ledger */}
-      <section className="relative border-b border-white/10 bg-[#030712] py-24 sm:py-32">
+      {/* 3. Executive Leadership Profiles */}
+      <section className="border-b border-white/10 bg-[#0B1424] py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="max-w-3xl">
-            <div className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.25em] text-[#d6a15c] uppercase">
-              <span className="h-px w-6 bg-[#d6a15c]" aria-hidden="true" />
-              <span>Core Values</span>
+            <div className="flex items-center gap-3">
+              <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
+              <span className="font-mono text-xs font-semibold tracking-[0.25em] text-[#D89A43] uppercase">
+                Executive Leadership
+              </span>
             </div>
-            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-              The four principles that govern our work.
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              Experienced practitioners leading from the front.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-slate-300">
-              Whether architecting a complex governance platform or mentoring a new practitioner, these four standards guide every commitment we make.
-            </p>
-          </div>
-
-          <div className="mt-16 divide-y divide-white/10 border-t border-b border-white/10">
-            {PRINCIPLES.map((p) => (
-              <div key={p.code} className="py-8 sm:py-10 transition-colors hover:bg-white/[0.02]">
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-center">
-                  <div className="flex items-baseline gap-4 lg:col-span-2 font-mono">
-                    <span className="text-3xl font-bold text-[#d6a15c]">
-                      {p.num}
-                    </span>
-                    <span className="text-xs text-slate-500 uppercase tracking-widest">
-                      {p.code}
-                    </span>
-                  </div>
-
-                  <div className="lg:col-span-6">
-                    <h3 className="text-xl font-bold text-white sm:text-2xl">
-                      {p.title}
-                    </h3>
-                    <p className="mt-1 font-mono text-xs text-[#d6a15c]">
-                      {p.rule}
-                    </p>
-                    <p className="mt-3 text-sm leading-relaxed text-slate-300">
-                      {p.description}
-                    </p>
-                  </div>
-
-                  <div className="lg:col-span-4 border-t border-white/5 pt-4 lg:border-t-0 lg:border-l lg:border-white/10 lg:pl-8 lg:pt-0">
-                    <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-                      Operational Impact
-                    </p>
-                    <p className="mt-1 text-xs leading-relaxed text-slate-300">
-                      Every project deliverable and curriculum module is audited against this principle prior to publication.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 4. Leadership Dossier: Bespoke Typographic Executive Layout */}
-      <section className="relative border-b border-white/10 bg-[#050a14] py-24 sm:py-32">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.25em] text-[#d6a15c] uppercase">
-              <span className="h-px w-6 bg-[#d6a15c]" aria-hidden="true" />
-              <span>Executive Leadership</span>
-            </div>
-            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-              Experienced leadership rooted in enterprise practice.
-            </h2>
-            <p className="mt-4 text-base leading-relaxed text-slate-300">
-              Our executive leadership combines deep hands-on identity engineering experience with disciplined operations and educational design.
+              Our leadership brings hands-on enterprise tenant implementation, governance programme management, and global educational execution.
             </p>
           </div>
 
@@ -250,41 +189,41 @@ export default function AboutPage() {
             {LEADERSHIP.map((leader) => (
               <div
                 key={leader.name}
-                className="border border-white/10 bg-[#07101f] p-8 sm:p-12 shadow-2xl"
+                className="border border-white/10 bg-[#14243B]/60 p-8 sm:p-10"
               >
-                <div className="flex items-center justify-between border-b border-white/10 pb-6">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-16 w-16 items-center justify-center bg-[#0B1424] border border-[#D89A43]/40 text-lg font-bold text-[#D89A43]">
+                    {leader.initials}
+                  </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-white sm:text-3xl">
+                    <h3 className="text-xl font-bold text-white">
                       {leader.name}
                     </h3>
-                    <p className="font-mono text-xs font-semibold text-[#d6a15c] uppercase tracking-wider mt-1">
+                    <p className="text-xs font-semibold text-[#D89A43]">
                       {leader.role}
                     </p>
                   </div>
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center border border-[#d6a15c]/40 bg-[#d6a15c]/10 font-mono text-lg font-bold text-[#d6a15c]">
-                    {leader.initials}
-                  </div>
                 </div>
 
-                <p className="mt-6 font-mono text-xs text-slate-400">
-                  Focus: {leader.remit}
+                <p className="mt-4 font-mono text-xs text-slate-400">
+                  {leader.remit}
                 </p>
 
-                <p className="mt-4 text-sm leading-relaxed text-slate-300">
+                <p className="mt-5 text-sm leading-relaxed text-slate-300">
                   {leader.bio}
                 </p>
 
-                <div className="mt-8 border-t border-white/10 pt-6">
-                  <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-                    Key Competencies
-                  </p>
+                <div className="mt-6 border-t border-white/10 pt-6">
+                  <span className="font-mono text-xs font-semibold text-slate-400 uppercase">
+                    Core Technical Domains
+                  </span>
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {leader.competencies.map((comp) => (
+                    {leader.competencies.map((c) => (
                       <span
-                        key={comp}
-                        className="border border-white/10 bg-white/[0.03] px-3 py-1 font-mono text-[11px] text-slate-300"
+                        key={c}
+                        className="bg-[#0B1424] border border-white/10 px-3 py-1 text-xs text-slate-300"
                       >
-                        {comp}
+                        {c}
                       </span>
                     ))}
                   </div>
@@ -295,79 +234,106 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 5. Sector Matrix Table */}
-      <section className="relative border-b border-white/10 bg-[#030712] py-24 sm:py-32">
+      {/* 4. Guiding Principles */}
+      <section className="border-b border-slate-200 bg-[#FFFFFF] py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="max-w-3xl">
-            <div className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.25em] text-[#d6a15c] uppercase">
-              <span className="h-px w-6 bg-[#d6a15c]" aria-hidden="true" />
-              <span>Target Industries</span>
+            <div className="flex items-center gap-3">
+              <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
+              <span className="font-mono text-xs font-semibold tracking-[0.25em] text-[#0B1424] uppercase">
+                Core Philosophy
+              </span>
             </div>
-            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-              Proven solutions across regulated environments.
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-[#0B1424] sm:text-4xl">
+              Principles that govern our work.
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-slate-300">
-              We understand the distinct regulatory, operational, and architectural requirements that shape identity security across critical enterprise sectors.
-            </p>
           </div>
 
-          <div className="mt-16 border border-white/10 bg-[#07101f]">
-            <div className="divide-y divide-white/10">
-              {SECTOR_MATRIX.map((s) => (
-                <div key={s.sector} className="p-6 sm:p-8 transition-colors hover:bg-white/[0.02]">
-                  <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:items-center">
-                    <div className="lg:col-span-4">
-                      <h3 className="text-lg font-bold text-white">
-                        {s.sector}
-                      </h3>
-                    </div>
-                    <div className="lg:col-span-4">
-                      <p className="font-mono text-[11px] uppercase tracking-wider text-rose-400">
-                        Primary Risk Vectors
-                      </p>
-                      <p className="mt-1 text-xs leading-relaxed text-slate-300">
-                        {s.vulnerability}
-                      </p>
-                    </div>
-                    <div className="lg:col-span-4">
-                      <p className="font-mono text-[11px] uppercase tracking-wider text-emerald-400">
-                        Governance Controls
-                      </p>
-                      <p className="mt-1 text-xs leading-relaxed text-slate-300">
-                        {s.governance}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {PRINCIPLES.map((p) => (
+              <div
+                key={p.num}
+                className="border-t-2 border-[#D89A43] pt-6"
+              >
+                <span className="font-mono text-xs font-bold text-[#D89A43]">
+                  PRINCIPLE // {p.num}
+                </span>
+                <h3 className="mt-3 text-lg font-bold text-[#0B1424]">
+                  {p.title}
+                </h3>
+                <p className="mt-2 text-xs font-semibold text-slate-500">
+                  {p.rule}
+                </p>
+                <p className="mt-3 text-sm leading-relaxed text-slate-700">
+                  {p.description}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 6. Partner Callout Banner */}
-      <section className="relative border-b border-white/10 bg-[#050a14] py-24 sm:py-32">
-        <div className="mx-auto max-w-4xl px-5 text-center sm:px-8">
-          <div className="flex items-center justify-center gap-3 font-mono text-xs font-semibold tracking-[0.25em] text-[#d6a15c] uppercase">
-            <span className="h-px w-8 bg-[#d6a15c]" aria-hidden="true" />
-            <span>Collaboration</span>
-            <span className="h-px w-8 bg-[#d6a15c]" aria-hidden="true" />
+      {/* 5. Industries Served */}
+      <section className="border-b border-white/10 bg-[#0B1424] py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3">
+              <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
+              <span className="font-mono text-xs font-semibold tracking-[0.25em] text-[#D89A43] uppercase">
+                Enterprise Sectors
+              </span>
+            </div>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              Sectors where identity security is mission-critical.
+            </h2>
           </div>
 
-          <h2 className="mt-6 text-3xl font-extrabold text-white sm:text-5xl">
-            Partner with The IAM Lab
+          <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2">
+            {INDUSTRIES.map((ind) => (
+              <div
+                key={ind.sector}
+                className="border border-white/10 bg-[#14243B]/40 p-8"
+              >
+                <h3 className="text-xl font-bold text-white">
+                  {ind.sector}
+                </h3>
+                <div className="mt-4 border-t border-white/10 pt-4">
+                  <span className="font-mono text-xs text-rose-300 uppercase">
+                    Key Vulnerabilities:
+                  </span>
+                  <p className="mt-1 text-sm text-slate-300">
+                    {ind.vulnerability}
+                  </p>
+                </div>
+                <div className="mt-4 border-t border-white/10 pt-4">
+                  <span className="font-mono text-xs text-[#D89A43] uppercase">
+                    Governance Solution:
+                  </span>
+                  <p className="mt-1 text-sm text-slate-300">
+                    {ind.governance}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Closing Section */}
+      <section className="border-b border-white/10 bg-[#0B1424] py-20 text-center">
+        <div className="mx-auto max-w-3xl px-5">
+          <h2 className="text-3xl font-bold text-white">
+            Ready to strengthen your enterprise identity posture?
           </h2>
-
-          <p className="mx-auto mt-6 max-w-2xl text-base text-slate-300 sm:text-lg">
-            Let us discuss how our advisory, engineering, or enablement services can elevate your organization&apos;s identity security posture.
+          <p className="mt-4 text-slate-300">
+            Reach out to our advisory team to arrange a confidential review of your identity governance, privileged access, or directory architecture.
           </p>
-
-          <div className="mt-10">
+          <div className="mt-8">
             <Link
-              href="/contact?type=enterprise_consulting"
-              className="inline-flex min-h-[52px] items-center justify-center border border-[#d6a15c] bg-[#d6a15c] px-8 py-3.5 text-sm font-semibold tracking-wide text-[#030712] shadow-xl transition-all hover:bg-[#e4b26f]"
+              href="/contact"
+              className="inline-flex min-h-[48px] items-center justify-center bg-[#D89A43] px-8 py-3 text-sm font-bold tracking-wider text-[#0B1424] uppercase hover:bg-[#e4a856]"
             >
-              Start a Conversation &rarr;
+              Contact The IAM Lab &rarr;
             </Link>
           </div>
         </div>

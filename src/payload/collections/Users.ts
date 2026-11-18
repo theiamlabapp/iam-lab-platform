@@ -6,6 +6,7 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: "email",
     defaultColumns: ["name", "email", "role", "createdAt"],
+    group: "Administration",
   },
   access: {
     read: ({ req: { user } }) => Boolean(user),

@@ -1,21 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fefefe;
-  --foreground: #0b1320;
-  --surface-canvas: #fefefe;
-  --surface-subtle: #f8f9fa;
-  --surface-alabaster: #f8f6f1;
+  --background: #f7f6f2;
+  --foreground: #0b1424;
+  --color-midnight: #0b1424;
+  --color-royal: #14243b;
+  --color-warm-white: #f7f6f2;
+  --color-pure-white: #ffffff;
+  --color-muted-slate: #718096;
+  --color-restrained-gold: #d89a43;
+  --surface-canvas: #f7f6f2;
+  --surface-subtle: #ffffff;
+  --surface-alabaster: #f7f6f2;
   --surface-card: #ffffff;
-  --surface-navy: #0b1320;
-  --surface-navy-elevated: #111c2f;
-  --surface-obsidian: #050a14;
-  --brand-gold: #b27936;
-  --brand-gold-text: #8c5c23;
-  --brand-gold-light: #d6a15c;
-  --brand-gold-subtle: rgba(178, 121, 54, 0.08);
-  --brand-blue: #3b82f6;
-  --border-light: rgba(11, 19, 32, 0.08);
+  --surface-navy: #0b1424;
+  --surface-navy-elevated: #14243b;
+  --surface-obsidian: #0b1424;
+  --brand-gold: #d89a43;
+  --brand-gold-text: #b47828;
+  --brand-gold-light: #d89a43;
+  --brand-gold-subtle: rgba(216, 154, 67, 0.1);
+  --brand-blue: #2563eb;
+  --border-light: rgba(11, 20, 36, 0.1);
   --border-dark: rgba(255, 255, 255, 0.1);
 }
 

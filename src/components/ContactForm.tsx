@@ -16,10 +16,10 @@ const SERVICE_PATHWAY_OPTIONS = [
   { label: "--- Corporate Consulting Services ---", value: "", disabled: true },
   { value: "service_strategy", label: "IAM Strategy, Assessment & Advisory" },
   { value: "service_governance", label: "Identity Governance & Access Management (IGA)" },
-  { value: "service_lifecycle", label: "Identity Lifecycle & Provisioning Automation" },
-  { value: "service_auth_sso", label: "Authentication, SSO & Access Modernisation" },
   { value: "service_pam", label: "Privileged Access Management (PAM)" },
-  { value: "service_implementation", label: "IAM Implementation & Technical Support" },
+  { value: "service_auth_sso", label: "Access Management & SSO/MFA" },
+  { value: "service_cloud_iam", label: "Cloud IAM & Entitlement Governance" },
+  { value: "service_directory", label: "Directory Modernisation & Implementation" },
   { label: "--- IAM Academy Pathways ---", value: "", disabled: true },
   { value: "pathway_foundation", label: "IAM Foundation (Beginner)" },
   { value: "pathway_analyst", label: "IAM Analyst" },
@@ -36,7 +36,7 @@ export function ContactForm() {
   const typeParam = searchParams.get("type");
 
   const defaultCategory =
-    typeParam === "individual" || typeParam === "academy"
+    typeParam === "individual" || typeParam === "individual_learning" || typeParam === "academy"
       ? "individual_learning"
       : typeParam === "corporate_training"
         ? "corporate_training"
@@ -78,12 +78,12 @@ export function ContactForm() {
       errs.name = "Full name is required.";
     }
     if (!formData.email.trim()) {
-      errs.email = "Email address is required.";
+      errs.email = "Work email address is required.";
     } else if (!EMAIL_REGEX.test(formData.email.trim())) {
-      errs.email = "Please enter a valid email address.";
+      errs.email = "Please enter a valid work email address.";
     }
     if (!formData.message.trim()) {
-      errs.message = "Please include your message or enquiry details.";
+      errs.message = "Please include your message or project requirements.";
     } else if (formData.message.trim().length < 10) {
       errs.message = "Message must be at least 10 characters.";
     }
@@ -134,40 +134,32 @@ export function ContactForm() {
       <div
         role="status"
         aria-live="polite"
-        className="border border-[#d6a15c]/40 bg-[#07101f] p-8 sm:p-12 text-center text-slate-100"
+        className="border border-[#D89A43] bg-[#F7F6F2] p-8 sm:p-12 text-center text-[#0B1424]"
       >
-        <div className="mx-auto flex h-14 w-14 items-center justify-center border border-[#d6a15c] bg-[#d6a15c]/10 text-[#d6a15c]">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center bg-[#0B1424] text-[#D89A43]">
           <svg
-            viewBox="0 0 24 24"
-            fill="none"
             className="h-7 w-7"
-            aria-hidden="true"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
           >
-            <path
-              d="M5 13l4 4L19 7"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         </div>
-
-        <h3 className="mt-6 text-2xl font-bold text-white">
-          Enquiry Received
+        <h3 className="mt-4 text-2xl font-bold text-[#0B1424]">
+          Consultation Request Received
         </h3>
-
-        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-slate-300">
-          Thank you for contacting The IAM Lab. Your enquiry has been logged directly into our system. Our team will review your message and respond within 24 to 48 business hours.
+        <p className="mt-3 text-sm leading-relaxed text-slate-700 max-w-md mx-auto">
+          Thank you for reaching out. Your enquiry has been persisted securely and routed to our advisory team. We will review your requirements and respond within one business day.
         </p>
-
-        <div className="mt-8 border-t border-white/10 pt-6">
+        <div className="mt-6">
           <button
             type="button"
             onClick={() => {
               setSubmitted(false);
               setFormData({
-                enquiryType: "enterprise_consulting",
+                enquiryType: defaultCategory,
                 name: "",
                 email: "",
                 organisation: "",
@@ -178,9 +170,9 @@ export function ContactForm() {
                 company_hp: "",
               });
             }}
-            className="font-mono text-xs font-bold text-[#d6a15c] uppercase underline underline-offset-4 hover:text-white"
+            className="text-xs font-bold text-[#0B1424] underline hover:text-[#D89A43]"
           >
-            Submit Another Enquiry &rarr;
+            Submit another enquiry &rarr;
           </button>
         </div>
       </div>
@@ -188,27 +180,14 @@ export function ContactForm() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      noValidate
-      className="space-y-6 border border-white/10 bg-[#07101f] p-8 sm:p-12 shadow-2xl"
-    >
-      <div className="border-b border-white/10 pb-4">
-        <span className="font-mono text-xs font-bold tracking-widest text-[#d6a15c] uppercase">
-          Transmission Protocol // Form Intake
-        </span>
-        <h2 className="mt-1 text-xl font-bold text-white">
-          Direct Consultation Request
-        </h2>
-      </div>
-
+    <form onSubmit={handleSubmit} noValidate className="space-y-6">
       {/* Enquiry Type Selector */}
       <div>
         <label
           htmlFor="enquiryType"
-          className="block font-mono text-xs font-semibold uppercase tracking-wider text-slate-300"
+          className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#14243B]"
         >
-          Enquiry Type <span className="text-[#d6a15c]">*</span>
+          Enquiry Track <span className="text-rose-600">*</span>
         </label>
         <select
           id="enquiryType"
@@ -216,16 +195,16 @@ export function ContactForm() {
           onChange={(e) =>
             setFormData({ ...formData, enquiryType: e.target.value })
           }
-          className="mt-2 block w-full rounded-none border border-white/15 bg-[#030712] px-4 py-3 text-sm font-medium text-white transition-colors focus:border-[#d6a15c] focus:outline-none"
+          className="mt-2 block w-full border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-3 text-sm font-medium text-[#0B1424] transition-colors focus:border-[#D89A43] focus:bg-white focus:outline-none"
         >
           {ENQUIRY_TYPES.map((t) => (
-            <option key={t.value} value={t.value} className="bg-[#07101f] text-slate-100">
+            <option key={t.value} value={t.value} className="bg-white text-[#0B1424]">
               {t.label}
             </option>
           ))}
         </select>
         {errors.enquiryType && (
-          <p className="mt-1.5 text-xs text-rose-400">{errors.enquiryType}</p>
+          <p className="mt-1.5 text-xs text-rose-600">{errors.enquiryType}</p>
         )}
       </div>
 
@@ -234,9 +213,9 @@ export function ContactForm() {
         <div>
           <label
             htmlFor="name"
-            className="block font-mono text-xs font-semibold uppercase tracking-wider text-slate-300"
+            className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#14243B]"
           >
-            Full Name <span className="text-[#d6a15c]">*</span>
+            Full Name <span className="text-rose-600">*</span>
           </label>
           <input
             id="name"
@@ -248,19 +227,19 @@ export function ContactForm() {
               setFormData({ ...formData, name: e.target.value })
             }
             placeholder="e.g. Alex Morgan"
-            className="mt-2 block w-full rounded-none border border-white/15 bg-[#030712] px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-[#d6a15c] focus:outline-none"
+            className="mt-2 block w-full border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-3 text-sm text-[#0B1424] placeholder:text-slate-400 focus:border-[#D89A43] focus:bg-white focus:outline-none"
           />
           {errors.name && (
-            <p className="mt-1.5 text-xs text-rose-400">{errors.name}</p>
+            <p className="mt-1.5 text-xs text-rose-600">{errors.name}</p>
           )}
         </div>
 
         <div>
           <label
             htmlFor="email"
-            className="block font-mono text-xs font-semibold uppercase tracking-wider text-slate-300"
+            className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#14243B]"
           >
-            Work Email Address <span className="text-[#d6a15c]">*</span>
+            Work Email Address <span className="text-rose-600">*</span>
           </label>
           <input
             id="email"
@@ -272,10 +251,10 @@ export function ContactForm() {
               setFormData({ ...formData, email: e.target.value })
             }
             placeholder="alex@organisation.com"
-            className="mt-2 block w-full rounded-none border border-white/15 bg-[#030712] px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-[#d6a15c] focus:outline-none"
+            className="mt-2 block w-full border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-3 text-sm text-[#0B1424] placeholder:text-slate-400 focus:border-[#D89A43] focus:bg-white focus:outline-none"
           />
           {errors.email && (
-            <p className="mt-1.5 text-xs text-rose-400">{errors.email}</p>
+            <p className="mt-1.5 text-xs text-rose-600">{errors.email}</p>
           )}
         </div>
       </div>
@@ -285,7 +264,7 @@ export function ContactForm() {
         <div>
           <label
             htmlFor="organisation"
-            className="block font-mono text-xs font-semibold uppercase tracking-wider text-slate-300"
+            className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#14243B]"
           >
             Organisation / Company{" "}
             <span className="text-[10px] text-slate-500">(Optional)</span>
@@ -299,14 +278,14 @@ export function ContactForm() {
               setFormData({ ...formData, organisation: e.target.value })
             }
             placeholder="Organisation Name"
-            className="mt-2 block w-full rounded-none border border-white/15 bg-[#030712] px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-[#d6a15c] focus:outline-none"
+            className="mt-2 block w-full border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-3 text-sm text-[#0B1424] placeholder:text-slate-400 focus:border-[#D89A43] focus:bg-white focus:outline-none"
           />
         </div>
 
         <div>
           <label
             htmlFor="phone"
-            className="block font-mono text-xs font-semibold uppercase tracking-wider text-slate-300"
+            className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#14243B]"
           >
             Phone / WhatsApp{" "}
             <span className="text-[10px] text-slate-500">(Optional)</span>
@@ -320,7 +299,7 @@ export function ContactForm() {
               setFormData({ ...formData, phone: e.target.value })
             }
             placeholder="+44 7... or +234..."
-            className="mt-2 block w-full rounded-none border border-white/15 bg-[#030712] px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-[#d6a15c] focus:outline-none"
+            className="mt-2 block w-full border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-3 text-sm text-[#0B1424] placeholder:text-slate-400 focus:border-[#D89A43] focus:bg-white focus:outline-none"
           />
         </div>
       </div>
@@ -329,7 +308,7 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="serviceOrPathway"
-          className="block font-mono text-xs font-semibold uppercase tracking-wider text-slate-300"
+          className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#14243B]"
         >
           Specific Service or Learning Pathway{" "}
           <span className="text-[10px] text-slate-500">(Optional)</span>
@@ -340,14 +319,14 @@ export function ContactForm() {
           onChange={(e) =>
             setFormData({ ...formData, serviceOrPathway: e.target.value })
           }
-          className="mt-2 block w-full rounded-none border border-white/15 bg-[#030712] px-4 py-3 text-sm text-white focus:border-[#d6a15c] focus:outline-none"
+          className="mt-2 block w-full border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-3 text-sm font-medium text-[#0B1424] focus:border-[#D89A43] focus:bg-white focus:outline-none"
         >
           {SERVICE_PATHWAY_OPTIONS.map((opt, i) => (
             <option
               key={`${opt.value}-${i}`}
               value={opt.value}
               disabled={"disabled" in opt ? opt.disabled : false}
-              className="bg-[#07101f] text-slate-100"
+              className="bg-white text-[#0B1424]"
             >
               {opt.label}
             </option>
@@ -359,9 +338,9 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="message"
-          className="block font-mono text-xs font-semibold uppercase tracking-wider text-slate-300"
+          className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#14243B]"
         >
-          Project Details / Requirements <span className="text-[#d6a15c]">*</span>
+          Project Details / Requirements <span className="text-rose-600">*</span>
         </label>
         <textarea
           id="message"
@@ -372,10 +351,10 @@ export function ContactForm() {
             setFormData({ ...formData, message: e.target.value })
           }
           placeholder="Please describe your current IAM challenge, architecture objectives, compliance deadlines, or training cohort requirements..."
-          className="mt-2 block w-full rounded-none border border-white/15 bg-[#030712] px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-[#d6a15c] focus:outline-none"
+          className="mt-2 block w-full border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-3 text-sm text-[#0B1424] placeholder:text-slate-400 focus:border-[#D89A43] focus:bg-white focus:outline-none"
         />
         {errors.message && (
-          <p className="mt-1.5 text-xs text-rose-400">{errors.message}</p>
+          <p className="mt-1.5 text-xs text-rose-600">{errors.message}</p>
         )}
       </div>
 
@@ -402,23 +381,22 @@ export function ContactForm() {
             onChange={(e) =>
               setFormData({ ...formData, privacyAccepted: e.target.checked })
             }
-            className="mt-1 h-4 w-4 rounded-none border-white/20 bg-[#030712] text-[#d6a15c] focus:ring-[#d6a15c]"
+            className="mt-1 h-4 w-4 rounded-none border-slate-300 text-[#0B1424] focus:ring-[#D89A43]"
           />
-          <span className="text-xs leading-relaxed text-slate-300">
+          <span className="text-xs leading-relaxed text-slate-600">
             I acknowledge that The IAM Lab will process the details submitted
-            strictly to respond to this enquiry. Marketing communications remain
-            independent and optional.
+            strictly to respond to this enquiry. Communications remain confidential.
           </span>
         </label>
         {errors.privacyAccepted && (
-          <p className="mt-1.5 text-xs text-rose-400">{errors.privacyAccepted}</p>
+          <p className="mt-1.5 text-xs text-rose-600">{errors.privacyAccepted}</p>
         )}
       </div>
 
       {serverError && (
         <div
           role="alert"
-          className="border border-rose-500/30 bg-rose-950/40 p-4 text-xs text-rose-300"
+          className="border border-rose-300 bg-rose-50 p-4 text-xs text-rose-800"
         >
           {serverError}
         </div>
@@ -428,10 +406,12 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="inline-flex min-h-[52px] w-full items-center justify-center border border-[#d6a15c] bg-[#d6a15c] px-8 py-3.5 font-mono text-xs font-bold uppercase tracking-wider text-[#030712] shadow-xl transition-all hover:bg-[#e4b26f] disabled:cursor-wait disabled:opacity-70 sm:w-auto"
+        className="inline-flex min-h-[48px] w-full items-center justify-center bg-[#0B1424] px-8 py-3 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#14243B] disabled:cursor-wait disabled:opacity-70 sm:w-auto"
       >
-        {isSubmitting ? "Transmitting..." : "Submit Enquiry Request"}
+        {isSubmitting ? "Transmitting..." : "Submit Consultation Request"}
       </button>
     </form>
   );
 }
+
+export default ContactForm;

@@ -5,33 +5,31 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Services & Solutions | Enterprise IAM Consulting",
   description:
-    "Explore The IAM Lab's 6 core identity services: IAM Strategy, IGA, Lifecycle Automation, Modern Authentication/SSO, PAM, and Implementation Support.",
+    "Explore The IAM Lab's six consulting service pillars: IAM Advisory, IGA, PAM, Access Management/SSO, Cloud IAM, and Directory Modernisation.",
 };
 
-const SERVICES = [
+const SIX_SERVICES = [
   {
     id: "strategy",
     num: "01",
-    code: "SVC-STRAT",
-    title: "IAM Strategy, Assessment & Advisory",
+    name: "IAM Advisory & Strategy",
     tagline: "Clarity on identity maturity, risks, and prioritised transformation.",
     problem:
       "Enterprises struggle with overlapping identity products, unquantified privilege accumulation, and unclear compliance status across distributed cloud environments.",
     scope: [
       "Current-state identity architecture & security maturity audit",
       "Privilege creep analysis and attack surface mapping",
-      "Vendor-neutral platform evaluation (Entra ID, Okta, SailPoint, CyberArk)",
+      "Vendor-neutral platform evaluation (Microsoft Entra ID, Okta, SailPoint, CyberArk)",
       "12-to-24-month prioritised roadmap with measurable governance milestones",
     ],
     outcomes:
       "Executive risk clarity, defensible security investment priorities, and an actionable path to verifiable Zero-Trust access.",
-    platforms: ["Enterprise Directories", "Zero-Trust Frameworks", "NIST SP 800-207", "CIS Benchmarks"],
+    platforms: ["NIST SP 800-207", "CIS Benchmarks", "ISO 27001", "SOX / NIS2"],
   },
   {
     id: "governance",
     num: "02",
-    code: "SVC-IGA",
-    title: "Identity Governance & Access Management (IGA)",
+    name: "Identity Governance & Administration (IGA)",
     tagline: "Verifiable access certification, role design, and compliance assurance.",
     problem:
       "Manual spreadsheet reviews and uncoordinated email approvals create audit failures, unmonitored entitlements, and segregation-of-duties violations.",
@@ -46,46 +44,9 @@ const SERVICES = [
     platforms: ["SailPoint IdentityIQ / IdentityNow", "Microsoft Entra ID Governance", "Saviynt", "Okta IGA"],
   },
   {
-    id: "lifecycle",
-    num: "03",
-    code: "SVC-JML",
-    title: "Identity Lifecycle & Provisioning Automation",
-    tagline: "Eliminate manual joiner delay and lingering leaver exposure.",
-    problem:
-      "Slow employee onboarding creates days of lost productivity, while manual deprovisioning risks departed staff retaining sensitive access indefinitely.",
-    scope: [
-      "HR-driven identity synchronization (Workday, SuccessFactors, SAP)",
-      "Automated Joiner, Mover, and Leaver (JML) state transitions",
-      "SCIM 2.0 connector development for bespoke enterprise cloud applications",
-      "Orphaned account discovery, directory hygiene, and birthright access rules",
-    ],
-    outcomes:
-      "Productive access on Day 1 for all new hires; immediate, verifiable access revocation upon employee termination.",
-    platforms: ["Workday", "Microsoft Entra ID", "SCIM 2.0", "Active Directory", "PowerShell"],
-  },
-  {
-    id: "auth-sso",
-    num: "04",
-    code: "SVC-AUTH",
-    title: "Authentication, SSO & Access Modernisation",
-    tagline: "Frictionless, phishing-resistant access across the modern enterprise.",
-    problem:
-      "Multiple disparate passwords, inconsistent MFA coverage, and legacy authentication protocols leave corporate accounts open to adversary-in-the-middle attacks.",
-    scope: [
-      "Single Sign-On (SSO) federation via SAML 2.0 and OpenID Connect (OIDC)",
-      "Phishing-resistant Multi-Factor Authentication (MFA) and FIDO2 keys",
-      "Adaptive Zero-Trust Conditional Access policies based on device, risk, and IP",
-      "Legacy protocol deprecation and passwordless authentication rollout",
-    ],
-    outcomes:
-      "Unified user sign-in experience paired with robust defense against credential stuffing and session hijacking.",
-    platforms: ["Microsoft Entra ID", "Okta", "Ping Identity", "FIDO2 / WebAuthn", "Kerberos / LDAP"],
-  },
-  {
     id: "pam",
-    num: "05",
-    code: "SVC-PAM",
-    title: "Privileged Access Management (PAM)",
+    num: "03",
+    name: "Privileged Access Management (PAM)",
     tagline: "Lock down critical keys, eliminate permanent admins, and audit every root session.",
     problem:
       "Unmanaged root credentials, shared domain admin passwords, and unmonitored infrastructure access invite lateral movement and ransomware.",
@@ -100,26 +61,59 @@ const SERVICES = [
     platforms: ["CyberArk", "BeyondTrust", "Microsoft Entra PIM", "Delinea", "HashiCorp Vault"],
   },
   {
-    id: "implementation",
-    num: "06",
-    code: "SVC-ENG",
-    title: "IAM Implementation & Technical Support",
-    tagline: "Experienced platform engineering, migration, and ongoing governance care.",
+    id: "auth-sso",
+    num: "04",
+    name: "Access Management & SSO / MFA",
+    tagline: "Frictionless, phishing-resistant access across the modern enterprise.",
     problem:
-      "Internal IT and security teams often lack the dedicated bandwidth or specialized platform knowledge to deliver complex IAM migrations on schedule.",
+      "Multiple disparate passwords, inconsistent MFA coverage, and legacy authentication protocols leave corporate accounts open to adversary-in-the-middle attacks.",
     scope: [
-      "Turnkey platform deployment, tenant configuration, and hybrid connectors",
-      "Active Directory to cloud directory migration and synchronization",
-      "Custom connector and PowerShell / API integration development",
-      "Operational runbooks, admin handovers, and post-go-live hypercare support",
+      "Single Sign-On (SSO) federation via SAML 2.0 and OpenID Connect (OIDC)",
+      "Phishing-resistant Multi-Factor Authentication (MFA) and FIDO2 keys",
+      "Adaptive Zero-Trust Conditional Access policies based on device, risk, and IP",
+      "Legacy protocol deprecation and passwordless authentication rollout",
     ],
     outcomes:
-      "De-risked, on-time project execution with fully documented operating procedures and an upskilled internal engineering team.",
-    platforms: ["Hybrid Cloud", "Enterprise Directories", "REST APIs", "PowerShell", "Terraform"],
+      "Unified user sign-in experience paired with robust defense against credential stuffing and session hijacking.",
+    platforms: ["Microsoft Entra ID", "Okta Workforce", "Ping Identity", "FIDO2 / WebAuthn"],
+  },
+  {
+    id: "cloud-iam",
+    num: "05",
+    name: "Cloud IAM & Entitlement Governance",
+    tagline: "Secure identities across multi-cloud infrastructure (AWS, Azure, GCP).",
+    problem:
+      "Cloud permissions are excessively permissive by default. Over-privileged IAM roles and unmonitored service accounts create critical breach pathways.",
+    scope: [
+      "Cloud Infrastructure Entitlement Management (CIEM) posture audits",
+      "Cross-account trust boundary definition and role least-privileging",
+      "Workload identity federation and short-lived credential architecture",
+      "Automated drift detection and unused permission pruning",
+    ],
+    outcomes:
+      "Elimination of excessive cloud permissions, auditable machine identities, and unified governance across hybrid clouds.",
+    platforms: ["AWS IAM", "Azure RBAC / Entra Workload ID", "Google Cloud IAM", "Terraform"],
+  },
+  {
+    id: "directory",
+    num: "06",
+    name: "Directory Modernisation & Lifecycle Engineering",
+    tagline: "Active Directory hygiene, SCIM 2.0 automation, and technical implementation.",
+    problem:
+      "Legacy Active Directory forests create technical debt, while manual joiner-mover-leaver processes cause operational delays and departed staff lingering access.",
+    scope: [
+      "Hybrid directory synchronization, forest consolidation, and cleanup",
+      "HR-driven user lifecycle automation (Workday, SuccessFactors, SAP)",
+      "Custom SCIM 2.0 connector development for enterprise SaaS tools",
+      "PowerShell automation, API integration, and operational runbook handovers",
+    ],
+    outcomes:
+      "Immediate Day-1 productivity for new hires, instantaneous revocation upon departure, and modern directory health.",
+    platforms: ["Active Directory", "Microsoft Entra Connect", "SCIM 2.0", "Workday", "PowerShell"],
   },
 ] as const;
 
-const WORKFLOW_STEPS = [
+const WORKFLOW = [
   {
     step: "01",
     phase: "Step 01 // Discovery",
@@ -153,175 +147,157 @@ const WORKFLOW_STEPS = [
 export default function ServicesPage() {
   return (
     <>
-      {/* 1. Cinematic Hero with Photographic Layer */}
-      <section className="relative overflow-hidden border-b border-white/10 bg-[#030712] py-24 sm:py-32 lg:py-40">
+      {/* 1. Photographic Hero */}
+      <section className="relative overflow-hidden border-b border-white/10 bg-[#0B1424] py-24 sm:py-32 lg:py-36">
         <div className="pointer-events-none absolute inset-0 -z-10">
           <Image
-            src="/brand/hero-bg.jpg"
-            alt="Enterprise IAM Architecture"
+            src="/brand/security-infrastructure.jpg"
+            alt="Enterprise technology and secure identity infrastructure"
             fill
             priority
-            className="object-cover object-center opacity-25 mix-blend-screen scale-105"
+            sizes="100vw"
+            className="object-cover object-center opacity-30"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#030712] via-[#030712]/92 to-[#030712]/75" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-[#030712]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0B1424] via-[#0B1424]/90 to-[#14243B]/80" />
         </div>
 
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-          <div className="max-w-4xl">
-            <div className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.28em] text-[#d6a15c] uppercase">
-              <span className="h-px w-8 bg-[#d6a15c]" aria-hidden="true" />
-              <span>Enterprise Services // Practice Areas</span>
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3">
+              <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
+              <span className="font-mono text-xs font-semibold tracking-[0.25em] text-[#D89A43] uppercase">
+                Enterprise Capabilities
+              </span>
             </div>
 
-            <h1 className="mt-8 text-4xl font-extrabold tracking-[-0.035em] text-white sm:text-6xl lg:text-7xl lg:leading-[1.08]">
-              End-to-end identity security, <br />
-              <span className="bg-gradient-to-r from-[#ebd0a3] via-[#d6a15c] to-amber-200 bg-clip-text text-transparent">
-                governance and operational engineering.
-              </span>
+            <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+              Architectural Rigour. Zero-Trust Certainty.
             </h1>
 
-            <p className="mt-8 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg sm:leading-relaxed">
-              We help enterprises design, deploy, and govern identity architectures that reduce exposure, eliminate audit findings, and keep everyday business moving forward.
+            <p className="mt-6 text-lg leading-relaxed text-slate-300">
+              Six specialised consulting service pillars engineered to eliminate standing privileges, streamline identity lifecycles, and maintain continuous regulatory audit-readiness.
             </p>
           </div>
         </div>
       </section>
 
-      {/* 2. Detailed Architectural Service Blueprint Ledgers (NOT repetitive cards) */}
-      <section className="relative border-b border-white/10 bg-[#050a14] py-24 sm:py-32">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.25em] text-[#d6a15c] uppercase">
-              <span className="h-px w-6 bg-[#d6a15c]" aria-hidden="true" />
-              <span>Pillar Specifications</span>
-            </div>
-            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-              Six specialized pillars of IAM expertise.
-            </h2>
-            <p className="mt-4 text-base leading-relaxed text-slate-300">
-              Our service catalogue addresses every stage of the identity lifecycle, from strategic assessments to deep platform engineering.
-            </p>
-          </div>
+      {/* 2. Distinct Editorial Service Sections */}
+      <section className="border-b border-slate-200 bg-[#F7F6F2] py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 space-y-20">
+          {SIX_SERVICES.map((s, idx) => (
+            <div
+              key={s.id}
+              id={s.id}
+              className="border border-slate-200 bg-[#FFFFFF] p-8 sm:p-12 shadow-sm"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-6">
+                <div>
+                  <span className="font-mono text-xs font-bold text-[#D89A43]">
+                    SERVICE PILLAR // {s.num}
+                  </span>
+                  <h2 className="mt-2 text-2xl font-extrabold text-[#0B1424] sm:text-3xl">
+                    {s.name}
+                  </h2>
+                </div>
+                <Link
+                  href={`/contact?type=enterprise_consulting&service=${s.id}`}
+                  className="inline-flex items-center justify-center bg-[#0B1424] px-5 py-2.5 text-xs font-bold text-white uppercase hover:bg-[#14243B]"
+                >
+                  Engage on this Pillar &rarr;
+                </Link>
+              </div>
 
-          <div className="mt-16 space-y-16">
-            {SERVICES.map((svc) => (
-              <div
-                key={svc.id}
-                id={svc.id}
-                className="border border-white/10 bg-[#07101f] shadow-2xl"
-              >
-                {/* Blueprint Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-white/10 p-6 sm:p-8 bg-white/[0.02] gap-4">
-                  <div className="flex items-baseline gap-4">
-                    <span className="font-mono text-3xl font-bold text-[#d6a15c]">
-                      {svc.num}
+              <p className="mt-6 text-base font-medium text-slate-800">
+                {s.tagline}
+              </p>
+
+              <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
+                {/* Problem & Outcomes */}
+                <div className="space-y-6 lg:col-span-5">
+                  <div>
+                    <span className="font-mono text-xs font-semibold text-rose-700 uppercase">
+                      The Business Challenge
                     </span>
-                    <div>
-                      <span className="font-mono text-xs text-slate-500 uppercase tracking-widest block">
-                        {svc.code}
-                      </span>
-                      <h2 className="text-2xl font-bold text-white sm:text-3xl">
-                        {svc.title}
-                      </h2>
-                    </div>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-700">
+                      {s.problem}
+                    </p>
                   </div>
 
-                  <Link
-                    href={`/contact?type=enterprise_consulting&service=${svc.id}`}
-                    className="inline-flex items-center justify-center border border-[#d6a15c] bg-[#d6a15c] px-6 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-[#030712] transition-all hover:bg-[#e4b26f] shrink-0"
-                  >
-                    Request Consultation
-                  </Link>
+                  <div>
+                    <span className="font-mono text-xs font-semibold text-emerald-800 uppercase">
+                      Expected Business Outcomes
+                    </span>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-700">
+                      {s.outcomes}
+                    </p>
+                  </div>
                 </div>
 
-                {/* Blueprint Content Grid */}
-                <div className="p-6 sm:p-8 lg:p-10 grid grid-cols-1 gap-8 lg:grid-cols-12">
-                  {/* Left Column: Problem & Outcomes */}
-                  <div className="space-y-6 lg:col-span-5">
-                    <div>
-                      <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-rose-400">
-                        Operational Problem Solved
-                      </p>
-                      <p className="mt-2 text-sm leading-relaxed text-slate-300">
-                        {svc.problem}
-                      </p>
-                    </div>
-
-                    <div className="border-t border-white/10 pt-6">
-                      <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-emerald-400">
-                        Target Commercial Outcome
-                      </p>
-                      <p className="mt-2 text-sm leading-relaxed text-slate-300">
-                        {svc.outcomes}
-                      </p>
-                    </div>
-
-                    <div className="border-t border-white/10 pt-6">
-                      <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-[#d6a15c]">
-                        Platform Ecosystem
-                      </p>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {svc.platforms.map((p) => (
-                          <span
-                            key={p}
-                            className="border border-white/10 bg-white/[0.03] px-2.5 py-1 font-mono text-[11px] text-slate-300"
-                          >
-                            {p}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right Column: Engineering Scope & Deliverables */}
-                  <div className="border-t border-white/10 pt-6 lg:border-t-0 lg:border-l lg:border-white/10 lg:pl-10 lg:pt-0 lg:col-span-7">
-                    <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-[#d6a15c]">
-                      Scope of Work &amp; Deliverables
-                    </p>
-                    <ul className="mt-4 space-y-4">
-                      {svc.scope.map((item, idx) => (
-                        <li key={idx} className="flex items-start gap-3 text-sm text-slate-300">
-                          <span className="font-mono text-xs font-bold text-[#d6a15c] shrink-0 mt-0.5">
-                            0{idx + 1} {"//"}
-                          </span>
-                          <span className="leading-relaxed">{item}</span>
+                {/* Scope & Platforms */}
+                <div className="space-y-6 border-t border-slate-200 pt-6 lg:col-span-7 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0">
+                  <div>
+                    <span className="font-mono text-xs font-semibold text-[#0B1424] uppercase">
+                      Scope of Advisory &amp; Engineering
+                    </span>
+                    <ul className="mt-3 space-y-2.5 text-sm text-slate-700">
+                      {s.scope.map((item) => (
+                        <li key={item} className="flex items-start gap-2.5">
+                          <span className="mt-1 h-1.5 w-1.5 shrink-0 bg-[#D89A43]" />
+                          <span>{item}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
+
+                  <div>
+                    <span className="font-mono text-xs font-semibold text-slate-500 uppercase">
+                      Supported Platforms &amp; Standards
+                    </span>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {s.platforms.map((plat) => (
+                        <span
+                          key={plat}
+                          className="border border-slate-200 bg-[#F7F6F2] px-3 py-1 text-xs font-medium text-slate-700"
+                        >
+                          {plat}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* 3. 4-Step Commercial Delivery Workflow */}
-      <section className="relative border-b border-white/10 bg-[#030712] py-24 sm:py-32">
+      {/* 3. 4-Stage Commercial Delivery Protocol */}
+      <section className="border-b border-white/10 bg-[#0B1424] py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="max-w-3xl">
-            <div className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.25em] text-[#d6a15c] uppercase">
-              <span className="h-px w-6 bg-[#d6a15c]" aria-hidden="true" />
-              <span>Engagement Protocol</span>
+            <div className="flex items-center gap-3">
+              <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
+              <span className="font-mono text-xs font-semibold tracking-[0.25em] text-[#D89A43] uppercase">
+                Consulting Protocol
+              </span>
             </div>
-            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-              How we engage and deliver.
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              Structured engagement from discovery to sign-off.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-slate-300">
-              Our structured consulting workflow ensures absolute transparency from initial exploratory discussions to final operational sign-off.
+              Our structured consulting workflow ensures absolute transparency from exploratory discussions to operational sign-off.
             </p>
           </div>
 
           <div className="mt-16 grid grid-cols-1 border-t border-white/10 sm:grid-cols-2 lg:grid-cols-4">
-            {WORKFLOW_STEPS.map((w, idx) => (
+            {WORKFLOW.map((w, idx) => (
               <div
                 key={w.step}
                 className={`py-8 sm:py-10 ${
                   idx > 0 ? "lg:border-l lg:border-white/10 lg:pl-8" : ""
                 } pr-6`}
               >
-                <span className="font-mono text-xs font-bold text-[#d6a15c] uppercase">
+                <span className="font-mono text-xs font-bold text-[#D89A43] uppercase">
                   {w.phase}
                 </span>
                 <h3 className="mt-3 text-lg font-bold text-white">
@@ -336,13 +312,13 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* 4. Section 3.7 Future Capability Notice */}
-      <section className="relative border-b border-white/10 bg-[#050a14] py-16">
+      {/* 4. Section 3.7 Notice of Future Capability */}
+      <section className="border-b border-white/10 bg-[#14243B] py-16">
         <div className="mx-auto max-w-5xl px-5 sm:px-8">
-          <div className="border border-white/10 bg-[#07101f] p-8">
+          <div className="border border-white/10 bg-[#0B1424] p-8">
             <div className="flex items-center gap-3">
-              <span className="h-2 w-2 bg-[#d6a15c]" />
-              <p className="font-mono text-xs font-semibold tracking-wider text-[#d6a15c] uppercase">
+              <span className="h-2 w-2 bg-[#D89A43]" />
+              <p className="font-mono text-xs font-semibold tracking-wider text-[#D89A43] uppercase">
                 Notice of Future Capability // Section 3.7
               </p>
             </div>
@@ -357,26 +333,18 @@ export default function ServicesPage() {
       </section>
 
       {/* 5. Consultation CTA Banner */}
-      <section className="relative border-b border-white/10 bg-[#030712] py-24 sm:py-32">
-        <div className="mx-auto max-w-4xl px-5 text-center sm:px-8">
-          <div className="flex items-center justify-center gap-3 font-mono text-xs font-semibold tracking-[0.25em] text-[#d6a15c] uppercase">
-            <span className="h-px w-8 bg-[#d6a15c]" aria-hidden="true" />
-            <span>Consultation</span>
-            <span className="h-px w-8 bg-[#d6a15c]" aria-hidden="true" />
-          </div>
-
-          <h2 className="mt-6 text-3xl font-extrabold text-white sm:text-5xl">
+      <section className="border-b border-white/10 bg-[#0B1424] py-24 text-center">
+        <div className="mx-auto max-w-3xl px-5">
+          <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
             Discuss your IAM initiative with an expert
           </h2>
-
-          <p className="mt-6 text-base text-slate-300 sm:text-lg">
+          <p className="mt-4 text-base text-slate-300">
             Tell us about your active projects, compliance deadlines, or infrastructure modernization goals. We will arrange a focused technical discussion.
           </p>
-
-          <div className="mt-10">
+          <div className="mt-8">
             <Link
               href="/contact?type=enterprise_consulting"
-              className="inline-flex min-h-[52px] items-center justify-center border border-[#d6a15c] bg-[#d6a15c] px-8 py-3.5 text-sm font-semibold tracking-wide text-[#030712] shadow-xl transition-all hover:bg-[#e4b26f]"
+              className="inline-flex min-h-[50px] items-center justify-center bg-[#D89A43] px-8 py-3.5 text-sm font-bold tracking-wider text-[#0B1424] uppercase hover:bg-[#e4a856]"
             >
               Request a Consultation &rarr;
             </Link>

@@ -1,127 +1,180 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { Suspense } from "react";
 import { ContactForm } from "@/components/ContactForm";
 
 export const metadata: Metadata = {
-  title: "Contact & Consultation | The IAM Lab",
+  title: "Contact & Consultation | Enterprise Advisory & Academy Admissions",
   description:
-    "Connect with The IAM Lab for enterprise identity consulting, access governance advisory, corporate training, or IAM Academy cohort enrollment.",
+    "Schedule an executive IAM consultation or apply for upcoming IAM Academy learning cohorts. Operating globally from London, United Kingdom.",
 };
 
 export default function ContactPage() {
   return (
     <>
-      {/* 1. Cinematic Hero with Photographic Layer */}
-      <section className="relative overflow-hidden border-b border-white/10 bg-[#030712] py-24 sm:py-32">
+      {/* 1. Premium Photographic Introduction */}
+      <section className="relative overflow-hidden border-b border-white/10 bg-[#0B1424] py-24 sm:py-32 lg:py-36">
         <div className="pointer-events-none absolute inset-0 -z-10">
           <Image
-            src="/brand/hero-bg.jpg"
-            alt="The IAM Lab Contact"
+            src="/brand/team-collaboration.jpg"
+            alt="The IAM Lab consultation and advisory team"
             fill
             priority
-            className="object-cover object-center opacity-25 mix-blend-screen scale-105"
+            sizes="100vw"
+            className="object-cover object-center opacity-30"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#030712] via-[#030712]/92 to-[#030712]/75" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-[#030712]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0B1424] via-[#0B1424]/90 to-[#14243B]/80" />
         </div>
 
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-          <div className="max-w-4xl">
-            <div className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.28em] text-[#d6a15c] uppercase">
-              <span className="h-px w-8 bg-[#d6a15c]" aria-hidden="true" />
-              <span>Direct Engagement &bull; London &bull; Worldwide</span>
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3">
+              <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
+              <span className="font-mono text-xs font-semibold tracking-[0.25em] text-[#D89A43] uppercase">
+                Initiate Discovery
+              </span>
             </div>
 
-            <h1 className="mt-8 text-4xl font-extrabold tracking-[-0.035em] text-white sm:text-6xl lg:text-7xl lg:leading-[1.08]">
-              Start a conversation <br />
-              <span className="bg-gradient-to-r from-[#ebd0a3] via-[#d6a15c] to-amber-200 bg-clip-text text-transparent">
-                with The IAM Lab.
-              </span>
+            <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+              Connect with The IAM Lab.
             </h1>
 
-            <p className="mt-8 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg sm:leading-relaxed">
-              Whether your enterprise requires an identity architecture assessment or you are ready to build practitioner skills in our Academy, our team is here to support your objectives.
+            <p className="mt-6 text-lg leading-relaxed text-slate-300">
+              Direct access to senior identity architects for corporate advisory reviews, vendor evaluations, or academy enrollment enquiries.
             </p>
           </div>
         </div>
       </section>
 
-      {/* 2. Main Contact Form & Direct Coordinates */}
-      <section className="relative border-b border-white/10 bg-[#050a14] py-24 sm:py-32">
+      {/* 2. Dual Pathway Briefing & Verified Company Details */}
+      <section className="border-b border-slate-200 bg-[#F7F6F2] py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-          <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-20">
-            {/* Left Column: Direct Coordinates & Channel Briefing */}
-            <div className="space-y-8 lg:col-span-5">
-              <div className="border border-white/10 bg-[#07101f] p-8">
-                <span className="font-mono text-xs font-bold tracking-widest text-[#d6a15c] uppercase">
-                  Route A // For Organisations
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+            {/* Left Column: Two Pathways & Company Details */}
+            <div className="space-y-10 lg:col-span-5">
+              <div>
+                <span className="font-mono text-xs font-bold text-[#D89A43] uppercase">
+                  TWO DEDICATED TRACKS
                 </span>
-                <h3 className="mt-3 text-xl font-bold text-white">
-                  Enterprise Consulting &amp; Advisory
-                </h3>
-                <p className="mt-2 text-xs leading-relaxed text-slate-300">
-                  IAM maturity assessments, Identity Governance architecture (IGA), Privileged Access Management (PAM), directory modernization, and custom corporate team enablement.
+                <h2 className="mt-2 text-2xl font-bold text-[#0B1424]">
+                  How can we support your goals?
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                  Select your track in the form on the right. Submissions are reviewed directly by our principal advisory and admissions team.
                 </p>
               </div>
 
-              <div className="border border-white/10 bg-[#07101f] p-8">
-                <span className="font-mono text-xs font-bold tracking-widest text-[#d6a15c] uppercase">
-                  Route B // For Individuals
+              {/* Pathway A */}
+              <div className="border border-slate-200 bg-[#FFFFFF] p-6 shadow-sm">
+                <span className="font-mono text-xs font-bold text-[#0B1424] uppercase">
+                  PATHWAY 01 // ENTERPRISE ADVISORY
                 </span>
-                <h3 className="mt-3 text-xl font-bold text-white">
-                  IAM Academy &amp; Mentorship
+                <h3 className="mt-2 text-base font-bold text-[#0B1424]">
+                  Corporate Consulting &amp; Architecture
                 </h3>
-                <p className="mt-2 text-xs leading-relaxed text-slate-300">
-                  Cohort schedules, pathway syllabus details, hands-on lab tenant access, and technical career advancement mentorship.
+                <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                  For CISOs, Heads of Architecture, and IT leaders seeking maturity reviews, PAM/IGA implementation, or directory migrations.
                 </p>
-              </div>
-
-              {/* Direct Communication Channels */}
-              <div className="border border-white/10 bg-[#07101f] p-8 space-y-6">
-                <div>
-                  <p className="font-mono text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                    Direct Email
-                  </p>
-                  <a
-                    href="mailto:info@theiamlab.com"
-                    className="mt-1 inline-flex items-center gap-2 text-base font-bold text-[#d6a15c] transition-colors hover:text-white"
+                <div className="mt-3">
+                  <Link
+                    href="/contact?type=enterprise_consulting"
+                    className="text-xs font-bold text-[#D89A43] hover:underline"
                   >
+                    Select Corporate Track &rarr;
+                  </Link>
+                </div>
+              </div>
+
+              {/* Pathway B */}
+              <div className="border border-slate-200 bg-[#FFFFFF] p-6 shadow-sm">
+                <span className="font-mono text-xs font-bold text-[#0B1424] uppercase">
+                  PATHWAY 02 // IAM ACADEMY
+                </span>
+                <h3 className="mt-2 text-base font-bold text-[#0B1424]">
+                  Individual Learning &amp; Mentorship
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                  For engineers and analysts seeking structured training, hands-on enterprise tenant labs, and 1-on-1 career coaching.
+                </p>
+                <div className="mt-3">
+                  <Link
+                    href="/contact?type=individual_learning"
+                    className="text-xs font-bold text-[#D89A43] hover:underline"
+                  >
+                    Select Academy Track &rarr;
+                  </Link>
+                </div>
+              </div>
+
+              {/* Verified Company Information */}
+              <div className="border-t border-slate-200 pt-8 space-y-4 text-sm text-slate-700">
+                <h4 className="font-mono text-xs font-bold text-[#0B1424] uppercase">
+                  Direct Inbound Contact
+                </h4>
+                <div className="flex items-start gap-3">
+                  <span className="font-mono text-xs text-slate-500 w-24">Email:</span>
+                  <a href="mailto:info@theiamlab.com" className="font-semibold text-[#0B1424] hover:text-[#D89A43]">
                     info@theiamlab.com
                   </a>
                 </div>
-
-                <div className="border-t border-white/10 pt-6">
-                  <p className="font-mono text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                    Headquarters
-                  </p>
-                  <p className="mt-1 text-sm font-medium text-white">
-                    London, United Kingdom
-                  </p>
+                <div className="flex items-start gap-3">
+                  <span className="font-mono text-xs text-slate-500 w-24">Headquarters:</span>
+                  <span className="text-slate-800">London, United Kingdom</span>
                 </div>
-
-                <div className="border-t border-white/10 pt-6">
-                  <p className="font-mono text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                    Response SLA
-                  </p>
-                  <p className="mt-1 text-xs text-slate-300 leading-relaxed">
-                    All client inquiries and cohort applications are reviewed promptly with a response within 24 to 48 business hours.
-                  </p>
+                <div className="flex items-start gap-3">
+                  <span className="font-mono text-xs text-slate-500 w-24">Operating Hours:</span>
+                  <span className="text-slate-800">Mon &ndash; Fri &middot; 09:00 &ndash; 17:30 UTC</span>
                 </div>
+                <div className="flex items-start gap-3">
+                  <span className="font-mono text-xs text-slate-500 w-24">Publications:</span>
+                  <a
+                    href="https://selar.com/m/chiemezie-uzoma1"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-[#0B1424] hover:text-[#D89A43]"
+                  >
+                    Selar Bookstore &rarr;
+                  </a>
+                </div>
+              </div>
+
+              {/* Confidentiality Commitment */}
+              <div className="border border-white/10 bg-[#0B1424] p-6 text-slate-300">
+                <span className="font-mono text-[11px] font-bold text-[#D89A43] uppercase">
+                  Confidentiality Commitment
+                </span>
+                <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                  All communications, architecture scopes, and discovery materials are treated under strict professional non-disclosure. We never disclose client identities, tenancy details, or project scopes without prior written consent.
+                </p>
               </div>
             </div>
 
-            {/* Right Column: Interactive Contact Form */}
+            {/* Right Column: The Validated Enterprise Form */}
             <div className="lg:col-span-7">
-              <Suspense
-                fallback={
-                  <div className="flex h-96 items-center justify-center border border-white/10 bg-[#07101f]">
-                    <p className="font-mono text-xs text-slate-400">Loading submission form...</p>
-                  </div>
-                }
-              >
-                <ContactForm />
-              </Suspense>
+              <div className="border border-slate-200 bg-[#FFFFFF] p-8 sm:p-12 shadow-md">
+                <div className="border-b border-slate-200 pb-6 mb-8">
+                  <span className="font-mono text-xs font-bold text-[#D89A43] uppercase">
+                    INBOUND ENQUIRY FORM
+                  </span>
+                  <h2 className="mt-2 text-2xl font-extrabold text-[#0B1424]">
+                    Submit your consultation request
+                  </h2>
+                  <p className="mt-1 text-xs text-slate-500">
+                    Your submission will be securely persisted and assigned directly to a specialist.
+                  </p>
+                </div>
+
+                <Suspense
+                  fallback={
+                    <div className="py-16 text-center text-sm text-slate-500">
+                      Loading consultation form...
+                    </div>
+                  }
+                >
+                  <ContactForm />
+                </Suspense>
+              </div>
             </div>
           </div>
         </div>

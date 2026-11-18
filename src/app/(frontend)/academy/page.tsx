@@ -91,161 +91,137 @@ const FORMATS = [
   },
   {
     num: "03",
-    title: "1-on-1 Mentorship & Review",
-    desc: "Direct technical feedback, resume teardowns, interview preparation, and personalized career path guidance from industry leaders.",
+    title: "1-on-1 Mentorship & Career Guidance",
+    desc: "Direct technical feedback, resume teardowns, mock technical interviews, and personalized career path guidance from industry leaders.",
   },
   {
     num: "04",
-    title: "Practitioner Community",
-    desc: "A private peer network of active IAM engineers and alumni sharing job leads, technical solutions, and platform insights.",
+    title: "Enterprise Corporate Enablement",
+    desc: "Custom training programmes designed for corporate engineering and security teams deploying new IAM infrastructure.",
   },
   {
     num: "05",
-    title: "Books & Study Guides",
-    desc: "Authored reference playbooks, exam alignment notes, and architectural diagrams available through our official publication store.",
+    title: "Selar Digital Resource Library",
+    desc: "Structured workbooks, architecture guides, and technical reference manuals available on our official Selar store.",
   },
 ] as const;
 
 export default function AcademyPage() {
   return (
     <>
-      {/* 1. Cinematic Hero with Photographic Background */}
-      <section className="relative overflow-hidden border-b border-white/10 bg-[#030712] py-24 sm:py-32 lg:py-40">
+      {/* 1. Photographic Academy Hero */}
+      <section className="relative overflow-hidden border-b border-white/10 bg-[#0B1424] py-24 sm:py-32 lg:py-36">
         <div className="pointer-events-none absolute inset-0 -z-10">
           <Image
-            src="/brand/academy-hero.jpg"
-            alt="The IAM Academy Training Environment"
+            src="/brand/academy-classroom.jpg"
+            alt="The IAM Academy professional learning masterclass"
             fill
             priority
-            className="object-cover object-center opacity-25 mix-blend-screen scale-105"
+            sizes="100vw"
+            className="object-cover object-center opacity-30"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#030712] via-[#030712]/92 to-[#030712]/75" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-[#030712]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0B1424] via-[#0B1424]/90 to-[#14243B]/80" />
         </div>
 
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-          <div className="max-w-4xl">
-            <div className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.28em] text-[#d6a15c] uppercase">
-              <span className="h-px w-8 bg-[#d6a15c]" aria-hidden="true" />
-              <span>Professional Learning &bull; Career Development</span>
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3">
+              <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
+              <span className="font-mono text-xs font-semibold tracking-[0.25em] text-[#D89A43] uppercase">
+                Professional Education
+              </span>
             </div>
 
-            <h1 className="mt-8 text-4xl font-extrabold tracking-[-0.035em] text-white sm:text-6xl lg:text-7xl lg:leading-[1.08]">
-              Learn IAM. <br />
-              <span className="bg-gradient-to-r from-[#ebd0a3] via-[#d6a15c] to-amber-200 bg-clip-text text-transparent">
-                Practise with purpose.
-              </span> <br />
-              Build capability.
+            <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+              The IAM Academy.
             </h1>
 
-            <p className="mt-8 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg sm:leading-relaxed">
-              Transform your cybersecurity career through rigorous, practitioner-led training. From foundational principles to enterprise solution architecture, we prepare you for real-world production environments.
+            <p className="mt-6 text-lg leading-relaxed text-slate-300">
+              Practical, practitioner-led Identity and Access Management education. From foundational principles to enterprise architecture and privileged access engineering.
             </p>
 
-            <div className="mt-10 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
+            <div className="mt-10 flex flex-wrap gap-4">
               <Link
                 href="/contact?type=individual_learning"
-                className="inline-flex min-h-[52px] items-center justify-center border border-[#d6a15c] bg-[#d6a15c] px-8 py-3.5 text-sm font-semibold tracking-wide text-[#030712] shadow-xl transition-all hover:bg-[#e4b26f]"
+                className="inline-flex min-h-[48px] items-center justify-center bg-[#D89A43] px-7 py-3 text-sm font-bold tracking-wider text-[#0B1424] uppercase hover:bg-[#e4a856]"
               >
-                Enquire for Upcoming Cohorts
+                Apply for Next Cohort
               </Link>
               <a
                 href="https://selar.com/m/chiemezie-uzoma1"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-[52px] items-center justify-center gap-3 border border-white/25 bg-white/[0.04] px-8 py-3.5 text-sm font-semibold tracking-wide text-slate-100 backdrop-blur-md transition-all hover:border-[#d6a15c] hover:text-white"
+                className="inline-flex min-h-[48px] items-center justify-center border border-white/20 bg-white/5 px-7 py-3 text-sm font-semibold text-white hover:border-[#D89A43] hover:text-[#D89A43]"
               >
-                <span>Browse Authored Books (Selar)</span>
-                <span aria-hidden="true">&rarr;</span>
+                Selar Bookstore &rarr;
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. Structured Pathways: Architectural Specification Ledger (NOT repetitive cards) */}
-      <section className="relative border-b border-white/10 bg-[#050a14] py-24 sm:py-32">
+      {/* 2. Six Learning Pathways */}
+      <section className="border-b border-slate-200 bg-[#F7F6F2] py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="max-w-3xl">
-            <div className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.25em] text-[#d6a15c] uppercase">
-              <span className="h-px w-6 bg-[#d6a15c]" aria-hidden="true" />
-              <span>Curriculum Architecture</span>
-            </div>
-            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-              Six progressive pathways to engineering mastery.
+            <span className="font-mono text-xs font-bold tracking-widest text-[#D89A43] uppercase">
+              STRUCTURED PROGRESSION
+            </span>
+            <h2 className="mt-4 text-3xl font-extrabold text-[#0B1424] sm:text-4xl">
+              Six learning pathways tailored to your career stage.
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-slate-300">
-              Our learning paths are mapped directly to market demand, equipping you with verifiable technical skills rather than superficial exam answers.
+            <p className="mt-4 text-base text-slate-700">
+              Whether entering cybersecurity or advancing to principal architect, our pathways deliver verifiable enterprise competence.
             </p>
           </div>
 
-          <div className="mt-16 space-y-12">
+          <div className="mt-16 space-y-8">
             {PATHWAYS.map((p) => (
               <div
                 key={p.num}
-                className="border border-white/10 bg-[#07101f] shadow-2xl"
+                className="border border-slate-200 bg-[#FFFFFF] p-8 sm:p-10 shadow-sm"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-white/10 p-6 sm:p-8 bg-white/[0.02] gap-4">
-                  <div className="flex items-baseline gap-4">
-                    <span className="font-mono text-3xl font-bold text-[#d6a15c]">
-                      {p.num}
+                <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
+                  <div>
+                    <span className="font-mono text-xs font-bold text-[#D89A43]">
+                      {p.tier}
                     </span>
-                    <div>
-                      <span className="font-mono text-xs text-[#d6a15c] uppercase tracking-widest block">
-                        {p.tier}
-                      </span>
-                      <h3 className="text-2xl font-bold text-white sm:text-3xl">
-                        {p.name}
-                      </h3>
-                    </div>
+                    <h3 className="text-2xl font-bold text-[#0B1424]">
+                      {p.name}
+                    </h3>
                   </div>
-
-                  <Link
-                    href={`/contact?type=individual_learning&pathway=${p.name.toLowerCase().replace(/\s+/g, "_")}`}
-                    className="inline-flex items-center justify-center border border-white/20 bg-white/[0.04] px-6 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-slate-200 transition-all hover:border-[#d6a15c] hover:text-white shrink-0"
-                  >
-                    Enquire for Pathway
-                  </Link>
+                  <span className="border border-slate-200 bg-[#F7F6F2] px-3 py-1 text-xs font-medium text-slate-700">
+                    {p.audience}
+                  </span>
                 </div>
 
-                <div className="p-6 sm:p-8 lg:p-10 grid grid-cols-1 gap-8 lg:grid-cols-12">
-                  <div className="space-y-6 lg:col-span-5">
-                    <div>
-                      <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-                        Target Candidate
-                      </p>
-                      <p className="mt-1 text-sm text-slate-300">
-                        {p.audience}
-                      </p>
-                    </div>
-
-                    <div className="border-t border-white/10 pt-6">
-                      <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-[#d6a15c]">
-                        Hands-On Enterprise Lab
-                      </p>
-                      <p className="mt-1 text-xs leading-relaxed text-slate-300">
-                        {p.lab}
-                      </p>
-                    </div>
-
-                    <div className="border-t border-white/10 pt-6">
-                      <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-emerald-400">
-                        Target Career Competency
-                      </p>
-                      <p className="mt-1 text-xs leading-relaxed text-slate-300">
-                        {p.outcome}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="border-t border-white/10 pt-6 lg:border-t-0 lg:border-l lg:border-white/10 lg:pl-10 lg:pt-0 lg:col-span-7">
-                    <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-[#d6a15c]">
-                      Core Curriculum Syllabus
-                    </p>
-                    <p className="mt-3 text-sm leading-relaxed text-slate-300">
+                <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-8">
+                  <div className="lg:col-span-5">
+                    <span className="font-mono text-xs font-semibold text-slate-500 uppercase">
+                      Core Syllabus &amp; Theory
+                    </span>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-700">
                       {p.focus}
                     </p>
                   </div>
+
+                  <div className="border-t border-slate-200 pt-6 lg:col-span-4 lg:border-t-0 lg:border-l lg:pl-8 lg:pt-0">
+                    <span className="font-mono text-xs font-semibold text-[#0B1424] uppercase">
+                      Hands-On Tenant Lab
+                    </span>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-700">
+                      {p.lab}
+                    </p>
+                  </div>
+
+                  <div className="border-t border-slate-200 pt-6 lg:col-span-3 lg:border-t-0 lg:border-l lg:pl-8 lg:pt-0">
+                    <span className="font-mono text-xs font-semibold text-emerald-800 uppercase">
+                      Expected Competency
+                    </span>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-700">
+                      {p.outcome}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -253,119 +229,122 @@ export default function AcademyPage() {
         </div>
       </section>
 
-      {/* 3. 5 Learning Formats: Horizontal Specification Ribbon */}
-      <section className="relative border-b border-white/10 bg-[#030712] py-24 sm:py-32">
+      {/* 3. Five Learning Formats */}
+      <section className="border-b border-white/10 bg-[#0B1424] py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="max-w-3xl">
-            <div className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.25em] text-[#d6a15c] uppercase">
-              <span className="h-px w-6 bg-[#d6a15c]" aria-hidden="true" />
-              <span>Pedagogy &bull; Learning Formats</span>
-            </div>
-            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-              Engineered for retention and practical impact.
+            <span className="font-mono text-xs font-bold tracking-widest text-[#D89A43] uppercase">
+              DELIVERY FORMATS
+            </span>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              Flexible learning built for working professionals.
             </h2>
           </div>
 
-          <div className="mt-16 grid grid-cols-1 border-t border-white/10 sm:grid-cols-2 lg:grid-cols-5">
-            {FORMATS.map((f, idx) => (
+          <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
+            {FORMATS.map((f) => (
               <div
                 key={f.num}
-                className={`py-8 sm:py-10 ${
-                  idx > 0 ? "lg:border-l lg:border-white/10 lg:pl-6" : ""
-                } pr-4`}
+                className="border border-white/10 bg-[#14243B]/40 p-6 flex flex-col justify-between"
               >
-                <span className="font-mono text-xs font-bold text-[#d6a15c]">
-                  {f.num} {"//"}
-                </span>
-                <h3 className="mt-3 text-base font-bold text-white">
-                  {f.title}
-                </h3>
-                <p className="mt-2 text-xs leading-relaxed text-slate-400">
-                  {f.desc}
-                </p>
+                <div>
+                  <span className="font-mono text-xs font-bold text-[#D89A43]">
+                    FORMAT // {f.num}
+                  </span>
+                  <h3 className="mt-3 text-lg font-bold text-white">
+                    {f.title}
+                  </h3>
+                  <p className="mt-3 text-xs leading-relaxed text-slate-300">
+                    {f.desc}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 4. Bookstore Showcase Banner */}
-      <section className="relative border-b border-white/10 bg-[#050a14] py-20">
+      {/* 4. Selar Bookstore Feature */}
+      <section className="border-b border-slate-200 bg-[#FFFFFF] py-20">
         <div className="mx-auto max-w-5xl px-5 sm:px-8">
-          <div className="border border-[#d6a15c]/40 bg-[#07101f] p-8 sm:p-12 shadow-2xl">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+          <div className="border-2 border-[#D89A43] bg-[#F7F6F2] p-8 sm:p-12">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <span className="font-mono text-xs font-bold tracking-[0.2em] text-[#d6a15c] uppercase">
-                  Official Publications
+                <span className="font-mono text-xs font-bold text-[#D89A43] uppercase">
+                  Digital Publications
                 </span>
-                <h2 className="mt-3 text-2xl font-bold text-white sm:text-3xl">
-                  Authored IAM Reference Books &amp; Study Guides
-                </h2>
-                <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-300">
-                  Authored by Chiemezie Uzoma. Practical reference manuals, career playbooks, and certification revision guides for identity security practitioners worldwide.
+                <h3 className="mt-2 text-2xl font-bold text-[#0B1424]">
+                  Official IAM Workbooks &amp; Study Guides
+                </h3>
+                <p className="mt-2 text-sm text-slate-700 max-w-xl">
+                  Authored by Chiemezie Uzoma, our practical e-books and architecture workbooks are available for immediate digital download via Selar.
                 </p>
               </div>
-
               <a
                 href="https://selar.com/m/chiemezie-uzoma1"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex shrink-0 items-center justify-center gap-3 border border-[#d6a15c] bg-[#d6a15c] px-8 py-3.5 font-mono text-xs font-bold uppercase tracking-wider text-[#030712] transition-all hover:bg-[#e4b26f]"
+                className="inline-flex shrink-0 items-center justify-center bg-[#0B1424] px-6 py-3.5 text-xs font-bold text-white uppercase hover:bg-[#14243B]"
               >
-                <span>Visit Store on Selar</span>
-                <span aria-hidden="true">&rarr;</span>
+                Visit Selar Store &rarr;
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 5. FAQs & Integrity Notice */}
-      <section className="relative border-b border-white/10 bg-[#030712] py-24 sm:py-32">
+      {/* 5. Academic Integrity Notice */}
+      <section className="border-b border-white/10 bg-[#14243B] py-16">
         <div className="mx-auto max-w-5xl px-5 sm:px-8">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.25em] text-[#d6a15c] uppercase">
-              <span className="h-px w-6 bg-[#d6a15c]" aria-hidden="true" />
-              <span>Academy FAQs</span>
+          <div className="border border-white/10 bg-[#0B1424] p-8">
+            <div className="flex items-center gap-3">
+              <span className="h-2 w-2 bg-[#D89A43]" />
+              <p className="font-mono text-xs font-semibold tracking-wider text-[#D89A43] uppercase">
+                Professional Learning Integrity Notice
+              </p>
             </div>
-            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-              Frequently asked questions.
-            </h2>
-          </div>
-
-          <div className="mt-12">
-            <AcademyFaq />
-          </div>
-
-          <div className="mt-12 border border-white/10 bg-[#07101f] p-6 text-center text-xs leading-relaxed text-slate-400">
-            <strong className="text-white">Learning Integrity Notice:</strong> The IAM Lab Academy is an engineering and operational capability programme. Completion certificates reflect practical competency demonstrated in enterprise lab tasks. We do not sell paper credentials or guarantee employment without personal dedication and technical competence.
+            <h3 className="mt-3 text-lg font-bold text-white">
+              Grounded in Competency, Never Shortcut Certification
+            </h3>
+            <p className="mt-2 text-sm leading-relaxed text-slate-400">
+              The IAM Academy does not sell certifications, provide exam proxies, or offer unauthorized exam dumps. We train students to understand enterprise architecture, configure production tenants, and pass official vendor credentials (Microsoft, CyberArk, SailPoint) through verifiable personal technical mastery.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* 6. Cohort Enrollment CTA Banner */}
-      <section className="relative border-b border-white/10 bg-[#050a14] py-24 sm:py-32">
-        <div className="mx-auto max-w-4xl px-5 text-center sm:px-8">
-          <div className="flex items-center justify-center gap-3 font-mono text-xs font-semibold tracking-[0.25em] text-[#d6a15c] uppercase">
-            <span className="h-px w-8 bg-[#d6a15c]" aria-hidden="true" />
-            <span>Enrollment</span>
-            <span className="h-px w-8 bg-[#d6a15c]" aria-hidden="true" />
+      {/* 6. Interactive FAQs */}
+      <section className="border-b border-white/10 bg-[#0B1424] py-24 sm:py-32">
+        <div className="mx-auto max-w-4xl px-5 sm:px-8">
+          <div className="text-center">
+            <span className="font-mono text-xs font-bold tracking-widest text-[#D89A43] uppercase">
+              Frequently Asked Questions
+            </span>
+            <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">
+              Everything you need to know about the Academy.
+            </h2>
           </div>
+          <div className="mt-12">
+            <AcademyFaq />
+          </div>
+        </div>
+      </section>
 
-          <h2 className="mt-6 text-3xl font-extrabold text-white sm:text-5xl">
-            Ready to accelerate your IAM capability?
+      {/* 7. Closing Enrollment CTA */}
+      <section className="border-b border-white/10 bg-[#0B1424] py-20 text-center">
+        <div className="mx-auto max-w-3xl px-5">
+          <h2 className="text-3xl font-bold text-white">
+            Take the next step in your IAM career.
           </h2>
-
-          <p className="mt-6 text-base text-slate-300 sm:text-lg">
-            Cohort seats are limited to ensure direct instructor interaction and personalized lab guidance. Submit an inquiry to receive syllabus details and schedule information.
+          <p className="mt-4 text-slate-300">
+            Cohort spaces are limited to preserve 1-on-1 mentorship quality. Submit an enquiry to receive the syllabus and cohort timetable.
           </p>
-
-          <div className="mt-10">
+          <div className="mt-8">
             <Link
               href="/contact?type=individual_learning"
-              className="inline-flex min-h-[52px] items-center justify-center border border-[#d6a15c] bg-[#d6a15c] px-8 py-3.5 text-sm font-semibold tracking-wide text-[#030712] shadow-xl transition-all hover:bg-[#e4b26f]"
+              className="inline-flex min-h-[48px] items-center justify-center bg-[#D89A43] px-8 py-3 text-sm font-bold tracking-wider text-[#0B1424] uppercase hover:bg-[#e4a856]"
             >
-              Enquire for Next Cohort &rarr;
+              Enquire About Enrollment &rarr;
             </Link>
           </div>
         </div>

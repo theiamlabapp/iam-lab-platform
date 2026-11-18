@@ -1,144 +1,62 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "motion/react";
-import { HeroTelemetryHud } from "./HeroTelemetryHud";
-
-const PLATFORMS = [
-  "Microsoft Entra ID",
-  "SailPoint",
-  "CyberArk",
-  "Okta",
-  "Ping Identity",
-  "Cloud IAM (AWS • Azure • GCP)",
-] as const;
 
 export function HomeHero() {
   return (
-    <section className="relative min-h-[92vh] flex items-center overflow-hidden border-b border-white/10 bg-[#030712] py-20 sm:py-28 lg:py-36">
-      {/* 1. Cinematic Background Photographic Layer with Balanced Dark Overlay */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+    <section className="relative overflow-hidden border-b border-white/10 bg-[#0B1424] py-24 sm:py-32 lg:py-40">
+      {/* Full-width realistic photographic background */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
         <Image
-          src="/brand/hero-bg.jpg"
-          alt="Enterprise Identity Architecture Background"
+          src="/brand/hero-enterprise.jpg"
+          alt="Enterprise cybersecurity and identity leadership in modern corporate boardroom"
           fill
           priority
-          className="object-cover object-center opacity-35 mix-blend-screen scale-105"
+          sizes="100vw"
+          className="object-cover object-center opacity-45"
         />
-        {/* Gradients designed so background image is clearly visible, not pitch black */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#030712] via-[#030712]/85 to-[#030712]/50" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-[#030712]/75" />
-        <div className="absolute top-1/4 left-1/4 h-[550px] w-[550px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#d6a15c]/12 blur-[140px]" />
-        <div className="absolute bottom-10 right-10 h-[450px] w-[450px] rounded-full bg-blue-600/10 blur-[130px]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1424] via-[#0B1424]/90 to-[#14243B]/80" />
       </div>
 
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 w-full">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
-          {/* Left Column: Bold Editorial Positioning */}
-          <div className="lg:col-span-7">
-            {/* Architectural Technical Eyebrow — NO rounded pill badge */}
-            <motion.div
-              initial={{ opacity: 0, x: -16 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-              className="flex items-center gap-3 font-mono text-xs font-semibold tracking-[0.28em] text-[#d6a15c] uppercase"
-            >
-              <span className="h-px w-8 bg-[#d6a15c]" aria-hidden="true" />
-              <span>Enterprise Identity Security &bull; Advisory &bull; Learning</span>
-            </motion.div>
-
-            {/* Main Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-6 text-4xl font-extrabold tracking-[-0.035em] text-white sm:text-5xl lg:text-6xl xl:text-7xl lg:leading-[1.08]"
-            >
-              Secure identities. <br />
-              <span className="bg-gradient-to-r from-[#ebd0a3] via-[#d6a15c] to-amber-200 bg-clip-text text-transparent">
-                Simplify access.
-              </span> <br />
-              Strengthen your business.
-            </motion.h1>
-
-            {/* Narrative Paragraph */}
-            <motion.p
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-6 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg sm:leading-relaxed"
-            >
-              The IAM Lab helps organisations establish resilient access governance,
-              eliminate privilege creep, and automate identity lifecycles &mdash; while
-              training the next generation of enterprise IAM practitioners with hands-on,
-              production-tested engineering capability.
-            </motion.p>
-
-            {/* Primary Action Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-8 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center"
-            >
-              <Link
-                href="/contact?type=enterprise_consulting"
-                className="inline-flex min-h-[52px] items-center justify-center gap-3 rounded-none border border-[#d6a15c] bg-[#d6a15c] px-8 py-3.5 font-mono text-xs font-bold uppercase tracking-wider text-[#030712] shadow-[0_10px_30px_rgba(214,161,92,0.25)] transition-all hover:bg-[#e4b26f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d6a15c]"
-              >
-                <span>Talk to an IAM Specialist</span>
-                <svg
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className="h-4 w-4"
-                  aria-hidden="true"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </Link>
-
-              <Link
-                href="/academy"
-                className="inline-flex min-h-[52px] items-center justify-center gap-3 rounded-none border border-white/25 bg-white/[0.04] px-8 py-3.5 font-mono text-xs font-bold uppercase tracking-wider text-slate-100 backdrop-blur-md transition-all hover:border-[#d6a15c] hover:bg-white/[0.08] hover:text-white"
-              >
-                <span>Explore IAM Academy</span>
-                <span aria-hidden="true" className="text-[#d6a15c]">&rarr;</span>
-              </Link>
-            </motion.div>
-
-            {/* Core Stack Telemetry Bar */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.45 }}
-              className="mt-12 border-t border-white/12 pt-6"
-            >
-              <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-4">
-                <span className="font-mono text-[11px] font-semibold tracking-[0.2em] text-[#d6a15c] uppercase shrink-0">
-                  Enterprise Platforms //
-                </span>
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-mono text-slate-400">
-                  {PLATFORMS.map((p, idx) => (
-                    <span key={p} className="flex items-center gap-2">
-                      <span className="text-white/25">{idx > 0 && "•"}</span>
-                      <span className="text-slate-300">{p}</span>
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        <div className="max-w-3xl">
+          {/* Restrained index line */}
+          <div className="flex items-center gap-3">
+            <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
+            <span className="font-mono text-xs font-semibold tracking-[0.25em] text-[#D89A43] uppercase">
+              Enterprise Identity &amp; Access Management
+            </span>
           </div>
 
-          {/* Right Column: Live Identity Security Telemetry Terminal */}
-          <div className="lg:col-span-5">
-            <HeroTelemetryHud />
+          {/* Headline */}
+          <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+            Secure identities. Simplify access. Strengthen your business.
+          </h1>
+
+          {/* Concise supporting copy */}
+          <p className="mt-6 text-lg leading-relaxed text-slate-300 sm:text-xl">
+            The IAM Lab provides independent Identity and Access Management advisory,
+            architecture engineering, and capability development for high-assurance enterprises.
+          </p>
+
+          {/* One clear primary CTA */}
+          <div className="mt-10 flex flex-wrap items-center gap-4">
+            <Link
+              href="/contact?type=enterprise_consulting"
+              className="inline-flex min-h-[50px] items-center justify-center bg-[#D89A43] px-8 py-3.5 text-sm font-bold tracking-wider text-[#0B1424] uppercase transition-colors hover:bg-[#e4a856]"
+            >
+              Request a Consultation
+            </Link>
+            <Link
+              href="/services"
+              className="inline-flex min-h-[50px] items-center justify-center border border-white/20 bg-white/5 px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:border-[#D89A43] hover:text-[#D89A43]"
+            >
+              Explore Capabilities &rarr;
+            </Link>
           </div>
         </div>
       </div>
     </section>
   );
 }
+
+export default HomeHero;

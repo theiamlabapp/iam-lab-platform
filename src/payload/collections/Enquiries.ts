@@ -10,6 +10,7 @@ export const Enquiries: CollectionConfig = {
     useAsTitle: "name",
     defaultColumns: ["name", "email", "enquiryType", "organisation", "status", "createdAt"],
     description: "Inbound corporate consulting requests and IAM Academy cohort applications.",
+    group: "Client Management",
   },
   access: {
     read: ({ req: { user } }) => Boolean(user),
