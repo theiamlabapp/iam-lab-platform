@@ -36,6 +36,16 @@ export default buildConfig({
         Logo: "/src/payload/components/Logo#Logo",
         Icon: "/src/payload/components/Icon#Icon",
       },
+      views: {
+        dashboard: {
+          Component: "/src/payload/views/DashboardView#DashboardView",
+        },
+        login: {
+          Component: "/src/payload/views/LoginView#LoginView",
+          path: "/login",
+          exact: true,
+        },
+      },
     },
   },
   collections: [Users, Media, Enquiries, Pages],
