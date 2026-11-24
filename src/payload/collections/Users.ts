@@ -1,18 +1,30 @@
 import type { CollectionConfig } from "payload";
+import { isAdminAccess, isAuthenticatedOrSelf } from "../access/roles";
 
 export const Users: CollectionConfig = {
   slug: "users",
   auth: true,
+  labels: {
+    singular: "User Account",
+    plural: "Users & Administrators",
+  },
   admin: {
     useAsTitle: "email",
-    defaultColumns: ["name", "email", "role", "createdAt"],
+    defaultColumns: ["name", "email", "role", "jobTitle", "createdAt"],
     group: "Administration",
+    components: {
+      views: {
+        list: {
+          Component: "/src/payload/views/UsersListView#UsersListView",
+        },
+      },
+    },
   },
   access: {
-    read: ({ req: { user } }) => Boolean(user),
-    create: ({ req: { user } }) => Boolean(user && user.role === "admin"),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user && user.role === "admin"),
+    read: isAuthenticatedOrSelf,
+    create: isAdminAccess,
+    update: isAuthenticatedOrSelf,
+    delete: isAdminAccess,
   },
   fields: [
     {
@@ -32,6 +44,14 @@ export const Users: CollectionConfig = {
       type: "select",
       required: true,
       defaultValue: "admin",
+      access: {
+        update: ({ req: { user } }) =>
+          Boolean(
+            user &&
+              typeof user.role === "string" &&
+              (user.role === "admin" || user.role === "super_admin")
+          ),
+      },
       options: [
         { label: "Super Administrator", value: "super_admin" },
         { label: "Administrator", value: "admin" },

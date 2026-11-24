@@ -129,7 +129,7 @@ export async function DashboardView(props: DashboardViewProps) {
           <Link href="/admin/collections/pages" className="iam-action-btn">
             <span>Manage Pages</span>
           </Link>
-          <Link href="/admin/collections/media/create" className="iam-action-btn">
+          <Link href="/admin/collections/media?action=upload" className="iam-action-btn">
             <span>Upload Media</span>
           </Link>
           <Link href="/admin/globals/site-settings" className="iam-action-btn">

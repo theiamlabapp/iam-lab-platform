@@ -14,7 +14,7 @@ const ENQUIRY_TYPES = [
 const SERVICE_PATHWAY_OPTIONS = [
   { value: "", label: "-- Select Service or Learning Pathway (Optional) --" },
   { label: "--- Corporate Consulting Services ---", value: "", disabled: true },
-  { value: "service_strategy", label: "IAM Strategy, Assessment & Advisory" },
+  { value: "service_strategy", label: "IAM Strategy, Architecture & Advisory" },
   { value: "service_governance", label: "Identity Governance & Access Management (IGA)" },
   { value: "service_pam", label: "Privileged Access Management (PAM)" },
   { value: "service_auth_sso", label: "Access Management & SSO/MFA" },
@@ -34,6 +34,32 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 export function ContactForm() {
   const searchParams = useSearchParams();
   const typeParam = searchParams.get("type");
+  const serviceParam = searchParams.get("service") || "";
+
+  const normalizeServiceParam = (raw: string): string => {
+    if (!raw) return "";
+    const validValues = new Set<string>(SERVICE_PATHWAY_OPTIONS.map((o) => o.value));
+    if (validValues.has(raw)) return raw;
+    const mapped: Record<string, string> = {
+      strategy: "service_strategy",
+      architecture: "service_strategy",
+      service_architecture: "service_strategy",
+      governance: "service_governance",
+      pam: "service_pam",
+      "auth-sso": "service_auth_sso",
+      "cloud-iam": "service_cloud_iam",
+      directory: "service_directory",
+      implementation: "service_directory",
+      service_implementation: "service_directory",
+      foundation: "pathway_foundation",
+      analyst: "pathway_analyst",
+      engineer: "pathway_engineer",
+      "senior-engineer": "pathway_senior_engineer",
+      architect: "pathway_architect",
+      "consultant-lead": "pathway_consultant_lead",
+    };
+    return mapped[raw.toLowerCase()] || "";
+  };
 
   const defaultCategory =
     typeParam === "individual" || typeParam === "individual_learning" || typeParam === "academy"
@@ -42,24 +68,28 @@ export function ContactForm() {
         ? "corporate_training"
         : "enterprise_consulting";
 
+  const defaultService = normalizeServiceParam(serviceParam);
+
   const [formData, setFormData] = useState({
     enquiryType: defaultCategory,
     name: "",
     email: "",
     organisation: "",
     phone: "",
-    serviceOrPathway: "",
+    serviceOrPathway: defaultService,
     message: "",
     privacyAccepted: false,
     company_hp: "", // Honeypot spam trap
   });
 
-  const [prevTypeParam, setPrevTypeParam] = useState(typeParam);
-  if (typeParam !== prevTypeParam) {
-    setPrevTypeParam(typeParam);
+  const [prevQueryKey, setPrevQueryKey] = useState(`${typeParam}|${serviceParam}`);
+  const currentQueryKey = `${typeParam}|${serviceParam}`;
+  if (currentQueryKey !== prevQueryKey) {
+    setPrevQueryKey(currentQueryKey);
     setFormData((prev) => ({
       ...prev,
       enquiryType: defaultCategory,
+      serviceOrPathway: defaultService || prev.serviceOrPathway,
     }));
   }
 

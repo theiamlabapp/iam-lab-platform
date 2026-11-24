@@ -77,7 +77,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#030712",
+  themeColor: "#0B1424",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -93,7 +93,7 @@ export default function FrontendRootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
     >
-      <body className="min-h-full flex flex-col bg-[#030712] text-slate-100 selection:bg-[#d6a15c]/30 selection:text-[#d6a15c]">
+      <body className="min-h-full flex flex-col bg-[#0B1424] text-slate-100 selection:bg-[#d6a15c]/30 selection:text-[#d6a15c]">
         <Navbar />
         <main id="main-content" className="flex-1">
           {children}

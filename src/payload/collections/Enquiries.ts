@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload";
+import { isAdminAccess, isStaffAccess } from "../access/roles";
 
 export const Enquiries: CollectionConfig = {
   slug: "enquiries",
@@ -8,15 +9,30 @@ export const Enquiries: CollectionConfig = {
   },
   admin: {
     useAsTitle: "name",
-    defaultColumns: ["name", "email", "enquiryType", "organisation", "status", "createdAt"],
-    description: "Inbound corporate consulting requests and IAM Academy cohort applications.",
+    defaultColumns: [
+      "name",
+      "email",
+      "enquiryType",
+      "organisation",
+      "status",
+      "createdAt",
+    ],
+    description:
+      "Inbound corporate consulting requests and IAM Academy cohort applications.",
     group: "Client Management",
+    components: {
+      views: {
+        list: {
+          Component: "/src/payload/views/EnquiriesListView#EnquiriesListView",
+        },
+      },
+    },
   },
   access: {
-    read: ({ req: { user } }) => Boolean(user),
-    create: () => true, // Allows submissions from public contact form
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user && user.role === "admin"),
+    read: isStaffAccess,
+    create: () => true, // Public contact form submission
+    update: isStaffAccess,
+    delete: isAdminAccess,
   },
   fields: [
     {
@@ -97,9 +113,11 @@ export const Enquiries: CollectionConfig = {
       defaultValue: [],
       label: "Communication History",
       admin: {
-        description: "Log of responses and outreach sent to this client enquiry.",
+        description:
+          "Log of responses and direct outreach sent to this client enquiry.",
         components: {
-          Field: "/src/payload/components/EnquiryCommunicationWorkspace#EnquiryCommunicationWorkspace",
+          Field:
+            "/src/payload/components/EnquiryCommunicationWorkspace#EnquiryCommunicationWorkspace",
         },
       },
     },

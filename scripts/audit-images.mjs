@@ -28,6 +28,7 @@ function searchIn(dir) {
       let match;
       while ((match = regex.exec(content)) !== null) {
         const ref = match[1];
+        if (ref.includes('${')) continue;
         if (!imageRefs.has(ref)) {
           imageRefs.set(ref, []);
         }

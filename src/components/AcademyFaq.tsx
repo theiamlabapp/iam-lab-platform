@@ -9,29 +9,29 @@ interface FaqItem {
 
 const FAQS: FaqItem[] = [
   {
-    question: "Who is the IAM Academy designed for?",
+    question: "Do I need IAM experience to start with IAM Academy?",
     answer:
-      "The IAM Academy is built for IT administrators, system engineers, helpdesk professionals, cloud specialists, and cybersecurity practitioners who want to build deep, market-relevant expertise in Identity and Access Management. We also support career switchers with foundational technical aptitude who are committed to structured, practitioner-led learning.",
+      "No prior cybersecurity work history is required to begin at the IAM Foundation stage. Foundation is specifically structured for beginners, IT support staff, and career switchers with technical aptitude before progressing into hands-on platform administration.",
   },
   {
-    question: "Do I need prior cybersecurity experience to enroll?",
+    question: "When should I select Microsoft Entra ID, Okta, SailPoint, or another platform?",
     answer:
-      "While foundational understanding of basic networking, operating systems, and client-server concepts is helpful, you do not need years of security experience. Our 'IAM Foundation' pathway starts with core principles before progressing to advanced IGA, PAM, and cloud identity engineering.",
+      "Learners explore core architectural identity concepts first in Foundation, then begin specialising on selected identity platforms at the IAM Analyst and IAM Engineer tiers based on their target role, regional enterprise demand, and career objectives.",
   },
   {
-    question: "What is the format and time commitment for cohorts?",
+    question: "Are live community and cohort sessions recorded?",
     answer:
-      "Cohorts run for 6 to 10 weeks depending on the specific pathway. Sessions are delivered live online during evenings or weekends to accommodate working professionals, supplemented by recorded archives, hands-on lab assignments, and direct access to instructors.",
+      "Cohort session schedules, recording access policies, and lab material guidelines are shared cleanly with each programme outline prior to enrolment so working professionals can plan reliably.",
   },
   {
-    question: "Do these programs prepare me for industry certifications?",
+    question: "How do one-to-one mentorship and corporate team training work?",
     answer:
-      "Yes. While our primary focus is practical engineering ability rather than rote exam memorization, our curricula align closely with industry standards and directly support preparation for credentials such as Microsoft SC-300 (Identity and Access Administrator), CompTIA Security+, and vendor-specific certifications across Okta, CyberArk, and SailPoint.",
+      "Both one-to-one mentorship and corporate engineering workshops begin with a focused consultation to assess capability objectives, current platform exposure, duration, and agreed scope before a tailored programme schedule is confirmed.",
   },
   {
-    question: "Does The IAM Lab offer corporate training for enterprise IT teams?",
+    question: "Where can I access IAM Lab workbooks, guides, and digital resources?",
     answer:
-      "Yes. We design and deliver customized corporate workshops tailored to your organization's specific identity architecture, tooling stack (e.g. Microsoft Entra ID, CyberArk, SailPoint), and internal standard operating procedures. Contact us through our consultation form to discuss team training.",
+      "Our official guides, technical study manuals, and career preparation packs are published directly via The IAM Lab Selar digital resource store at https://selar.com/m/chiemezie-uzoma1.",
   },
 ];
 
@@ -43,24 +43,32 @@ export function AcademyFaq() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="divide-y divide-white/10 border-t border-b border-white/10">
       {FAQS.map((faq, idx) => {
         const isOpen = openIndex === idx;
         return (
-          <div
-            key={idx}
-            className="rounded-xl border border-white/10 bg-[#07101f]/70 backdrop-blur-sm transition-colors hover:border-[#d6a15c]/40"
-          >
+          <div key={idx} className="transition-colors hover:bg-white/[0.02]">
             <button
               type="button"
               onClick={() => toggle(idx)}
-              className="flex w-full items-center justify-between p-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d6a15c] focus-visible:ring-inset"
+              className="flex w-full items-center justify-between py-6 px-2 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D89A43] focus-visible:ring-inset"
               aria-expanded={isOpen}
             >
-              <span className="text-base font-semibold text-white sm:text-lg">
-                {faq.question}
-              </span>
-              <span className="ml-4 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#d6a15c]">
+              <div className="flex items-baseline gap-4 pr-6">
+                <span className="font-mono text-xs font-bold text-[#D89A43]">
+                  0{idx + 1}
+                </span>
+                <span className="text-base font-bold text-white sm:text-lg">
+                  {faq.question}
+                </span>
+              </div>
+              <span
+                className={`flex h-8 w-8 shrink-0 items-center justify-center border text-[#D89A43] transition-colors ${
+                  isOpen
+                    ? "border-[#D89A43] bg-[#D89A43]/15"
+                    : "border-white/15 bg-white/[0.03]"
+                }`}
+              >
                 <svg
                   className={`h-4 w-4 transform transition-transform duration-200 ${
                     isOpen ? "rotate-180" : ""
@@ -79,7 +87,7 @@ export function AcademyFaq() {
               </span>
             </button>
             {isOpen && (
-              <div className="border-t border-white/10 px-5 pb-5 pt-3">
+              <div className="pb-6 pl-9 pr-4 sm:pl-11">
                 <p className="text-sm leading-relaxed text-slate-300">
                   {faq.answer}
                 </p>

@@ -1,25 +1,12 @@
 import type { CollectionConfig } from "payload";
+import { isAdminAccess, isEditorialAccess } from "../access/roles";
 
 export const Media: CollectionConfig = {
   slug: "media",
   upload: {
-    staticDir: "public/media",
-    imageSizes: [
-      {
-        name: "thumbnail",
-        width: 400,
-        height: 300,
-        position: "centre",
-      },
-      {
-        name: "hero",
-        width: 1920,
-        height: 1080,
-        position: "centre",
-      },
-    ],
+    disableLocalStorage: true,
     adminThumbnail: "thumbnail",
-    mimeTypes: ["image/*", "application/pdf"],
+    mimeTypes: ["image/*"],
   },
   admin: {
     group: "Content Management",
@@ -32,10 +19,10 @@ export const Media: CollectionConfig = {
     },
   },
   access: {
-    read: () => true, // Public read for uploaded brand assets & images
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user),
+    read: () => true,
+    create: isEditorialAccess,
+    update: isEditorialAccess,
+    delete: isAdminAccess,
   },
   fields: [
     {
@@ -48,6 +35,27 @@ export const Media: CollectionConfig = {
       name: "caption",
       type: "text",
       label: "Caption / Description",
+    },
+    {
+      name: "category",
+      type: "select",
+      defaultValue: "hero",
+      options: [
+        { label: "Hero Photography", value: "hero" },
+        { label: "Advisory & Consulting", value: "consulting" },
+        { label: "IAM Academy", value: "classroom" },
+        { label: "Identity Operations", value: "identity" },
+        { label: "Brand Logos", value: "logo" },
+      ],
+      label: "Asset Category",
+    },
+    {
+      name: "sourceType",
+      type: "text",
+      defaultValue: "uploaded",
+      admin: {
+        readOnly: true,
+      },
     },
   ],
 };

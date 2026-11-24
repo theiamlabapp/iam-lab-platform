@@ -1,306 +1,345 @@
-import { Client } from 'pg';
+import fs from "fs";
+import path from "path";
+import { Client } from "pg";
 
-const connectionString = (
-  process.env.DATABASE_URI ||
-  'postgresql://payload_app.lqkrwdjtkxghrbiifuif:IamLabSecure2026_PayloadDB@aws-0-eu-west-2.pooler.supabase.com:5432/postgres'
-).trim().replace(/^["']|["']$/g, '');
+if (!process.env.DATABASE_URI) {
+  const envFile = path.resolve(process.cwd(), ".env.local");
+  if (fs.existsSync(envFile)) {
+    for (const line of fs.readFileSync(envFile, "utf8").split(/\r?\n/)) {
+      const m = line.match(/^\s*DATABASE_URI\s*=\s*(.+)\s*$/);
+      if (m) process.env.DATABASE_URI = m[1].trim().replace(/^["']|["']$/g, "");
+    }
+  }
+}
+
+const connectionString = (process.env.DATABASE_URI || "").trim().replace(/^["']|["']$/g, "");
+if (!connectionString) {
+  console.error("Missing DATABASE_URI in environment or .env.local.");
+  process.exit(1);
+}
 
 const initialPages = [
   {
-    title: 'Home — The IAM Lab',
-    slug: 'home',
+    title: "Home — The IAM Lab",
+    slug: "home",
     meta_description:
-      'Enterprise Identity and Access Management advisory, engineering, and workforce capability enablement. Secure identities. Simplify access. Strengthen your business.',
-    hero_headline: 'Secure identities. Simplify access. Strengthen your business.',
+      "The IAM Lab helps organisations secure digital identities and manage access with greater clarity, control and efficiency, while helping professionals develop practical IAM capability.",
+    hero_headline:
+      "Secure identities. Simplify access. Strengthen your business.",
     hero_subheadline:
-      'Independent Identity and Access Management advisory, engineering, and capability development for high-assurance enterprises.',
-    status: 'published',
+      "The IAM Lab supports organisations with practical Identity and Access Management expertise — from access governance and lifecycle automation to authentication, privileged access, and capability enablement.",
+    status: "published",
     sections: [
       {
-        type: 'hero',
-        badge: 'Enterprise Identity Architecture & Governance',
-        headline: 'Secure identities. Simplify access. Strengthen your business.',
+        type: "hero",
+        badge: "Identity Security • IAM Consulting • Professional Learning",
+        headline:
+          "Secure identities. Simplify access. Strengthen your business.",
         subheadline:
-          'Independent Identity and Access Management advisory, engineering, and capability development for high-assurance enterprises.',
-        ctaPrimary: { label: 'Request Consultation', href: '/contact?type=enterprise_consulting' },
-        ctaSecondary: { label: 'Explore IAM Academy', href: '/academy' },
-        bgImage: '/brand/corporate-hero.jpg',
+          "The IAM Lab supports organisations with practical Identity and Access Management expertise — from access governance and lifecycle automation to authentication, privileged access, and capability enablement.",
+        ctaPrimary: {
+          label: "Discuss an IAM Project",
+          href: "/contact?type=enterprise_consulting",
+        },
+        ctaSecondary: {
+          label: "Explore IAM Academy",
+          href: "/academy",
+        },
+        bgImage: "/brand/hero-enterprise.jpg",
       },
       {
-        type: 'challenges_ledger',
-        badge: 'Enterprise Friction & Risk',
-        title: 'The Four Structural Identity Challenges Facing Enterprise Leaders',
+        type: "challenges_ledger",
+        badge: "Enterprise Vulnerabilities",
+        title: "Identity is the primary attack surface.",
         subtitle:
-          'Modern enterprises accumulate identity friction through rapid SaaS adoption, legacy Active Directory debt, and uncoordinated PAM sprawl.',
+          "Modern organisations manage workforce, vendor, and workload access across disparate systems. Without coordinated governance and automated controls, access risk compounds silently.",
         items: [
           {
-            num: '01',
-            title: 'Governance & Audit Sprawl',
-            context: 'Manual access reviews across hybrid multi-cloud directories generate audit fatigue.',
-            friction: 'Incomplete entitlement visibility leads to toxic combinations and compliance citations.',
-            resolution: 'Automated, policy-driven IGA workflows that enforce continuous least privilege.',
+            num: "01",
+            title: "Identity Sprawl & Cloud Proliferation",
+            context: "SaaS & Multi-Cloud Complexity",
+            friction:
+              "As organisations grow across hybrid directories and cloud applications, permissions fragment rapidly. Engineering teams lose authoritative visibility over who holds access.",
+            resolution:
+              "Authoritative identity orchestration, directory consolidation, and consistent Single Source of Truth controls.",
           },
           {
-            num: '02',
-            title: 'Privileged Access Sprawl',
-            context: 'Standing administrative privileges create catastrophic breach vectors.',
-            friction: 'Hardcoded secrets and unvaulted service accounts evade legacy security tools.',
-            resolution: 'Zero Standing Privilege (ZSP) with just-in-time credential brokering and session recording.',
+            num: "02",
+            title: "Privilege Creep & Unmonitored Admins",
+            context: "Standing Entitlements & Key Risk",
+            friction:
+              "Staff shift roles while keeping old permissions, and shared or standing administrative privileges leave critical infrastructure vulnerable to lateral escalation.",
+            resolution:
+              "Zero Standing Privilege architecture, automated periodic reviews, and Just-in-Time access elevation.",
           },
           {
-            num: '03',
-            title: 'Legacy Directory Debt',
-            context: 'Fragmented on-premises Active Directory forests stalling cloud modernization.',
-            friction: 'M&A integration friction, orphaned accounts, and high authentication latency.',
-            resolution: 'Streamlined directory consolidation and modern OpenID Connect/SAML 2.0 federation.',
+            num: "03",
+            title: "Inconsistent Review & Audit Debt",
+            context: "Regulatory Governance Friction",
+            friction:
+              "Manual spreadsheet sign-offs and informal approval trails break down under audit pressure across ISO 27001, SOX, and NIS2 mandates.",
+            resolution:
+              "Traceable access governance workflows, verifiable Separation of Duties (SoD), and continuous audit trails.",
           },
           {
-            num: '04',
-            title: 'Identity Talent Deficit',
-            context: 'Acute global shortage of certified IAM engineers and solution architects.',
-            friction: 'High contractor dependency and knowledge gaps inside internal security operations.',
-            resolution: 'Tailored enterprise workforce training and production-grade lab enablement.',
+            num: "04",
+            title: "Manual Joiner-Mover-Leaver Latency",
+            context: "Operational Lifecycle Bottlenecks",
+            friction:
+              "Manual ticket onboarding delays Day-1 productivity, while late revocation on departure leaves lingering access across peripheral business systems.",
+            resolution:
+              "Event-driven Joiner-Mover-Leaver automation connecting HR sources directly to enterprise directories via SCIM.",
           },
         ],
       },
       {
-        type: 'services_list',
-        badge: 'Enterprise Capabilities',
-        title: 'Comprehensive Identity & Access Solutions',
-        items: [
-          {
-            num: '01',
-            title: 'IAM Strategy & Maturity Assessment',
-            desc: 'Independent architectural audit evaluating current-state maturity against NIST SP 800-207 and ISO 27001.',
-          },
-          {
-            num: '02',
-            title: 'Privileged Access Management (PAM)',
-            desc: 'Design and deployment of zero standing privilege architecture, credential vaulting, and session recording.',
-          },
-          {
-            num: '03',
-            title: 'Identity Governance & Administration (IGA)',
-            desc: 'End-to-end lifecycle automation, access request workflows, and compliance-grade certification campaigns.',
-          },
-          {
-            num: '04',
-            title: 'Cloud Identity & Workforce Enablement',
-            desc: 'Single Sign-On (SSO), adaptive MFA, conditional access policies, and enterprise directory consolidation.',
-          },
-        ],
+        type: "advisory_editorial",
+        badge: "Independent Advisory",
+        headline: "We begin with the business problem, not software sales.",
+        subheadline:
+          "Identity security is not one tool or a single policy — it is a connected set of decisions about who receives access, how approvals are enforced, and how change is governed.",
+        body: "The IAM Lab provides clear, technically grounded consulting across advisory assessments, identity governance, lifecycle automation, and privileged access — tailored to your real environment without vendor hype.",
+        bgImage: "/brand/team-collaboration.jpg",
+      },
+      {
+        type: "workforce_capabilities",
+        badge: "Engineering & Operational Depth",
+        headline: "Practical controls teams can genuinely run and audit.",
+        subheadline:
+          "Our goal is to make Identity and Access Management transparent to leadership, friction-free for legitimate users, and maintainable by internal IT and security teams.",
+        bgImage: "/brand/workforce-operations.jpg",
+      },
+      {
+        type: "academy_feature",
+        badge: "Professional Capability Building",
+        headline: "Build your IAM career with The IAM Academy.",
+        subheadline:
+          "Our learning initiatives connect foundational IAM concepts to real enterprise engineering. Explore structured career pathways, practical platform walkthroughs, interview preparation, and digital workbooks.",
+        bgImage: "/brand/academy-classroom.jpg",
+      },
+      {
+        type: "closing_cta",
+        badge: "Initiate a Conversation",
+        headline:
+          "Let’s discuss the identity challenge your organisation is solving.",
+        subheadline:
+          "Supporting teams, organisations, and IAM practitioners who want to strengthen identity security and practical operational capability.",
+        ctaPrimary: {
+          label: "Talk to an IAM Specialist",
+          href: "/contact?type=enterprise_consulting",
+        },
+        bgImage: "/brand/executive-consulting.jpg",
       },
     ],
     content: {
       root: {
-        type: 'root',
-        format: '',
+        type: "root",
+        format: "",
         indent: 0,
         version: 1,
         children: [
           {
-            type: 'paragraph',
-            format: '',
+            type: "paragraph",
+            format: "",
             indent: 0,
             version: 1,
             children: [
               {
-                mode: 'normal',
-                text: 'The IAM Lab is a specialist cybersecurity consulting practice focused exclusively on Identity and Access Management (IAM), Privileged Access Management (PAM), and Identity Governance and Administration (IGA).',
-                type: 'text',
+                mode: "normal",
+                text: "The IAM Lab is an independent Identity and Access Management consulting and professional learning brand.",
+                type: "text",
                 version: 1,
               },
             ],
           },
         ],
-        direction: 'ltr',
+        direction: "ltr",
       },
     },
   },
   {
-    title: 'About The IAM Lab',
-    slug: 'about',
+    title: "About The IAM Lab",
+    slug: "about",
     meta_description:
-      'Learn about The IAM Lab, our founding mission, executive leadership, operating philosophy, and multi-sector enterprise expertise.',
-    hero_headline: 'Engineering Trust Across the Modern Enterprise.',
+      "Learn about The IAM Lab, our founding mission, operating principles, and executive leadership led by Co-Founders Chiemezie Uzoma and Jennifer Uzoma.",
+    hero_headline: "Engineering Trust Across the Modern Enterprise.",
     hero_subheadline:
-      'The IAM Lab was established to bridge the critical gap between complex cybersecurity compliance mandates and frictionless enterprise operations.',
-    status: 'published',
+      "The IAM Lab is an identity and access management consultancy and professional learning practice dedicated to solving real access governance challenges.",
+    status: "published",
     sections: [
       {
-        type: 'hero',
-        badge: 'Founding Mission & Leadership',
-        headline: 'Engineering Trust Across the Modern Enterprise.',
+        type: "hero",
+        badge: "Who We Are",
+        headline: "Engineering Trust Across the Modern Enterprise.",
         subheadline:
-          'The IAM Lab was established to bridge the critical gap between complex cybersecurity compliance mandates and frictionless enterprise operations.',
-        bgImage: '/brand/cyber-command.jpg',
+          "The IAM Lab is an identity and access management consultancy and professional learning practice dedicated to solving real access governance challenges.",
+        bgImage: "/brand/office-architecture.jpg",
       },
       {
-        type: 'leadership_profile',
-        name: 'Chiemezie Uzoma',
-        role: 'Founder & Principal IAM Consultant',
-        bio: 'Senior cybersecurity architect and author with over a decade of hands-on experience designing and delivering identity governance, privileged access management, and cloud security frameworks for tier-one financial institutions, healthcare operators, and critical national infrastructure.',
-        credentials: ['CISSP', 'CISM', 'Lead IAM Architect', 'Published Author'],
+        type: "leadership_profile",
+        name: "Chiemezie Uzoma",
+        role: "Co-Founder & Chief Executive Officer",
+        bio: "Leads IAM consulting, technical strategy, identity security initiatives, and professional learning. His background spans enterprise identity administration, identity governance, privileged access, Microsoft Entra ID, Okta, SailPoint, CyberArk, and identity lifecycle automation.",
       },
     ],
     content: {
       root: {
-        type: 'root',
-        format: '',
+        type: "root",
+        format: "",
         indent: 0,
         version: 1,
         children: [
           {
-            type: 'paragraph',
-            format: '',
+            type: "paragraph",
+            format: "",
             indent: 0,
             version: 1,
             children: [
               {
-                mode: 'normal',
-                text: 'Founded by Chiemezie Uzoma, a seasoned Principal IAM Consultant, The IAM Lab provides high-assurance advisory and implementation services across Banking, Healthcare, Government, and Critical National Infrastructure.',
-                type: 'text',
+                mode: "normal",
+                text: "Led by Co-Founders Chiemezie Uzoma and Jennifer Uzoma, The IAM Lab bridges complex identity security requirements and sustainable operations.",
+                type: "text",
                 version: 1,
               },
             ],
           },
         ],
-        direction: 'ltr',
+        direction: "ltr",
       },
     },
   },
   {
-    title: 'Services & Solutions',
-    slug: 'services',
+    title: "Services & Solutions",
+    slug: "services",
     meta_description:
-      'Specialist enterprise services: IAM Architecture, PAM Engineering, IGA Lifecycle Automation, and Cloud Identity Federation.',
-    hero_headline: 'Specialist Identity Engineering. High-Assurance Delivery.',
+      "Explore The IAM Lab's six consulting pillars: IAM Strategy & Advisory, IGA, Lifecycle Automation, Authentication/SSO, PAM Engineering, and Implementation Support.",
+    hero_headline: "Connected Decisions. Defensible Identity Control.",
     hero_subheadline:
-      'We design, implement, and govern robust Identity and Access architectures tailored for complex enterprise operating models.',
-    status: 'published',
+      "Identity security is not one product or a single policy — it is a set of connected decisions about who receives access, how access is approved, how change is handled, and how risk is governed.",
+    status: "published",
     sections: [
       {
-        type: 'hero',
-        badge: 'Specialist Enterprise Advisory',
-        headline: 'Specialist Identity Engineering. High-Assurance Delivery.',
+        type: "hero",
+        badge: "Services & Solutions",
+        headline: "Connected Decisions. Defensible Identity Control.",
         subheadline:
-          'We design, implement, and govern robust Identity and Access architectures tailored for complex enterprise operating models.',
-        bgImage: '/brand/enterprise-security.jpg',
+          "Identity security is not one product or a single policy — it is a set of connected decisions about who receives access, how access is approved, how change is handled, and how risk is governed.",
+        bgImage: "/brand/enterprise-architecture.jpg",
       },
     ],
     content: {
       root: {
-        type: 'root',
-        format: '',
+        type: "root",
+        format: "",
         indent: 0,
         version: 1,
         children: [
           {
-            type: 'paragraph',
-            format: '',
+            type: "paragraph",
+            format: "",
             indent: 0,
             version: 1,
             children: [
               {
-                mode: 'normal',
-                text: 'Our consulting services span the full identity lifecycle: strategy and roadmap formulation, vendor evaluation, solution architecture, deployment, custom integration, and post-implementation capability handover.',
-                type: 'text',
+                mode: "normal",
+                text: "Six scoped consulting service pillars covering strategy, IGA, lifecycle automation, SSO/MFA, PAM, and integration engineering.",
+                type: "text",
                 version: 1,
               },
             ],
           },
         ],
-        direction: 'ltr',
+        direction: "ltr",
       },
     },
   },
   {
-    title: 'The IAM Academy',
-    slug: 'academy',
+    title: "The IAM Academy",
+    slug: "academy",
     meta_description:
-      'Professional training, enterprise tenant lab exercises, and 1-on-1 career mentorship for current and aspiring IAM engineers.',
-    hero_headline: 'Bridge the Identity Skills Gap. Build Production Capability.',
+      "Learn IAM and practise with purpose through 6 structured career progression tiers, practical enterprise scenarios, mentorship, and digital resources.",
+    hero_headline: "Learn IAM. Practise with purpose. Build real capability.",
     hero_subheadline:
-      'Practical, instructor-led training and enterprise tenant lab exercises designed by practicing Principal IAM Architects.',
-    status: 'published',
+      "The IAM Academy connects conceptual foundations, realistic enterprise scenarios, and architectural decision-making so learners understand what they are implementing and why it works.",
+    status: "published",
     sections: [
       {
-        type: 'hero',
-        badge: 'Workforce Enablement & Practical Labs',
-        headline: 'Bridge the Identity Skills Gap. Build Production Capability.',
+        type: "hero",
+        badge: "The IAM Academy",
+        headline: "Learn IAM. Practise with purpose. Build real capability.",
         subheadline:
-          'Practical, instructor-led training and enterprise tenant lab exercises designed by practicing Principal IAM Architects.',
-        bgImage: '/brand/iam-academy-hero.jpg',
+          "The IAM Academy connects conceptual foundations, realistic enterprise scenarios, and architectural decision-making so learners understand what they are implementing and why it works.",
+        bgImage: "/brand/academy-classroom.jpg",
       },
     ],
     content: {
       root: {
-        type: 'root',
-        format: '',
+        type: "root",
+        format: "",
         indent: 0,
         version: 1,
         children: [
           {
-            type: 'paragraph',
-            format: '',
+            type: "paragraph",
+            format: "",
             indent: 0,
             version: 1,
             children: [
               {
-                mode: 'normal',
-                text: 'The IAM Academy equips security engineers, system administrators, and technology analysts with the practical skills demanded by top-tier employers.',
-                type: 'text',
+                mode: "normal",
+                text: "Structured learning pathways from IAM Foundation through Senior Engineer, Architect, and Consulting Leadership.",
+                type: "text",
                 version: 1,
               },
             ],
           },
         ],
-        direction: 'ltr',
+        direction: "ltr",
       },
     },
   },
   {
-    title: 'Contact & Consultation',
-    slug: 'contact',
+    title: "Contact & Consultation",
+    slug: "contact",
     meta_description:
-      'Schedule an executive IAM consultation or apply for upcoming IAM Academy learning cohorts. Operating globally from London, United Kingdom.',
-    hero_headline: 'Connect with The IAM Lab.',
+      "Connect with The IAM Lab for corporate IAM advisory consultations or IAM Academy pathway enquiries. Operating from London, United Kingdom.",
+    hero_headline: "Let’s discuss your IAM needs.",
     hero_subheadline:
-      'Direct access to senior identity architects for corporate advisory reviews, vendor evaluations, or academy enrollment enquiries.',
-    status: 'published',
+      "Whether your organisation needs advisory assistance with identity governance, access modernisation, or IAM Academy training enquiries, we welcome an initial conversation.",
+    status: "published",
     sections: [
       {
-        type: 'hero',
-        badge: 'Initiate Discovery',
-        headline: 'Connect with The IAM Lab.',
+        type: "hero",
+        badge: "Contact & Consultation",
+        headline: "Let’s discuss your IAM needs.",
         subheadline:
-          'Direct access to senior identity architects for corporate advisory reviews, vendor evaluations, or academy enrollment enquiries.',
-        bgImage: '/brand/team-collaboration.jpg',
+          "Whether your organisation needs advisory assistance with identity governance, access modernisation, or IAM Academy training enquiries, we welcome an initial conversation.",
+        bgImage: "/brand/contact-advisory.jpg",
       },
     ],
     content: {
       root: {
-        type: 'root',
-        format: '',
+        type: "root",
+        format: "",
         indent: 0,
         version: 1,
         children: [
           {
-            type: 'paragraph',
-            format: '',
+            type: "paragraph",
+            format: "",
             indent: 0,
             version: 1,
             children: [
               {
-                mode: 'normal',
-                text: 'Submit your enquiry to schedule a preliminary discovery conversation with a Principal Consultant.',
-                type: 'text',
+                mode: "normal",
+                text: "Enquiries are persisted directly in Supabase PostgreSQL and routed to our team.",
+                type: "text",
                 version: 1,
               },
             ],
           },
         ],
-        direction: 'ltr',
+        direction: "ltr",
       },
     },
   },
@@ -314,16 +353,19 @@ async function seed() {
 
   try {
     await client.connect();
-    console.log('[Seed Pages] Connected to Supabase.');
+    console.log("[Seed Pages] Connected to Supabase.");
 
     for (const page of initialPages) {
-      const existing = await client.query('SELECT id, slug FROM pages WHERE slug = $1;', [page.slug]);
+      const existing = await client.query(
+        "SELECT id, slug FROM pages WHERE slug = $1;",
+        [page.slug]
+      );
       const timestamp = new Date().toISOString();
 
       if (existing.rows.length === 0) {
         await client.query(
-          `INSERT INTO pages (title, slug, meta_description, hero_headline, hero_subheadline, status, sections, content, created_at, updated_at)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $9);`,
+          `INSERT INTO pages (title, slug, meta_description, hero_headline, hero_subheadline, status, published_at, sections, content, created_at, updated_at)
+           VALUES ($1, $2, $3, $4, $5, $6, $9, $7, $8, $9, $9);`,
           [
             page.title,
             page.slug,
@@ -339,7 +381,7 @@ async function seed() {
         console.log(`[Seed Pages] Created page: ${page.slug}`);
       } else {
         await client.query(
-          `UPDATE pages 
+          `UPDATE pages
            SET title = $1, meta_description = $2, hero_headline = $3, hero_subheadline = $4, status = $5, sections = $6, updated_at = $7
            WHERE slug = $8;`,
           [
@@ -353,17 +395,16 @@ async function seed() {
             page.slug,
           ]
         );
-        console.log(`[Seed Pages] Enriched existing page: ${page.slug} (ID: ${existing.rows[0].id})`);
+        console.log(`[Seed Pages] Synchronized page: ${page.slug} (ID: ${existing.rows[0].id})`);
       }
     }
 
-    const countRes = await client.query('SELECT count(*) FROM pages;');
-    console.log(`[Seed Pages] Total pages in database: ${countRes.rows[0].count}`);
-
-    await client.end();
+    const res = await client.query("SELECT COUNT(*) FROM pages;");
+    console.log("[Seed Pages] Total pages in database:", res.rows[0].count);
   } catch (err) {
-    console.error('[Seed Pages] Error:', err);
-    process.exit(1);
+    console.error("[Seed Pages] Error:", err);
+  } finally {
+    await client.end();
   }
 }
 

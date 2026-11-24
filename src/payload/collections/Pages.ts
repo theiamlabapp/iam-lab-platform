@@ -1,21 +1,46 @@
+import { revalidatePath } from "next/cache";
 import type { CollectionConfig } from "payload";
+import { isAdminAccess, isEditorialAccess } from "../access/roles";
 
 export const Pages: CollectionConfig = {
   slug: "pages",
   labels: {
     singular: "Page",
-    plural: "Pages",
+    plural: "Website Pages",
   },
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "slug", "updatedAt"],
+    defaultColumns: ["title", "slug", "status", "updatedAt"],
     group: "Content Management",
+    components: {
+      views: {
+        list: {
+          Component: "/src/payload/views/PagesListView#PagesListView",
+        },
+      },
+    },
+  },
+  hooks: {
+    afterChange: [
+      ({ doc }) => {
+        try {
+          revalidatePath("/", "layout");
+          if (doc?.slug === "home") {
+            revalidatePath("/");
+          } else if (doc?.slug) {
+            revalidatePath(`/${String(doc.slug)}`);
+          }
+        } catch {
+          // Ignore revalidation warnings outside HTTP request context
+        }
+      },
+    ],
   },
   access: {
     read: () => true,
-    create: ({ req: { user } }) => Boolean(user),
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user && user.role === "admin"),
+    create: isEditorialAccess,
+    update: isEditorialAccess,
+    delete: isAdminAccess,
   },
   fields: [
     {
@@ -29,7 +54,7 @@ export const Pages: CollectionConfig = {
       type: "text",
       required: true,
       unique: true,
-      label: "URL Slug (e.g. home, about, services, academy, contact)",
+      label: "URL Route Slug (home, about, services, academy, contact)",
     },
     {
       name: "metaDescription",
@@ -49,7 +74,7 @@ export const Pages: CollectionConfig = {
     {
       name: "content",
       type: "richText",
-      label: "Page Content",
+      label: "Page Notes / Summary Copy",
     },
     {
       name: "status",
@@ -77,9 +102,11 @@ export const Pages: CollectionConfig = {
       type: "json",
       label: "Structured Page Sections",
       admin: {
-        description: "Visual section editor: headings, copy, images, and call-to-actions.",
+        description:
+          "Visual CMS editor: edit copy, headings, background photography, CTAs, and section order without writing code.",
         components: {
-          Field: "/src/payload/components/SectionsVisualEditor#SectionsVisualEditor",
+          Field:
+            "/src/payload/components/SectionsVisualEditor#SectionsVisualEditor",
         },
       },
     },

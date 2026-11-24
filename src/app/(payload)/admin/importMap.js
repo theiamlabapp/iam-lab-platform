@@ -7,6 +7,9 @@ import { SectionsVisualEditor as SectionsVisualEditor_5 } from "@/payload/compon
 import { EnquiryCommunicationWorkspace as EnquiryCommunicationWorkspace_6 } from "@/payload/components/EnquiryCommunicationWorkspace";
 import { MediaLibraryView as MediaLibraryView_7 } from "@/payload/views/MediaLibraryView";
 import { AccountView as AccountView_8 } from "@/payload/views/AccountView";
+import { PagesListView as PagesListView_9 } from "@/payload/views/PagesListView";
+import { EnquiriesListView as EnquiriesListView_10 } from "@/payload/views/EnquiriesListView";
+import { UsersListView as UsersListView_11 } from "@/payload/views/UsersListView";
 
 export const importMap = {
   "/src/payload/components/Logo#Logo": Logo_0,
@@ -27,4 +30,10 @@ export const importMap = {
   "src/payload/views/MediaLibraryView#MediaLibraryView": MediaLibraryView_7,
   "/src/payload/views/AccountView#AccountView": AccountView_8,
   "src/payload/views/AccountView#AccountView": AccountView_8,
+  "/src/payload/views/PagesListView#PagesListView": PagesListView_9,
+  "src/payload/views/PagesListView#PagesListView": PagesListView_9,
+  "/src/payload/views/EnquiriesListView#EnquiriesListView": EnquiriesListView_10,
+  "src/payload/views/EnquiriesListView#EnquiriesListView": EnquiriesListView_10,
+  "/src/payload/views/UsersListView#UsersListView": UsersListView_11,
+  "src/payload/views/UsersListView#UsersListView": UsersListView_11,
 };

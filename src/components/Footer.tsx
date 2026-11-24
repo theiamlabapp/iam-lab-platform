@@ -1,8 +1,11 @@
 import Link from "next/link";
+import { getSiteSettings } from "@/lib/getPageData";
 import { BrandLogo } from "./BrandLogo";
 import { CopyrightYear } from "./CopyrightYear";
 
-export function Footer() {
+export async function Footer() {
+  const settings = await getSiteSettings();
+
   return (
     <footer className="border-t border-white/10 bg-[#0B1424] text-slate-300">
       <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-16 lg:px-12">
@@ -12,24 +15,33 @@ export function Footer() {
             <Link
               href="/"
               aria-label="The IAM Lab"
-              className="inline-flex rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#D89A43]"
+              className="inline-flex focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#D89A43]"
             >
-              <BrandLogo surface="card" className="w-[100px] sm:w-[110px]" />
+              <BrandLogo
+                variant="light"
+                surface="plain"
+                className="w-[98px] sm:w-[112px]"
+              />
             </Link>
 
             <p className="text-base font-semibold text-white">
-              Secure identities. Simplify access. Strengthen your business.
+              {settings.tagline}
             </p>
 
             <p className="max-w-md text-sm leading-relaxed text-slate-400">
-              The IAM Lab is an independent Identity and Access Management advisory,
+              {settings.company_name} is an independent Identity and Access Management advisory,
               enterprise security engineering, and practitioner capability enablement brand
-              operating globally from London, United Kingdom.
+              operating internationally from {settings.address}.
             </p>
 
-            <div className="pt-2">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs text-slate-400">
+              <span>{settings.address}</span>
+              <span>{settings.phone}</span>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-5 pt-2">
               <a
-                href="mailto:info@theiamlab.com"
+                href={`mailto:${settings.official_email}`}
                 className="inline-flex items-center gap-2 text-sm font-medium text-[#D89A43] transition-colors hover:text-[#ebd0a3]"
               >
                 <svg
@@ -55,8 +67,19 @@ export function Footer() {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <span>info@theiamlab.com</span>
+                <span>{settings.official_email}</span>
               </a>
+
+              {settings.linkedin_url && (
+                <a
+                  href={settings.linkedin_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wider text-slate-400 uppercase transition-colors hover:text-[#D89A43]"
+                >
+                  <span>LinkedIn &rarr;</span>
+                </a>
+              )}
             </div>
           </div>
 
@@ -116,7 +139,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/services#lifecycle" className="text-slate-400 transition-colors hover:text-white">
+                <Link href="/services#directory" className="text-slate-400 transition-colors hover:text-white">
                   Lifecycle Automation (JML)
                 </Link>
               </li>
@@ -141,13 +164,18 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="https://selar.com/m/chiemezie-uzoma1"
+                  href={settings.selar_store_url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-slate-400 transition-colors hover:text-white"
                 >
                   Selar Bookstore &rarr;
                 </a>
+              </li>
+              <li>
+                <Link href="/contact?type=individual_learning" className="text-slate-400 transition-colors hover:text-white">
+                  Ask About Academy
+                </Link>
               </li>
               <li>
                 <Link href="/admin/login" className="text-slate-500 transition-colors hover:text-slate-300">
@@ -161,12 +189,12 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-slate-500 sm:flex-row">
           <p>
-            &copy; <CopyrightYear /> The IAM Lab. All rights reserved. Registered in England &amp; Wales.
+            &copy; <CopyrightYear /> {settings.company_name}. All rights reserved. Registered in England &amp; Wales.
           </p>
-          <div className="flex items-center gap-6">
-            <span>Enterprise Security</span>
-            <span>Zero-Trust Architecture</span>
-            <span>London, UK</span>
+          <div className="flex flex-wrap items-center gap-6">
+            <span>Enterprise Identity Security</span>
+            <span>Zero-Trust Governance</span>
+            <span>{settings.location}</span>
           </div>
         </div>
       </div>
