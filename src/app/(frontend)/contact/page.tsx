@@ -10,6 +10,7 @@ import {
   getCustomSections,
   getPageData,
   getSiteSettings,
+  getWhatsAppHref,
 } from "@/lib/getPageData";
 import { resolveDraftPreview } from "@/lib/previewHelper";
 
@@ -33,6 +34,7 @@ export default async function ContactPage({
     getPageData("contact", { allowDraft }),
     getSiteSettings(),
   ]);
+  const whatsappHref = getWhatsAppHref(settings.whatsapp_number);
 
   const heroSec = findSection(pageData, "hero");
   const customSections = getCustomSections(pageData, BUILTIN_CONTACT_SECTIONS);
@@ -160,12 +162,19 @@ export default async function ContactPage({
                   </a>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="w-28 shrink-0 font-mono text-xs text-slate-500">Telephone:</span>
-                  <span className="text-slate-800">{settings.phone}</span>
+                  <span className="w-28 shrink-0 font-mono text-xs text-slate-500">WhatsApp:</span>
+                  <a
+                    href={whatsappHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-[#0B1424] hover:text-[#B07424]"
+                  >
+                    {settings.whatsapp_number}
+                  </a>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="w-28 shrink-0 font-mono text-xs text-slate-500">Hours:</span>
-                  <span className="text-slate-800">Mon &ndash; Fri &middot; 09:00 &ndash; 17:30 UTC</span>
+                  <span className="w-28 shrink-0 font-mono text-xs text-slate-500">Telephone:</span>
+                  <span className="text-slate-800">{settings.phone}</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="w-28 shrink-0 font-mono text-xs text-slate-500">Office:</span>

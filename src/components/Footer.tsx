@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { getSiteSettings } from "@/lib/getPageData";
+import { getSiteSettings, getWhatsAppHref } from "@/lib/getPageData";
 import { BrandLogo } from "./BrandLogo";
 import { CopyrightYear } from "./CopyrightYear";
 
 export async function Footer() {
   const settings = await getSiteSettings();
+  const whatsappHref = getWhatsAppHref(settings.whatsapp_number);
 
   return (
     <footer className="border-t border-white/10 bg-[#0B1424] text-slate-300">
@@ -28,15 +29,16 @@ export async function Footer() {
               {settings.tagline}
             </p>
 
-            <p className="max-w-md text-sm leading-relaxed text-slate-400">
-              {settings.company_name} is an independent Identity and Access Management advisory,
-              enterprise security engineering, and practitioner capability enablement brand
-              operating internationally from {settings.address}.
-            </p>
-
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs text-slate-400">
               <span>{settings.address}</span>
-              <span>{settings.phone}</span>
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-300 transition-colors hover:text-[#D89A43]"
+              >
+                WhatsApp: {settings.whatsapp_number}
+              </a>
             </div>
 
             <div className="flex flex-wrap items-center gap-5 pt-2">
@@ -189,12 +191,23 @@ export async function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-slate-500 sm:flex-row">
           <p>
-            &copy; <CopyrightYear /> {settings.company_name}. All rights reserved. Registered in England &amp; Wales.
+            Copyright <CopyrightYear /> {settings.company_name}. All rights reserved.
           </p>
-          <div className="flex flex-wrap items-center gap-6">
-            <span>Enterprise Identity Security</span>
-            <span>Zero-Trust Governance</span>
-            <span>{settings.location}</span>
+          <div className="flex flex-wrap items-center gap-5">
+            <Link href="/contact" className="text-slate-400 transition-colors hover:text-white">
+              Privacy &amp; Enquiry Notice
+            </Link>
+            <span>
+              Powered by{" "}
+              <a
+                href="https://mujteknify.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-[#D89A43] transition-colors hover:text-[#ebd0a3]"
+              >
+                MUJTEKNIFY
+              </a>
+            </span>
           </div>
         </div>
       </div>

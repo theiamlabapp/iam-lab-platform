@@ -8,6 +8,7 @@ import { Enquiries } from "./src/payload/collections/Enquiries";
 import { Media } from "./src/payload/collections/Media";
 import { Pages } from "./src/payload/collections/Pages";
 import { Users } from "./src/payload/collections/Users";
+import { smtpEmailAdapter } from "./src/payload/email/smtpAdapter";
 import { SiteSettings } from "./src/payload/globals/SiteSettings";
 
 const filename = fileURLToPath(import.meta.url);
@@ -52,6 +53,7 @@ export default buildConfig({
   },
   collections: [Users, Media, Enquiries, Pages],
   globals: [SiteSettings],
+  email: smtpEmailAdapter,
   editor: lexicalEditor(),
   secret: rawSecret,
   serverURL:

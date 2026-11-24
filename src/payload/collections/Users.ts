@@ -3,7 +3,38 @@ import { isAdminAccess, isAuthenticatedOrSelf } from "../access/roles";
 
 export const Users: CollectionConfig = {
   slug: "users",
-  auth: true,
+  auth: {
+    tokenExpiration: 7200,
+    maxLoginAttempts: 5,
+    lockTime: 600 * 1000,
+    forgotPassword: {
+      generateEmailSubject: () => "The IAM Lab — Administrator Password Reset",
+      generateEmailHTML: (args) => {
+        const token = args?.token || "";
+        const baseUrl = (
+          process.env.NEXT_PUBLIC_SERVER_URL ||
+          (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://www.theiamlab.com")
+        ).replace(/\/+$/, "");
+        const resetUrl = `${baseUrl}/admin/reset/${token}`;
+        return `
+          <div style="font-family: sans-serif; color: #0B1424; max-width: 560px; margin: 0 auto; padding: 24px;">
+            <h2 style="margin-bottom: 12px;">The IAM Lab — Password Reset</h2>
+            <p style="font-size: 14px; line-height: 1.6; color: #334155;">
+              A password reset was requested for your administrator account. Use the button below to choose a new password:
+            </p>
+            <p style="margin: 24px 0;">
+              <a href="${resetUrl}" style="display: inline-block; background: #0B1424; color: #FFFFFF; padding: 12px 20px; text-decoration: none; border-radius: 6px; font-weight: 600;">
+                Reset Administrator Password
+              </a>
+            </p>
+            <p style="font-size: 12px; color: #64748B;">
+              If you did not request this reset, you can safely ignore this message.
+            </p>
+          </div>
+        `;
+      },
+    },
+  },
   labels: {
     singular: "User Account",
     plural: "Users & Administrators",

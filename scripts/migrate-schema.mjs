@@ -82,12 +82,14 @@ async function migrate() {
   await client.query(`
     ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS address TEXT DEFAULT '128 City Road, London, EC1V 2NX, United Kingdom';
     ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS phone TEXT DEFAULT '+44 20 8090 1234';
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS whatsapp_number VARCHAR(64) DEFAULT '+234 803 865 2760';
     ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS map_embed_url TEXT;
   `);
   await client.query(`DELETE FROM site_settings WHERE id > 1;`);
   await client.query(
     `UPDATE site_settings
      SET map_embed_url = COALESCE(NULLIF(map_embed_url, ''), $1),
+         whatsapp_number = COALESCE(NULLIF(whatsapp_number, ''), '+234 803 865 2760'),
          updated_at = NOW()
      WHERE id = 1;`,
     [DEFAULT_MAP_EMBED]

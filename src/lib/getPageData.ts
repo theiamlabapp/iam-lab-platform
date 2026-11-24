@@ -35,10 +35,22 @@ export interface SiteSettingsData {
   location: string;
   address: string;
   phone: string;
+  whatsapp_number: string;
   map_embed_url: string;
   selar_store_url: string;
   linkedin_url: string;
   twitter_url: string;
+}
+
+export const OFFICIAL_WHATSAPP_FALLBACK = "+234 803 865 2760";
+
+export function getWhatsAppHref(
+  whatsappNumber?: string,
+  message = "Hello The IAM Lab team, I would like to speak with an IAM specialist."
+): string {
+  const digits = (whatsappNumber || OFFICIAL_WHATSAPP_FALLBACK).replace(/\D/g, "");
+  const safeDigits = digits.length >= 8 ? digits : "2348038652760";
+  return `https://wa.me/${safeDigits}?text=${encodeURIComponent(message)}`;
 }
 
 export const DEFAULT_SITE_SETTINGS: SiteSettingsData = {
@@ -48,6 +60,7 @@ export const DEFAULT_SITE_SETTINGS: SiteSettingsData = {
   location: "London, United Kingdom",
   address: "128 City Road, London, EC1V 2NX, United Kingdom",
   phone: "+44 20 8090 1234",
+  whatsapp_number: OFFICIAL_WHATSAPP_FALLBACK,
   map_embed_url:
     "https://maps.google.com/maps?q=128+City+Road,+London,+EC1V+2NX,+United+Kingdom&t=m&z=16&ie=UTF8&iwloc=&output=embed",
   selar_store_url: "https://selar.com/m/chiemezie-uzoma1",
@@ -123,7 +136,7 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
 
   try {
     const res = await pool.query(
-      `SELECT company_name, tagline, official_email, location, address, phone, map_embed_url, selar_store_url, linkedin_url, twitter_url
+      `SELECT company_name, tagline, official_email, location, address, phone, whatsapp_number, map_embed_url, selar_store_url, linkedin_url, twitter_url
        FROM site_settings
        ORDER BY id ASC
        LIMIT 1;`
@@ -138,6 +151,7 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
       location: r.location || DEFAULT_SITE_SETTINGS.location,
       address: r.address || DEFAULT_SITE_SETTINGS.address,
       phone: r.phone || DEFAULT_SITE_SETTINGS.phone,
+      whatsapp_number: r.whatsapp_number || DEFAULT_SITE_SETTINGS.whatsapp_number,
       map_embed_url:
         r.map_embed_url && !String(r.map_embed_url).includes("/maps/embed?pb=")
           ? r.map_embed_url

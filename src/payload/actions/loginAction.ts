@@ -2,7 +2,7 @@
 
 import configPromise from "@payload-config";
 import { getPayload } from "payload";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 export interface LoginActionResult {
   success: boolean;
@@ -44,14 +44,18 @@ export async function loginAdminAction(formData: {
 
     if (result && result.token && result.user) {
       const cookieStore = await cookies();
-      const isProduction = process.env.NODE_ENV === "production";
+      const hdrs = await headers();
+      const proto = hdrs.get("x-forwarded-proto") || "";
+      const isHttps =
+        proto === "https" ||
+        (!hdrs.get("host")?.includes("localhost") && process.env.NODE_ENV === "production");
 
       // Set the standard Payload CMS auth token cookie in response headers
       cookieStore.set("payload-token", result.token, {
         path: "/",
         httpOnly: true,
         sameSite: "lax",
-        secure: isProduction,
+        secure: isHttps,
         maxAge: 7200, // 2 hours
       });
 

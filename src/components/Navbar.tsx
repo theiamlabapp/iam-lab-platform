@@ -13,7 +13,10 @@ const NAV_LINKS = [
   { href: "/contact", label: "Contact" },
 ] as const;
 
-export function Navbar() {
+export function Navbar({ whatsappHref }: { whatsappHref?: string } = {}) {
+  const specialistHref =
+    whatsappHref ||
+    "https://wa.me/2348038652760?text=Hello%20The%20IAM%20Lab%20team%2C%20I%20would%20like%20to%20speak%20with%20an%20IAM%20specialist.";
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [prevPathname, setPrevPathname] = useState(pathname);
@@ -111,12 +114,14 @@ export function Navbar() {
 
           {/* Right Action / Mobile Trigger */}
           <div className="flex items-center gap-3">
-            <Link
-              href="/contact?type=enterprise_consulting"
+            <a
+              href={specialistHref}
+              target="_blank"
+              rel="noopener noreferrer"
               className="hidden items-center justify-center border border-[#D89A43] bg-[#D89A43] px-5 py-2.5 text-[11px] font-bold tracking-[0.12em] text-[#0B1424] uppercase shadow-xs transition-all hover:bg-[#c58832] hover:border-[#c58832] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0B1424] sm:inline-flex"
             >
               Talk to an IAM Specialist
-            </Link>
+            </a>
 
             <button
               ref={triggerBtnRef}
@@ -189,15 +194,17 @@ export function Navbar() {
             </nav>
 
             <div className="mt-10 border-t border-slate-200 pt-8">
-              <Link
-                href="/contact?type=enterprise_consulting"
+              <a
+                href={specialistHref}
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={() => setMobileOpen(false)}
                 className="flex w-full items-center justify-center bg-[#D89A43] px-6 py-3.5 text-xs font-bold tracking-[0.12em] text-[#0B1424] uppercase hover:bg-[#c58832]"
               >
                 Talk to an IAM Specialist
-              </Link>
+              </a>
               <p className="mt-6 text-xs text-slate-500">
-                128 City Road, London &middot; info@theiamlab.com
+                info@theiamlab.com &middot; WhatsApp +234 803 865 2760
               </p>
             </div>
           </div>

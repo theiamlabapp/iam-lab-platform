@@ -2,52 +2,60 @@
 
 import React, { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import {
+  BookOpenCheck,
+  ClipboardList,
+  FileCheck2,
+  PhoneCall,
+  type LucideIcon,
+} from "lucide-react";
 
 export interface DeliveryStage {
-  step: string;
-  phase: string;
+  id: string;
   title: string;
   detail: string;
   output: string;
+  Icon: LucideIcon;
 }
 
 const DEFAULT_STAGES: DeliveryStage[] = [
   {
-    step: "01",
-    phase: "Discovery",
-    title: "Discovery & Needs Assessment",
+    id: "discovery",
+    title: "Discovery call",
     detail:
-      "Focused consultation evaluating your current identity architecture, operational bottlenecks, and compliance priorities.",
-    output: "Current-State Risk & Priority Summary",
+      "Understand your organisation's identity environment, immediate security concerns, and operational objectives.",
+    output: "Aligned Problem Framing",
+    Icon: PhoneCall,
   },
   {
-    step: "02",
-    phase: "Scoping",
-    title: "Scope & Requirements",
+    id: "scope",
+    title: "Scope and requirements",
     detail:
-      "Rigorous definition of target directories, system boundaries, user cohorts, and measurable technical acceptance criteria.",
-    output: "Agreed Architectural Scope Brief",
+      "Define clear technical boundaries, target identity systems, stakeholders, and practical priorities.",
+    output: "Agreed Scope Definition",
+    Icon: ClipboardList,
   },
   {
-    step: "03",
-    phase: "Architecture",
-    title: "Formal Proposal & Design",
+    id: "proposal",
+    title: "Proposal and agreed deliverables",
     detail:
-      "Target blueprint formulation, technology alignment tailored to your stack, milestone timetable, and transparent statement of work.",
-    output: "Target IAM Design & Milestone SOW",
+      "Establish a transparent engagement structure, milestone plan, and technology approach tailored to your environment.",
+    output: "Clear Delivery Plan",
+    Icon: FileCheck2,
   },
   {
-    step: "04",
-    phase: "Handover",
-    title: "Delivery & Knowledge Transfer",
+    id: "delivery",
+    title: "Delivery and knowledge transfer",
     detail:
-      "Hands-on platform engineering, staging verification, production rollout, runbooks, and structured capability enablement for your internal team.",
-    output: "Production Controls & Team Runbooks",
+      "Execute agreed technical work alongside practical documentation and skills transfer for your internal team.",
+    output: "Controls & Team Enablement",
+    Icon: BookOpenCheck,
   },
 ];
 
 /**
- * Animated interactive 4-stage delivery methodology timeline.
+ * Interactive 4-stage service delivery workflow aligned with the client brief.
+ * Uses semantic Lucide icons rather than arbitrary numbered labels or decorative dots.
  */
 export function DeliveryTimeline({
   stages = DEFAULT_STAGES,
@@ -63,7 +71,7 @@ export function DeliveryTimeline({
   return (
     <div>
       {/* Animated Connecting Track on Desktop */}
-      <div className="relative hidden lg:block mb-6">
+      <div className="relative mb-6 hidden lg:block">
         <div
           className={`h-[2px] w-full ${
             isDark ? "bg-white/10" : "bg-slate-200"
@@ -83,9 +91,10 @@ export function DeliveryTimeline({
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-slate-200/20">
         {stages.map((s, idx) => {
           const isCurrent = idx === activeStep;
+          const StageIcon = s.Icon;
           return (
             <button
-              key={s.step}
+              key={s.id}
               type="button"
               onClick={() => setActiveStep(idx)}
               className={`group flex flex-col justify-between text-left transition-all lg:px-6 lg:first:pl-0 lg:last:pr-0 ${
@@ -103,23 +112,16 @@ export function DeliveryTimeline({
               }`}
             >
               <div>
-                <div className="flex items-center justify-between">
-                  <span
-                    className={`font-mono text-xs font-bold ${
-                      isDark ? "text-[#D89A43]" : "text-[#B07424]"
-                    }`}
-                  >
-                    STAGE // {s.step}
-                  </span>
-                  <span
-                    className={`h-2 w-2 rounded-full transition-transform ${
-                      isCurrent
-                        ? "scale-125 bg-[#D89A43]"
-                        : isDark
-                          ? "bg-white/20"
-                          : "bg-slate-300"
-                    }`}
-                  />
+                <div
+                  className={`flex h-10 w-10 items-center justify-center border transition-colors ${
+                    isCurrent
+                      ? "border-[#D89A43] bg-[#D89A43]/15 text-[#D89A43]"
+                      : isDark
+                        ? "border-white/15 bg-white/[0.03] text-slate-300 group-hover:border-[#D89A43]/50"
+                        : "border-slate-200 bg-white text-[#0B1424] group-hover:border-[#D89A43]"
+                  }`}
+                >
+                  <StageIcon className="h-4.5 w-4.5" aria-hidden="true" />
                 </div>
 
                 <h3
@@ -145,11 +147,11 @@ export function DeliveryTimeline({
                 }`}
               >
                 <span
-                  className={`block font-mono text-[10px] uppercase tracking-wider ${
+                  className={`block font-mono text-[10px] tracking-wider uppercase ${
                     isDark ? "text-slate-400" : "text-slate-500"
                   }`}
                 >
-                  Key Deliverable
+                  Focus Output
                 </span>
                 <span
                   className={`mt-1 block text-xs font-semibold ${

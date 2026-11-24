@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { WhatsAppFloat } from "@/components/WhatsAppFloat";
+import { getSiteSettings, getWhatsAppHref } from "@/lib/getPageData";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -83,22 +85,26 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function FrontendRootLayout({
+export default async function FrontendRootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSiteSettings();
+  const whatsappHref = getWhatsAppHref(settings.whatsapp_number);
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
     >
       <body className="min-h-full flex flex-col bg-[#0B1424] text-slate-100 selection:bg-[#d6a15c]/30 selection:text-[#d6a15c]">
-        <Navbar />
+        <Navbar whatsappHref={whatsappHref} />
         <main id="main-content" className="flex-1">
           {children}
         </main>
         <Footer />
+        <WhatsAppFloat href={whatsappHref} />
       </body>
     </html>
   );

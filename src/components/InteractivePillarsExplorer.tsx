@@ -3,126 +3,119 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import {
+  CheckCircle2,
+  Compass,
+  KeyRound,
+  LockKeyhole,
+  ServerCog,
+  Users,
+  Workflow,
+  type LucideIcon,
+} from "lucide-react";
 
 export interface PillarItem {
-  num: string;
+  id: string;
   name: string;
   tagline: string;
   problem: string;
-  scope: string[];
+  scope: string;
   outcomes: string;
-  platforms: string[];
+  platforms: string;
   anchor: string;
+  Icon: LucideIcon;
 }
 
 const DEFAULT_PILLARS: PillarItem[] = [
   {
-    num: "01",
+    id: "strategy",
     name: "IAM Strategy, Assessment & Advisory",
-    tagline: "Clarity on identity maturity, risks, and prioritised transformation.",
+    tagline: "Understand identity risks, governance maturity, and improvement priorities.",
     problem:
-      "Fragmented IAM practices, unclear access ownership, inconsistent controls, and difficulty deciding where to invest security budget first.",
-    scope: [
-      "Current-state identity architecture & governance maturity audit",
-      "Privilege exposure analysis and compliance gap evaluation",
-      "Vendor-neutral technology evaluation aligned to existing estate",
-      "Prioritised multi-phase transformation roadmap & operating model",
-    ],
+      "Fragmented IAM practices, unclear ownership, inconsistent controls, and difficulty deciding what to improve first.",
+    scope:
+      "Assess identity processes, technology architecture, risks, governance maturity, and business requirements to define practical improvement priorities and a roadmap.",
     outcomes:
-      "A clear view of risk, an actionable executive roadmap, and informed architecture and investment decisions.",
-    platforms: ["NIST SP 800-207", "ISO 27001", "Existing Cloud & On-Premises Estates"],
+      "A clearer view of risk, a prioritised plan, and more informed architecture or investment decisions.",
+    platforms: "Existing directories, cloud identity providers, IGA and PAM environments, according to scope.",
     anchor: "/services#strategy",
+    Icon: Compass,
   },
   {
-    num: "02",
+    id: "governance",
     name: "Identity Governance & Access Management",
-    tagline: "Verifiable access certification, role models, and audit traceability.",
+    tagline: "Structured access requests, approvals, reviews, and least-privilege oversight.",
     problem:
-      "Excessive permissions, weak ownership of application access, manual spreadsheet reviews, and insufficient visibility into who can access what.",
-    scope: [
-      "Access request workflows and multi-tier manager/owner approvals",
-      "Automated periodic access recertification campaigns",
-      "Role mining, business role models, and least-privilege practices",
-      "Segregation of Duties (SoD) controls and toxic combination monitoring",
-    ],
+      "Excess permissions, weak ownership of access, manual recertification, and insufficient visibility into who can access what.",
+    scope:
+      "Support identity governance design, access request workflows, approvals, access review processes, role models, and least-privilege practices.",
     outcomes:
-      "Consistent access decisions, verifiable audit traceability, and measurable entitlement risk reduction.",
-    platforms: ["Microsoft Entra ID Governance", "SailPoint", "IGA Workflows"],
+      "More consistent access decisions, traceability, and stronger governance processes.",
+    platforms: "Microsoft Entra ID, SailPoint, and relevant governance platforms, subject to confirmed capability.",
     anchor: "/services#governance",
+    Icon: Users,
   },
   {
-    num: "03",
+    id: "directory",
     name: "Identity Lifecycle & Provisioning Automation",
-    tagline: "Eliminate slow onboarding delays and lingering departure exposure.",
+    tagline: "Reduce manual overhead across joiner, mover, and leaver processes.",
     problem:
-      "Slow manual onboarding tickets, accumulated access across internal transfers, and unrevoked lingering accounts after contractor or employee exits.",
-    scope: [
-      "HR-driven Joiner-Mover-Leaver (JML) workflow architecture",
-      "Automated user provisioning, group rules, and deprovisioning",
-      "Dynamic lifecycle synchronization with Microsoft Graph & SCIM 2.0",
-      "PowerShell and connector automation across enterprise applications",
-    ],
+      "Slow onboarding, lingering access after role changes or exits, repetitive tickets, and avoidable manual errors.",
+    scope:
+      "Assess and improve joiner, mover, and leaver processes, user provisioning and deprovisioning, group management, workflow integration, and automation.",
     outcomes:
-      "Reliable access transitions, drastic reduction in manual ticket overhead, and immediate revocation on exit.",
-    platforms: ["Microsoft Entra ID", "Microsoft Graph", "PowerShell", "SCIM 2.0"],
+      "More reliable access changes, reduced manual intervention, and improved lifecycle controls.",
+    platforms: "Microsoft Entra ID, Microsoft Graph, PowerShell, identity directories, and agreed connectors.",
     anchor: "/services#directory",
+    Icon: Workflow,
   },
   {
-    num: "04",
+    id: "auth-sso",
     name: "Authentication, SSO & Access Modernisation",
-    tagline: "Consistent, phishing-resistant access across enterprise estates.",
+    tagline: "Consistent sign-in controls and risk-informed user access.",
     problem:
-      "Inconsistent sign-in policies, credential reuse fatigue, and legacy authentication protocols leaving sensitive portals vulnerable to compromise.",
-    scope: [
-      "Single Sign-On (SSO) federation via SAML 2.0 & OpenID Connect (OIDC)",
-      "Phishing-resistant Multi-Factor Authentication (MFA) & passwordless controls",
-      "Risk-informed Conditional Access policy frameworks",
-      "Legacy authentication protocol deprecation and application onboarding",
-    ],
+      "Inconsistent sign-in controls, fragmented access experiences, and avoidable authentication exposure.",
+    scope:
+      "Support secure authentication designs, SSO, MFA, conditional access, application onboarding, and access policy improvement.",
     outcomes:
-      "Consistent user sign-in experience backed by defensible, risk-informed authentication assurance.",
-    platforms: ["Microsoft Entra ID", "Okta", "SAML 2.0 / OIDC", "FIDO2"],
+      "Clearer access policies, better sign-in consistency, and risk-informed authentication controls.",
+    platforms: "Microsoft Entra ID, Okta, and relevant authentication protocols, subject to the agreed project.",
     anchor: "/services#auth-sso",
+    Icon: LockKeyhole,
   },
   {
-    num: "05",
+    id: "pam",
     name: "Privileged Access Management (PAM)",
-    tagline: "Eliminate standing admin privileges and protect critical control planes.",
+    tagline: "Controlled privileged workflows and clearer administrative accountability.",
     problem:
-      "Overprivileged accounts, unmanaged administrative credentials, shared passwords, and limited visibility into sensitive privileged operations.",
-    scope: [
-      "Privileged credential discovery, secure vaulting, and automated rotation",
-      "Just-in-Time (JIT) ephemeral elevation & workflow approvals",
-      "Privileged session isolation and accountable audit logging",
-      "Break-glass emergency access governance and validation",
-    ],
+      "Overprivileged accounts, unmanaged administrative access, and difficulty monitoring sensitive access.",
+    scope:
+      "Provide assessment, design, and technical support for privileged identity controls, privileged access workflows, role elevation, and operating processes.",
     outcomes:
-      "Controlled privileged access, zero permanent standing administrators, and clear operational accountability.",
-    platforms: ["CyberArk", "Microsoft Entra PIM", "PAM Controls"],
+      "A more controlled approach to privileged access and clearer accountability.",
+    platforms: "CyberArk and Microsoft Entra privileged identity capabilities, where in project scope.",
     anchor: "/services#pam",
+    Icon: KeyRound,
   },
   {
-    num: "06",
-    name: "IAM Implementation, Integration & Support",
-    tagline: "Scoped technical delivery, troubleshooting, and knowledge transfer.",
+    id: "implementation",
+    name: "IAM Implementation, Integration & Technical Support",
+    tagline: "Scoped platform configuration, integration support, and knowledge transfer.",
     problem:
-      "Project delivery bottlenecks, stalled directory integrations, and gaps between high-level architectural blueprints and daily operations.",
-    scope: [
-      "Scoped configuration and technical troubleshooting of IAM platforms",
-      "Custom API integrations and multi-cloud entitlement hardening (AWS/Azure)",
-      "Directory hygiene and active hybrid synchronization stabilization",
-      "Comprehensive operational runbooks and internal team enablement",
-    ],
+      "Project delivery bottlenecks, integration issues, and gaps between architecture and day-to-day operations.",
+    scope:
+      "Provide scoped assistance with IAM platform configuration, integrations, troubleshooting, operational documentation, and knowledge transfer.",
     outcomes:
-      "Defined technical deliverables, resilient operating practices, and sustainable internal skills transfer.",
-    platforms: ["Hybrid Directories", "AWS / Azure IAM", "Custom Integrations"],
+      "Defined technical deliverables, clearer operating practices, and skills transfer for internal teams.",
+    platforms: "Scope confirmed per engagement; technology choices follow client requirements.",
     anchor: "/services#implementation",
+    Icon: ServerCog,
   },
 ];
 
 /**
  * Interactive 6-Pillar Enterprise Explorer
- * Replaces repetitive 3x2 card grids with a hairline architectural vertical selector & detail pane.
+ * Replaces numbered list with 6 clean Lucide icons and concise source-aligned specifications.
  */
 export function InteractivePillarsExplorer({
   pillars = DEFAULT_PILLARS,
@@ -132,20 +125,28 @@ export function InteractivePillarsExplorer({
   const [activeIdx, setActiveIdx] = useState(0);
   const shouldReduceMotion = useReducedMotion();
   const active = pillars[activeIdx] || pillars[0];
+  const ActiveIcon = active.Icon;
 
   return (
     <div className="border border-white/15 bg-[#08101E]">
       <div className="grid grid-cols-1 lg:grid-cols-12">
         {/* Left Navigation Rail */}
-        <div className="divide-y divide-white/10 border-b border-white/10 lg:col-span-5 lg:border-b-0 lg:border-r">
+        <div
+          role="tablist"
+          aria-label="Six Core IAM Practice Pillars"
+          className="divide-y divide-white/10 border-b border-white/10 lg:col-span-5 lg:border-b-0 lg:border-r"
+        >
           {pillars.map((pillar, idx) => {
             const isSelected = idx === activeIdx;
+            const PillarIcon = pillar.Icon;
             return (
               <button
-                key={pillar.num}
+                key={pillar.id}
                 type="button"
+                role="tab"
+                aria-selected={isSelected}
                 onClick={() => setActiveIdx(idx)}
-                className={`group relative flex w-full items-start gap-4 px-6 py-5 text-left transition-colors focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#D89A43] ${
+                className={`group relative flex w-full items-start gap-4 px-6 py-4 text-left transition-colors focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#D89A43] ${
                   isSelected
                     ? "bg-[#14243B]/90"
                     : "bg-transparent hover:bg-white/[0.03]"
@@ -157,18 +158,22 @@ export function InteractivePillarsExplorer({
                     aria-hidden="true"
                   />
                 )}
-                <span
-                  className={`mt-0.5 font-mono text-xs font-bold transition-colors ${
-                    isSelected ? "text-[#D89A43]" : "text-slate-500 group-hover:text-slate-300"
+                <div
+                  className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center border transition-colors ${
+                    isSelected
+                      ? "border-[#D89A43] bg-[#D89A43]/15 text-[#D89A43]"
+                      : "border-white/15 bg-white/[0.03] text-slate-400 group-hover:border-white/30 group-hover:text-white"
                   }`}
                 >
-                  {pillar.num}
-                </span>
+                  <PillarIcon className="h-4 w-4" aria-hidden="true" />
+                </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between gap-2">
                     <h3
-                      className={`text-sm font-bold tracking-tight sm:text-base ${
-                        isSelected ? "text-white" : "text-slate-300 group-hover:text-white"
+                      className={`text-sm font-bold tracking-tight sm:text-[15px] ${
+                        isSelected
+                          ? "text-white"
+                          : "text-slate-300 group-hover:text-white"
                       }`}
                     >
                       {pillar.name}
@@ -193,32 +198,44 @@ export function InteractivePillarsExplorer({
           })}
         </div>
 
-        {/* Right Architectural Specification Pane */}
+        {/* Right Concise Specification Pane */}
         <div className="relative flex flex-col justify-between p-7 sm:p-10 lg:col-span-7">
           <AnimatePresence mode="wait">
             <motion.div
-              key={active.num}
+              key={active.id}
               initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={shouldReduceMotion ? undefined : { opacity: 0, y: -6 }}
-              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
               className="space-y-6"
             >
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-5">
+              <div className="flex items-center gap-3.5 border-b border-white/10 pb-5">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-[#D89A43]/50 bg-[#14243B] text-[#D89A43]">
+                  <ActiveIcon className="h-5 w-5" aria-hidden="true" />
+                </div>
                 <div>
-                  <span className="font-mono text-xs font-bold tracking-[0.2em] text-[#D89A43] uppercase">
-                    Pillar {active.num} {"//"} Specification
+                  <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[#D89A43] uppercase">
+                    Practice Pillar Overview
                   </span>
-                  <h3 className="mt-2 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                  <h3 className="mt-1 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
                     {active.name}
                   </h3>
                 </div>
               </div>
 
+              <div className="border-l-2 border-[#D89A43] pl-4">
+                <span className="font-mono text-[10px] font-bold tracking-wider text-[#D89A43] uppercase">
+                  Service Focus
+                </span>
+                <p className="mt-1.5 text-sm leading-relaxed text-slate-200">
+                  {active.scope}
+                </p>
+              </div>
+
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div className="border-l-2 border-rose-400/50 pl-4">
                   <span className="font-mono text-[10px] font-bold tracking-wider text-rose-300 uppercase">
-                    Challenge Addressed
+                    Problem Addressed
                   </span>
                   <p className="mt-1.5 text-sm leading-relaxed text-slate-300">
                     {active.problem}
@@ -227,7 +244,7 @@ export function InteractivePillarsExplorer({
 
                 <div className="border-l-2 border-emerald-400/50 pl-4">
                   <span className="font-mono text-[10px] font-bold tracking-wider text-emerald-300 uppercase">
-                    Expected Outcome
+                    Expected Outcomes
                   </span>
                   <p className="mt-1.5 text-sm leading-relaxed text-slate-200">
                     {active.outcomes}
@@ -235,41 +252,29 @@ export function InteractivePillarsExplorer({
                 </div>
               </div>
 
-              <div className="border-t border-white/10 pt-5">
-                <span className="font-mono text-[10px] font-bold tracking-wider text-[#D89A43] uppercase">
-                  Core Deliverables &amp; Advisory Scope
+              <div className="flex items-start gap-2.5 border-t border-white/10 pt-5 text-xs text-slate-300">
+                <CheckCircle2
+                  className="mt-0.5 h-4 w-4 shrink-0 text-[#D89A43]"
+                  aria-hidden="true"
+                />
+                <span>
+                  <strong className="text-white">Technology Context:</strong>{" "}
+                  {active.platforms}
                 </span>
-                <ul className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-                  {active.scope.map((line) => (
-                    <li
-                      key={line}
-                      className="flex items-start gap-2.5 text-xs leading-relaxed text-slate-300"
-                    >
-                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 bg-[#D89A43]" />
-                      <span>{line}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
 
-              <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6">
-                <div className="flex flex-wrap gap-2">
-                  {active.platforms.map((tag) => (
-                    <span
-                      key={tag}
-                      className="border border-white/15 bg-white/[0.04] px-2.5 py-1 font-mono text-[11px] text-slate-300"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
+              <div className="flex flex-col items-stretch gap-3 border-t border-white/10 pt-6 sm:flex-row sm:flex-nowrap sm:items-center sm:justify-between">
                 <Link
                   href={active.anchor}
-                  className="inline-flex items-center gap-2 bg-[#D89A43] px-5 py-2.5 text-xs font-bold tracking-wider text-[#0B1424] uppercase transition-colors hover:bg-[#e5aa57]"
+                  className="inline-flex items-center justify-center whitespace-nowrap bg-[#D89A43] px-5 py-2.5 text-xs font-bold tracking-wider text-[#0B1424] uppercase transition-colors hover:bg-[#e5aa57]"
                 >
-                  <span>Explore Pillar Scope</span>
-                  <span>&rarr;</span>
+                  Inspect Full Scope &rarr;
+                </Link>
+                <Link
+                  href={`/contact?type=enterprise_consulting&service=${active.id}`}
+                  className="inline-flex items-center justify-center whitespace-nowrap border border-white/25 px-5 py-2.5 text-xs font-semibold tracking-wider text-white uppercase transition-colors hover:border-[#D89A43] hover:text-[#D89A43]"
+                >
+                  Request Consultation
                 </Link>
               </div>
             </motion.div>

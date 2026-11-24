@@ -68,6 +68,12 @@ export const SiteSettings: GlobalConfig = {
               label: "Telephone / Contact Number",
             },
             {
+              name: "whatsappNumber",
+              type: "text",
+              defaultValue: "+234 803 865 2760",
+              label: "Official WhatsApp Number (International Format)",
+            },
+            {
               name: "location",
               type: "text",
               defaultValue: "London, United Kingdom",

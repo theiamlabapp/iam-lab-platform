@@ -27,7 +27,7 @@ const initialPages = [
     hero_headline:
       "Secure identities. Simplify access. Strengthen your business.",
     hero_subheadline:
-      "The IAM Lab supports organisations with practical Identity and Access Management expertise — from access governance and lifecycle automation to authentication, privileged access, and capability enablement.",
+      "The IAM Lab supports organisations with practical identity and access management expertise — from access governance and identity lifecycle automation to authentication, privileged access and IAM improvement initiatives. We also help professionals build meaningful IAM skills through structured learning and hands-on guidance.",
     status: "published",
     sections: [
       {
@@ -36,7 +36,7 @@ const initialPages = [
         headline:
           "Secure identities. Simplify access. Strengthen your business.",
         subheadline:
-          "The IAM Lab supports organisations with practical Identity and Access Management expertise — from access governance and lifecycle automation to authentication, privileged access, and capability enablement.",
+          "The IAM Lab supports organisations with practical identity and access management expertise — from access governance and identity lifecycle automation to authentication, privileged access and IAM improvement initiatives. We also help professionals build meaningful IAM skills through structured learning and hands-on guidance.",
         ctaPrimary: {
           label: "Discuss an IAM Project",
           href: "/contact?type=enterprise_consulting",
@@ -49,81 +49,63 @@ const initialPages = [
       },
       {
         type: "challenges_ledger",
-        badge: "Enterprise Vulnerabilities",
-        title: "Identity is the primary attack surface.",
+        badge: "The Challenge We Help Solve",
+        title: "Identity processes need clear control.",
         subtitle:
-          "Modern organisations manage workforce, vendor, and workload access across disparate systems. Without coordinated governance and automated controls, access risk compounds silently.",
+          "As organisations grow, managing the right access for the right people becomes more complex. A well-designed IAM approach makes identity processes controlled, traceable, and workable.",
         items: [
           {
             num: "01",
-            title: "Identity Sprawl & Cloud Proliferation",
-            context: "SaaS & Multi-Cloud Complexity",
-            friction:
-              "As organisations grow across hybrid directories and cloud applications, permissions fragment rapidly. Engineering teams lose authoritative visibility over who holds access.",
-            resolution:
-              "Authoritative identity orchestration, directory consolidation, and consistent Single Source of Truth controls.",
+            title: "Identity Sprawl & Fragmented Systems",
+            description:
+              "Manual onboarding and fragmented directories leave security teams without consistent visibility over who holds access across cloud and hybrid estates.",
           },
           {
             num: "02",
-            title: "Privilege Creep & Unmonitored Admins",
-            context: "Standing Entitlements & Key Risk",
-            friction:
-              "Staff shift roles while keeping old permissions, and shared or standing administrative privileges leave critical infrastructure vulnerable to lateral escalation.",
-            resolution:
-              "Zero Standing Privilege architecture, automated periodic reviews, and Just-in-Time access elevation.",
+            title: "Excessive Permissions & Standing Risk",
+            description:
+              "Accumulated user permissions and unmonitored administrative privileges create avoidable security exposure when roles change or accounts remain active.",
           },
           {
             num: "03",
-            title: "Inconsistent Review & Audit Debt",
-            context: "Regulatory Governance Friction",
-            friction:
-              "Manual spreadsheet sign-offs and informal approval trails break down under audit pressure across ISO 27001, SOX, and NIS2 mandates.",
-            resolution:
-              "Traceable access governance workflows, verifiable Separation of Duties (SoD), and continuous audit trails.",
-          },
-          {
-            num: "04",
-            title: "Manual Joiner-Mover-Leaver Latency",
-            context: "Operational Lifecycle Bottlenecks",
-            friction:
-              "Manual ticket onboarding delays Day-1 productivity, while late revocation on departure leaves lingering access across peripheral business systems.",
-            resolution:
-              "Event-driven Joiner-Mover-Leaver automation connecting HR sources directly to enterprise directories via SCIM.",
+            title: "Inconsistent Approvals & Audit Friction",
+            description:
+              "Informal approval processes and manual access reviews cause operational delays and weaken audit traceability across business systems.",
           },
         ],
       },
       {
         type: "advisory_editorial",
-        badge: "Independent Advisory",
+        badge: "A Practical, Accountable Approach",
         headline: "We begin with the business problem, not software sales.",
         subheadline:
-          "Identity security is not one tool or a single policy — it is a connected set of decisions about who receives access, how approvals are enforced, and how change is governed.",
-        body: "The IAM Lab provides clear, technically grounded consulting across advisory assessments, identity governance, lifecycle automation, and privileged access — tailored to your real environment without vendor hype.",
+          "We assess your current identity environment, define appropriate controls, and support practical implementation or improvement.",
+        body: "Our goal is to make IAM understandable to stakeholders and sustainable for the internal teams responsible for operating it.",
         bgImage: "/brand/team-collaboration.jpg",
       },
       {
         type: "workforce_capabilities",
         badge: "Engineering & Operational Depth",
-        headline: "Practical controls teams can genuinely run and audit.",
+        headline: "Controls built to operate, govern, and sustain.",
         subheadline:
-          "Our goal is to make Identity and Access Management transparent to leadership, friction-free for legitimate users, and maintainable by internal IT and security teams.",
+          "Identity governance and automation designed cleanly for everyday IT operations and audit readiness.",
         bgImage: "/brand/workforce-operations.jpg",
       },
       {
         type: "academy_feature",
         badge: "Professional Capability Building",
-        headline: "Build your IAM career with The IAM Academy.",
+        headline: "Build your IAM career with The IAM Lab.",
         subheadline:
-          "Our learning initiatives connect foundational IAM concepts to real enterprise engineering. Explore structured career pathways, practical platform walkthroughs, interview preparation, and digital workbooks.",
+          "Our learning initiatives connect IAM concepts to enterprise practice. Explore foundation learning, hands-on platform pathways, technical projects, career mentorship, interview preparation, and specialist resources — with a focus on understanding why a solution works, not simply copying steps.",
         bgImage: "/brand/academy-classroom.jpg",
       },
       {
         type: "closing_cta",
-        badge: "Initiate a Conversation",
+        badge: "Start a Conversation",
         headline:
-          "Let’s discuss the identity challenge your organisation is solving.",
+          "Let’s discuss the identity challenge your organisation is trying to solve.",
         subheadline:
-          "Supporting teams, organisations, and IAM practitioners who want to strengthen identity security and practical operational capability.",
+          "Supporting teams, organisations, and IAM professionals who want to improve identity security and capability.",
         ctaPrimary: {
           label: "Talk to an IAM Specialist",
           href: "/contact?type=enterprise_consulting",
@@ -162,24 +144,24 @@ const initialPages = [
     slug: "about",
     meta_description:
       "Learn about The IAM Lab, our founding mission, operating principles, and executive leadership led by Co-Founders Chiemezie Uzoma and Jennifer Uzoma.",
-    hero_headline: "Engineering Trust Across the Modern Enterprise.",
+    hero_headline: "Practical consulting and professional IAM development.",
     hero_subheadline:
-      "The IAM Lab is an identity and access management consultancy and professional learning practice dedicated to solving real access governance challenges.",
+      "The IAM Lab is an identity and access management initiative focused on enterprise identity security, practical consulting, and professional development. We bring together technical IAM experience, structured learning, and a commitment to solving real access management challenges.",
     status: "published",
     sections: [
       {
         type: "hero",
         badge: "Who We Are",
-        headline: "Engineering Trust Across the Modern Enterprise.",
+        headline: "Practical consulting and professional IAM development.",
         subheadline:
-          "The IAM Lab is an identity and access management consultancy and professional learning practice dedicated to solving real access governance challenges.",
+          "The IAM Lab is an identity and access management initiative focused on enterprise identity security, practical consulting, and professional development. We bring together technical IAM experience, structured learning, and a commitment to solving real access management challenges.",
         bgImage: "/brand/office-architecture.jpg",
       },
       {
         type: "leadership_profile",
         name: "Chiemezie Uzoma",
-        role: "Co-Founder & Chief Executive Officer",
-        bio: "Leads IAM consulting, technical strategy, identity security initiatives, and professional learning. His background spans enterprise identity administration, identity governance, privileged access, Microsoft Entra ID, Okta, SailPoint, CyberArk, and identity lifecycle automation.",
+        role: "Co-Founder & CEO",
+        bio: "Leads IAM consulting, technical strategy, identity security initiatives, and professional learning. His background spans enterprise identity administration, governance, privileged access, Microsoft Entra ID, Okta, SailPoint, CyberArk, and identity automation.",
       },
     ],
     content: {
@@ -213,17 +195,17 @@ const initialPages = [
     slug: "services",
     meta_description:
       "Explore The IAM Lab's six consulting pillars: IAM Strategy & Advisory, IGA, Lifecycle Automation, Authentication/SSO, PAM Engineering, and Implementation Support.",
-    hero_headline: "Connected Decisions. Defensible Identity Control.",
+    hero_headline: "Connected decisions. Defensible identity control.",
     hero_subheadline:
-      "Identity security is not one product or a single policy — it is a set of connected decisions about who receives access, how access is approved, how change is handled, and how risk is governed.",
+      "Identity security is not one product or a single policy. It is a set of connected decisions about who receives access, how access is approved, how identity changes are handled, and how risk is controlled. The IAM Lab provides scoped IAM consulting, technical guidance, and implementation support to help organisations improve these decisions.",
     status: "published",
     sections: [
       {
         type: "hero",
         badge: "Services & Solutions",
-        headline: "Connected Decisions. Defensible Identity Control.",
+        headline: "Connected decisions. Defensible identity control.",
         subheadline:
-          "Identity security is not one product or a single policy — it is a set of connected decisions about who receives access, how access is approved, how change is handled, and how risk is governed.",
+          "Identity security is not one product or a single policy. It is a set of connected decisions about who receives access, how access is approved, how identity changes are handled, and how risk is controlled. The IAM Lab provides scoped IAM consulting, technical guidance, and implementation support to help organisations improve these decisions.",
         bgImage: "/brand/enterprise-architecture.jpg",
       },
     ],
@@ -258,17 +240,17 @@ const initialPages = [
     slug: "academy",
     meta_description:
       "Learn IAM and practise with purpose through 6 structured career progression tiers, practical enterprise scenarios, mentorship, and digital resources.",
-    hero_headline: "Learn IAM. Practise with purpose. Build real capability.",
+    hero_headline: "Learn IAM. Practise with purpose. Build capability.",
     hero_subheadline:
-      "The IAM Academy connects conceptual foundations, realistic enterprise scenarios, and architectural decision-making so learners understand what they are implementing and why it works.",
+      "IAM Academy is the professional learning division of The IAM Lab, designed for people entering identity and access management and practitioners developing more advanced skills. Our approach connects concepts, practical scenarios, and technical decision-making so learners understand what they are doing and why it matters.",
     status: "published",
     sections: [
       {
         type: "hero",
-        badge: "The IAM Academy",
-        headline: "Learn IAM. Practise with purpose. Build real capability.",
+        badge: "IAM Academy",
+        headline: "Learn IAM. Practise with purpose. Build capability.",
         subheadline:
-          "The IAM Academy connects conceptual foundations, realistic enterprise scenarios, and architectural decision-making so learners understand what they are implementing and why it works.",
+          "IAM Academy is the professional learning division of The IAM Lab, designed for people entering identity and access management and practitioners developing more advanced skills. Our approach connects concepts, practical scenarios, and technical decision-making so learners understand what they are doing and why it matters.",
         bgImage: "/brand/academy-classroom.jpg",
       },
     ],

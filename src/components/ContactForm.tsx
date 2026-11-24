@@ -14,14 +14,14 @@ const ENQUIRY_TYPES = [
 const SERVICE_PATHWAY_OPTIONS = [
   { value: "", label: "-- Select Service or Learning Pathway (Optional) --" },
   { label: "--- Corporate Consulting Services ---", value: "", disabled: true },
-  { value: "service_strategy", label: "IAM Strategy, Architecture & Advisory" },
-  { value: "service_governance", label: "Identity Governance & Access Management (IGA)" },
+  { value: "service_strategy", label: "IAM Strategy, Assessment & Advisory" },
+  { value: "service_governance", label: "Identity Governance & Access Management" },
+  { value: "service_directory", label: "Identity Lifecycle & Provisioning Automation" },
+  { value: "service_auth_sso", label: "Authentication, SSO & Access Modernisation" },
   { value: "service_pam", label: "Privileged Access Management (PAM)" },
-  { value: "service_auth_sso", label: "Access Management & SSO/MFA" },
-  { value: "service_cloud_iam", label: "Cloud IAM & Entitlement Governance" },
-  { value: "service_directory", label: "Directory Modernisation & Implementation" },
+  { value: "service_cloud_iam", label: "IAM Implementation, Integration & Technical Support" },
   { label: "--- IAM Academy Pathways ---", value: "", disabled: true },
-  { value: "pathway_foundation", label: "IAM Foundation (Beginner)" },
+  { value: "pathway_foundation", label: "IAM Foundation" },
   { value: "pathway_analyst", label: "IAM Analyst" },
   { value: "pathway_engineer", label: "IAM Engineer" },
   { value: "pathway_senior_engineer", label: "Senior IAM Engineer" },
@@ -49,8 +49,8 @@ export function ContactForm() {
       "auth-sso": "service_auth_sso",
       "cloud-iam": "service_cloud_iam",
       directory: "service_directory",
-      implementation: "service_directory",
-      service_implementation: "service_directory",
+      implementation: "service_cloud_iam",
+      service_implementation: "service_cloud_iam",
       foundation: "pathway_foundation",
       analyst: "pathway_analyst",
       engineer: "pathway_engineer",
@@ -178,10 +178,10 @@ export function ContactForm() {
           </svg>
         </div>
         <h3 className="mt-4 text-2xl font-bold text-[#0B1424]">
-          Consultation Request Received
+          Thank You for Contacting The IAM Lab
         </h3>
         <p className="mt-3 text-sm leading-relaxed text-slate-700 max-w-md mx-auto">
-          Thank you for reaching out. Your enquiry has been persisted securely and routed to our advisory team. We will review your requirements and respond within one business day.
+          Thank you for contacting The IAM Lab. Your enquiry has been received. Our team will review your message and respond using the contact details provided.
         </p>
         <div className="mt-6">
           <button

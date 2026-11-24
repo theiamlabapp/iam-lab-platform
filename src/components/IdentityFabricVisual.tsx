@@ -2,6 +2,16 @@
 
 import React, { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import {
+  CheckCircle2,
+  KeyRound,
+  LockKeyhole,
+  Network,
+  ShieldCheck,
+  Users,
+  Workflow,
+  type LucideIcon,
+} from "lucide-react";
 
 interface FabricDomain {
   id: string;
@@ -11,48 +21,69 @@ interface FabricDomain {
   controls: string[];
   cx: number;
   cy: number;
+  Icon: LucideIcon;
 }
 
 const FABRIC_DOMAINS: FabricDomain[] = [
   {
     id: "directory",
-    code: "SRC-01",
+    code: "SRC",
     title: "Authoritative Identity Core",
     summary:
-      "HR systems and cloud directories synchronized into one clean source of truth, eliminating fragmented identities.",
-    controls: ["Workday / SAP HR Sync", "Active Directory Consolidation", "SCIM 2.0 Provisioning"],
+      "HR sources and enterprise directories aligned into a consistent identity lifecycle, reducing manual joiner-mover-leaver bottlenecks.",
+    controls: [
+      "HR & Directory Synchronisation",
+      "Automated Joiner-Mover-Leaver Flows",
+      "SCIM & Connector Provisioning",
+    ],
     cx: 150,
     cy: 155,
+    Icon: Workflow,
   },
   {
     id: "governance",
-    code: "IGA-02",
-    title: "Governance & Policy Plane",
+    code: "IGA",
+    title: "Identity Governance & Access Control",
     summary:
-      "Automated access request workflows, separation of duties (SoD), and verifiable compliance reviews.",
-    controls: ["Access Recertification", "SoD Conflict Guardrails", "Least-Privilege Role Models"],
+      "Structured access requests, approvals, recertification campaigns, role design, and oversight across applications.",
+    controls: [
+      "Access Request & Approval Workflows",
+      "Periodic Access Recertification",
+      "Role Design & Least-Privilege Oversight",
+    ],
     cx: 400,
     cy: 80,
+    Icon: Users,
   },
   {
     id: "privilege",
-    code: "PAM-03",
-    title: "Zero Standing Privilege Vault",
+    code: "PAM",
+    title: "Privileged Access Management",
     summary:
-      "Ephemeral Just-in-Time elevation replacing shared domain administrator credentials and orphan service tokens.",
-    controls: ["Just-in-Time Elevation", "Session Recording & Isolation", "Automated Secret Rotation"],
+      "Controlled privileged workflows, administrative role elevation, and accountable governance protecting sensitive systems.",
+    controls: [
+      "Privileged Access Controls",
+      "Controlled Role Elevation Workflows",
+      "Administrative Accountability & Review",
+    ],
     cx: 400,
     cy: 235,
+    Icon: KeyRound,
   },
   {
     id: "cloud",
-    code: "ZTA-04",
-    title: "Hybrid & Cloud Access Boundary",
+    code: "SSO",
+    title: "Authentication & Access Modernisation",
     summary:
-      "Phishing-resistant authentication and risk-adaptive conditional access governing every SaaS and workload.",
-    controls: ["FIDO2 / Passwordless MFA", "SAML 2.0 / OIDC Federation", "Workload & API Identity"],
+      "Consistent SSO, MFA, conditional access, and application onboarding strengthening how users authenticate.",
+    controls: [
+      "Single Sign-On (SAML / OIDC)",
+      "Multi-Factor & Conditional Access",
+      "Application Access Modernisation",
+    ],
     cx: 650,
     cy: 155,
+    Icon: LockKeyhole,
   },
 ];
 
@@ -65,8 +96,8 @@ const CONNECTIONS = [
 ];
 
 /**
- * Interactive Zero-Trust Identity Network & Orbital Control Visualization
- * Placed behind/alongside the structural enterprise identity challenges section.
+ * Interactive Connected Identity Control Fabric
+ * Replaced generic bullet dots with meaningful domain & control Lucide icons.
  */
 export function IdentityFabricVisual() {
   const [selectedId, setSelectedId] = useState<string>("governance");
@@ -74,6 +105,7 @@ export function IdentityFabricVisual() {
 
   const activeDomain =
     FABRIC_DOMAINS.find((d) => d.id === selectedId) || FABRIC_DOMAINS[1];
+  const ActiveIcon = activeDomain.Icon;
 
   return (
     <div className="relative overflow-hidden border border-white/15 bg-[#08101E]">
@@ -89,17 +121,17 @@ export function IdentityFabricVisual() {
       />
 
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12">
-        {/* Left: Interactive SVG Constellation & Orbital Globe Mesh */}
+        {/* Left: Interactive SVG Constellation & Orbital Mesh */}
         <div className="relative border-b border-white/10 p-6 sm:p-8 lg:col-span-7 lg:border-b-0 lg:border-r">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
-              <span className="h-2 w-2 rounded-full bg-[#D89A43]" />
+              <Network className="h-4 w-4 text-[#D89A43]" aria-hidden="true" />
               <span className="font-mono text-[10px] font-bold tracking-[0.22em] text-[#D89A43] uppercase">
-                Connected Identity Fabric &middot; Decision Topology
+                Connected Identity Fabric
               </span>
             </div>
             <span className="font-mono text-[10px] text-slate-400">
-              Select a control plane node
+              Select a domain node
             </span>
           </div>
 
@@ -118,7 +150,7 @@ export function IdentityFabricVisual() {
                 </linearGradient>
               </defs>
 
-              {/* Rotating Subtle Globe Meridian Ring */}
+              {/* Rotating Subtle Meridian Ring */}
               <motion.g
                 style={{ originX: "400px", originY: "155px" }}
                 animate={shouldReduceMotion ? undefined : { rotate: 360 }}
@@ -228,14 +260,8 @@ export function IdentityFabricVisual() {
                       stroke={active ? "#D89A43" : "rgba(255,255,255,0.22)"}
                       strokeWidth={active ? "1.6" : "1"}
                     />
-                    <circle
-                      cx={node.cx - 56}
-                      cy={node.cy}
-                      r="3.5"
-                      fill={active ? "#D89A43" : "#60A5FA"}
-                    />
                     <text
-                      x={node.cx - 44}
+                      x={node.cx - 56}
                       y={node.cy - 4}
                       fill="#D89A43"
                       fontSize="9"
@@ -245,8 +271,8 @@ export function IdentityFabricVisual() {
                       {node.code}
                     </text>
                     <text
-                      x={node.cx - 44}
-                      y={node.cy + 10}
+                      x={node.cx - 56}
+                      y={node.cy + 11}
                       fill="#FFFFFF"
                       fontSize="10.5"
                       fontFamily="sans-serif"
@@ -264,9 +290,13 @@ export function IdentityFabricVisual() {
         {/* Right: Active Control Domain Inspector */}
         <div className="flex flex-col justify-between bg-[#0B1424]/85 p-6 sm:p-8 lg:col-span-5">
           <div>
-            <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[#D89A43] uppercase">
-              {activeDomain.code} {"//"} Active Control Domain
-            </span>
+            <div className="flex items-center gap-2.5">
+              <ActiveIcon className="h-4 w-4 text-[#D89A43]" aria-hidden="true" />
+              <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[#D89A43] uppercase">
+                Active Control Domain
+              </span>
+            </div>
+
             <h3 className="mt-3 text-xl font-bold text-white">
               {activeDomain.title}
             </h3>
@@ -276,15 +306,18 @@ export function IdentityFabricVisual() {
 
             <div className="mt-6 border-t border-white/10 pt-5">
               <p className="font-mono text-[10px] font-semibold tracking-wider text-slate-400 uppercase">
-                Implemented Architectural Controls
+                Core Architectural Focus
               </p>
-              <ul className="mt-3 space-y-2">
+              <ul className="mt-3 space-y-2.5">
                 {activeDomain.controls.map((ctrl) => (
                   <li
                     key={ctrl}
                     className="flex items-center gap-2.5 text-xs font-medium text-slate-200"
                   >
-                    <span className="h-1.5 w-1.5 shrink-0 bg-[#D89A43]" />
+                    <CheckCircle2
+                      className="h-3.5 w-3.5 shrink-0 text-[#D89A43]"
+                      aria-hidden="true"
+                    />
                     <span>{ctrl}</span>
                   </li>
                 ))}
@@ -293,23 +326,30 @@ export function IdentityFabricVisual() {
           </div>
 
           <div className="mt-6 flex flex-wrap gap-2 border-t border-white/10 pt-5">
-            {FABRIC_DOMAINS.map((d) => (
-              <button
-                key={d.id}
-                type="button"
-                onClick={() => setSelectedId(d.id)}
-                className={`border px-2.5 py-1 font-mono text-[10px] uppercase transition-colors ${
-                  d.id === selectedId
-                    ? "border-[#D89A43] bg-[#D89A43]/15 font-bold text-[#D89A43]"
-                    : "border-white/15 bg-transparent text-slate-400 hover:border-white/40 hover:text-white"
-                }`}
-              >
-                {d.code}
-              </button>
-            ))}
+            {FABRIC_DOMAINS.map((d) => {
+              const TabIcon = d.Icon;
+              const isSelected = d.id === selectedId;
+              return (
+                <button
+                  key={d.id}
+                  type="button"
+                  onClick={() => setSelectedId(d.id)}
+                  className={`inline-flex items-center gap-1.5 border px-2.5 py-1.5 font-mono text-[10px] uppercase transition-colors ${
+                    isSelected
+                      ? "border-[#D89A43] bg-[#D89A43]/15 font-bold text-[#D89A43]"
+                      : "border-white/15 bg-transparent text-slate-400 hover:border-white/40 hover:text-white"
+                  }`}
+                >
+                  <TabIcon className="h-3 w-3" aria-hidden="true" />
+                  <span>{d.title.split(" ")[0]}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+export { ShieldCheck };
