@@ -145,23 +145,27 @@ export function LoginView() {
     <div className="iam-login-split">
       {/* ========================================================
           LEFT: Enterprise IAM Governance & Security Composition
-          Deep Midnight Navy -> Royal Blue atmospheric composition
-          with connected security nodes, glassmorphic policy cards,
-          and restrained gold accents (self-contained SVG + CSS).
+          Photorealistic enterprise infrastructure backdrop beneath
+          a strong Midnight Navy gradient overlay, grid lines, and
+          Connected Identity Fabric diagram with gold accents.
           ======================================================== */}
       <div className="iam-login-visual-panel" aria-hidden="true">
-        {/* Atmospheric background grid & gold radial glow */}
+        <Image
+          src="/brand/admin-login-enterprise-bg.jpg"
+          alt=""
+          fill
+          priority
+          sizes="(max-width: 1024px) 100vw, 52vw"
+          className="iam-login-bg-photo"
+        />
+        <div className="iam-login-bg-overlay" />
+
+        {/* Atmospheric background grid & subtle accent glows */}
         <div className="iam-login-grid-bg" />
         <div className="iam-login-glow-top" />
         <div className="iam-login-glow-bottom" />
 
         <div className="iam-login-visual-inner">
-          {/* Eyebrow */}
-          <div className="iam-login-visual-pill">
-            <span className="iam-login-pill-dot" />
-            <span>ENTERPRISE IDENTITY GOVERNANCE CONSOLE</span>
-          </div>
-
           {/* Core Headline */}
           <div className="iam-login-visual-copy">
             <h2 className="iam-login-visual-title">
@@ -172,9 +176,8 @@ export function LoginView() {
             </p>
           </div>
 
-          {/* Glassmorphic IAM Dashboard Composition */}
+          {/* Connected Identity Fabric Diagram */}
           <div className="iam-login-stage">
-            {/* Connected Identity Fabric SVG Topology */}
             <div className="iam-login-glass-card iam-login-card-primary">
               <div className="iam-login-card-header">
                 <span className="iam-login-card-label">Connected Identity Fabric</span>
@@ -250,31 +253,6 @@ export function LoginView() {
                 ))}
               </svg>
             </div>
-
-            {/* Bottom Two Mini Security Control Cards */}
-            <div className="iam-login-mini-grid">
-              <div className="iam-login-glass-card">
-                <div className="iam-login-mini-top">
-                  <span className="iam-login-card-label">Access Verification</span>
-                  <span className="iam-login-status-ok">ENFORCED</span>
-                </div>
-                <div className="iam-login-mini-val">HTTP-Only &middot; CSRF</div>
-                <div className="iam-login-bar-track">
-                  <div className="iam-login-bar-fill" style={{ width: "92%" }} />
-                </div>
-              </div>
-
-              <div className="iam-login-glass-card">
-                <div className="iam-login-mini-top">
-                  <span className="iam-login-card-label">RBAC Hierarchy</span>
-                  <span className="iam-login-card-badge">6 TIERS</span>
-                </div>
-                <div className="iam-login-mini-val">Least-Privilege Scope</div>
-                <div className="iam-login-bar-track">
-                  <div className="iam-login-bar-fill" style={{ width: "84%" }} />
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -298,7 +276,7 @@ export function LoginView() {
           </div>
 
           <div className="iam-login-heading-group">
-            <h1 className="iam-login-title">Welcome back</h1>
+            <h1 className="iam-login-title">Sign in to Console</h1>
             <p className="iam-login-subtitle">
               Sign in to manage The IAM Lab enterprise platform.
             </p>
