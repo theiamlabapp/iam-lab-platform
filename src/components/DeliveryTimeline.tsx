@@ -59,11 +59,27 @@ const DEFAULT_STAGES: DeliveryStage[] = [
  */
 export function DeliveryTimeline({
   stages = DEFAULT_STAGES,
+  cmsItems,
   theme = "light",
 }: {
   stages?: DeliveryStage[];
+  cmsItems?: Array<Record<string, unknown>>;
   theme?: "light" | "dark";
 }) {
+  const resolvedStages: DeliveryStage[] =
+    Array.isArray(cmsItems) && cmsItems.length > 0
+      ? cmsItems.map((item, idx) => {
+          const fallback = DEFAULT_STAGES[idx % DEFAULT_STAGES.length];
+          return {
+            id: String(item.id || fallback.id),
+            title: String(item.title || item.name || fallback.title),
+            detail: String(item.detail || item.description || fallback.detail),
+            output: String(item.output || item.focusOutput || fallback.output),
+            Icon: fallback.Icon,
+          };
+        })
+      : stages;
+
   const [activeStep, setActiveStep] = useState(0);
   const shouldReduceMotion = useReducedMotion();
   const isDark = theme === "dark";
@@ -81,7 +97,7 @@ export function DeliveryTimeline({
           className="absolute top-0 left-0 h-[2px] bg-[#D89A43]"
           initial={shouldReduceMotion ? undefined : { width: "25%" }}
           animate={{
-            width: `${((activeStep + 1) / stages.length) * 100}%`,
+            width: `${((activeStep + 1) / resolvedStages.length) * 100}%`,
           }}
           transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         />
@@ -89,7 +105,7 @@ export function DeliveryTimeline({
 
       {/* Interactive Stages Grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-slate-200/20">
-        {stages.map((s, idx) => {
+        {resolvedStages.map((s, idx) => {
           const isCurrent = idx === activeStep;
           const StageIcon = s.Icon;
           return (
@@ -97,7 +113,7 @@ export function DeliveryTimeline({
               key={s.id}
               type="button"
               onClick={() => setActiveStep(idx)}
-              className={`group flex flex-col justify-between text-left transition-all lg:px-6 lg:first:pl-0 lg:last:pr-0 ${
+              className={`group flex flex-col justify-between text-left transition-all lg:px-7 ${
                 isDark
                   ? `border-t-2 p-6 lg:border-t-0 ${
                       isCurrent

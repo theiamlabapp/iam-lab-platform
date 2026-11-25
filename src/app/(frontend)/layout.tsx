@@ -4,6 +4,7 @@ import "../globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
+import { BackToTopButton } from "@/components/BackToTopButton";
 import { getSiteSettings, getWhatsAppHref } from "@/lib/getPageData";
 
 const geistSans = Geist({
@@ -99,12 +100,20 @@ export default async function FrontendRootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
     >
       <body className="min-h-full flex flex-col bg-[#0B1424] text-slate-100 selection:bg-[#d6a15c]/30 selection:text-[#d6a15c]">
-        <Navbar whatsappHref={whatsappHref} />
+        <Navbar
+          whatsappHref={whatsappHref}
+          navLinks={settings.nav_links}
+          ctaLabel={settings.header_cta_label}
+          logoSrc={settings.logo_dark_url}
+          officialEmail={settings.official_email}
+          whatsappDisplay={settings.whatsapp_number}
+        />
         <main id="main-content" className="flex-1">
           {children}
         </main>
         <Footer />
         <WhatsAppFloat href={whatsappHref} />
+        <BackToTopButton />
       </body>
     </html>
   );

@@ -84,12 +84,19 @@ async function migrate() {
     ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS phone TEXT DEFAULT '+44 20 8090 1234';
     ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS whatsapp_number VARCHAR(64) DEFAULT '+234 803 865 2760';
     ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS map_embed_url TEXT;
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS logo_light_url TEXT DEFAULT '/brand/the-iam-lab-logo-light.png';
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS logo_dark_url TEXT DEFAULT '/brand/the-iam-lab-logo-dark.png';
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS header_cta_label TEXT DEFAULT 'Talk to an IAM Specialist';
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS footer_copyright_suffix TEXT DEFAULT 'All rights reserved.';
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS nav_links JSONB DEFAULT '[{"label":"Home","href":"/"},{"label":"About","href":"/about"},{"label":"Services & Solutions","href":"/services"},{"label":"IAM Academy","href":"/academy"},{"label":"Contact","href":"/contact"}]'::jsonb;
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS instagram_url TEXT DEFAULT '';
   `);
   await client.query(`DELETE FROM site_settings WHERE id > 1;`);
   await client.query(
     `UPDATE site_settings
      SET map_embed_url = COALESCE(NULLIF(map_embed_url, ''), $1),
          whatsapp_number = COALESCE(NULLIF(whatsapp_number, ''), '+234 803 865 2760'),
+         linkedin_url = CASE WHEN linkedin_url = 'https://www.linkedin.com/company/theiamlab' THEN '' ELSE COALESCE(linkedin_url, '') END,
          updated_at = NOW()
      WHERE id = 1;`,
     [DEFAULT_MAP_EMBED]

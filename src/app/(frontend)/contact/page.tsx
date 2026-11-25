@@ -22,7 +22,12 @@ export const metadata: Metadata = {
     "Connect with The IAM Lab for corporate IAM advisory consultations or IAM Academy pathway enquiries. Operating from London, United Kingdom.",
 };
 
-const BUILTIN_CONTACT_SECTIONS = new Set(["hero", "contact_tracks", "office_map"]);
+const BUILTIN_CONTACT_SECTIONS = new Set([
+  "hero",
+  "contact_tracks",
+  "form_intro",
+  "office_map",
+]);
 
 export default async function ContactPage({
   searchParams,
@@ -37,7 +42,14 @@ export default async function ContactPage({
   const whatsappHref = getWhatsAppHref(settings.whatsapp_number);
 
   const heroSec = findSection(pageData, "hero");
+  const tracksSec = findSection(pageData, "contact_tracks");
+  const formSec = findSection(pageData, "form_intro");
+  const mapSec = findSection(pageData, "office_map");
   const customSections = getCustomSections(pageData, BUILTIN_CONTACT_SECTIONS);
+
+  const trackItems = Array.isArray(tracksSec?.items) ? tracksSec.items : [];
+  const track1 = trackItems[0] || {};
+  const track2 = trackItems[1] || {};
 
   return (
     <>
@@ -93,57 +105,80 @@ export default async function ContactPage({
             <div className="space-y-8 lg:col-span-5">
               <div>
                 <span className="font-mono text-xs font-bold tracking-wider text-[#B07424] uppercase">
-                  Two Dedicated Enquiry Routes
+                  {tracksSec?.badge || "Two Dedicated Enquiry Routes"}
                 </span>
                 <h2 className="mt-2 text-2xl font-extrabold text-[#0B1424]">
-                  How can we support your goals?
+                  {tracksSec?.headline || "How can we support your goals?"}
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-slate-600">
-                  Choose the track matching your objectives in the form. Enquiries are routed directly to our consulting and admissions specialists.
+                  {tracksSec?.subheadline ||
+                    "Choose the track matching your objectives in the form. Enquiries are routed directly to our consulting and admissions specialists."}
                 </p>
               </div>
 
               {/* Pathway A — For Organisations */}
-              <div className="border-l-4 border-[#0B1424] bg-white p-6 shadow-xs border-y border-r border-slate-200">
+              <div className="border-y border-r border-l-4 border-slate-200 border-l-[#0B1424] bg-white p-6 shadow-xs">
                 <span className="font-mono text-[10px] font-bold tracking-wider text-[#B07424] uppercase">
-                  ROUTE 01 // FOR ORGANISATIONS
+                  {String(track1.badge || "ROUTE 01 // FOR ORGANISATIONS")}
                 </span>
                 <h3 className="mt-2 text-base font-bold text-[#0B1424]">
-                  Consulting, Implementation &amp; Assessments
+                  {String(
+                    track1.title || "Consulting, Implementation & Assessments"
+                  )}
                 </h3>
                 <p className="mt-2 text-xs leading-relaxed text-slate-600">
-                  Discuss consulting architecture, employee enablement, identity risk reviews, or an active modernisation project.
+                  {String(
+                    track1.description ||
+                      "Discuss consulting architecture, employee enablement, identity risk reviews, or an active modernisation project."
+                  )}
                 </p>
                 <div className="mt-4">
                   <Link
-                    href="/contact?type=enterprise_consulting"
+                    href={String(
+                      track1.href || "/contact?type=enterprise_consulting#contact-form"
+                    )}
                     className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0B1424] hover:text-[#B07424]"
                   >
-                    <span>Request a Business Consultation</span>
+                    <span>
+                      {String(track1.ctaLabel || "Request a Business Consultation")}
+                    </span>
                     <span>&rarr;</span>
                   </Link>
                 </div>
               </div>
 
               {/* Pathway B — For Individuals */}
-              <div className="border-l-4 border-[#D89A43] bg-white p-6 shadow-xs border-y border-r border-slate-200">
+              <div className="border-y border-r border-l-4 border-slate-200 border-l-[#D89A43] bg-white p-6 shadow-xs">
                 <span className="font-mono text-[10px] font-bold tracking-wider text-[#B07424] uppercase">
-                  ROUTE 02 // FOR INDIVIDUALS
+                  {String(track2.badge || "ROUTE 02 // FOR INDIVIDUALS")}
                 </span>
                 <h3 className="mt-2 text-base font-bold text-[#0B1424]">
-                  IAM Academy Pathways &amp; Mentorship
+                  {String(track2.title || "IAM Academy Pathways & Mentorship")}
                 </h3>
                 <p className="mt-2 text-xs leading-relaxed text-slate-600">
-                  Enquire about structured learning tracks, cohort dates, one-to-one mentorship, or technical study guides.
+                  {String(
+                    track2.description ||
+                      "Explore structured learning pathways, cohorts, one-to-one mentorship, or curated study guides on IAM Academy."
+                  )}
                 </p>
-                <div className="mt-4">
+                <div className="mt-4 flex flex-wrap items-center gap-4">
                   <Link
-                    href="/contact?type=individual_learning"
+                    href={String(track2.href || "/academy")}
                     className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0B1424] hover:text-[#B07424]"
                   >
-                    <span>Ask About IAM Academy</span>
+                    <span>
+                      {String(track2.ctaLabel || "Ask About IAM Academy")}
+                    </span>
                     <span>&rarr;</span>
                   </Link>
+                  <a
+                    href={settings.selar_store_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#B07424] hover:text-[#0B1424]"
+                  >
+                    <span>Books &amp; Resources &rarr;</span>
+                  </a>
                 </div>
               </div>
 
@@ -184,17 +219,18 @@ export default async function ContactPage({
             </div>
 
             {/* Right Column: Validated Enterprise Consultation Form */}
-            <div className="lg:col-span-7">
+            <div id="contact-form" className="scroll-mt-28 lg:col-span-7">
               <div className="border border-slate-200 bg-white p-8 shadow-sm sm:p-12">
                 <div className="mb-8 border-b border-slate-200 pb-6">
                   <span className="font-mono text-xs font-bold tracking-wider text-[#B07424] uppercase">
-                    Inbound Enquiry Desk
+                    {formSec?.badge || "Inbound Enquiry Desk"}
                   </span>
                   <h2 className="mt-2 text-2xl font-extrabold text-[#0B1424]">
-                    Submit your consultation request
+                    {formSec?.headline || "Submit your consultation request"}
                   </h2>
                   <p className="mt-1.5 text-xs text-slate-500">
-                    Your details are recorded securely and routed directly to our team for follow-up.
+                    {formSec?.subheadline ||
+                      "Your details are recorded securely and routed directly to our team for follow-up."}
                   </p>
                 </div>
 
@@ -223,14 +259,15 @@ export default async function ContactPage({
               <div className="flex items-center gap-3">
                 <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
                 <span className="font-mono text-xs font-semibold tracking-[0.25em] text-[#B07424] uppercase">
-                  United Kingdom Advisory Base
+                  {mapSec?.badge || "United Kingdom Advisory Base"}
                 </span>
               </div>
               <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-[#0B1424]">
-                London Headquarters
+                {mapSec?.headline || "London Headquarters"}
               </h2>
               <p className="mt-2 max-w-2xl text-base text-slate-600">
-                Operating internationally from London, supporting enterprises and learners across the UK, Africa, Europe, and North America.
+                {mapSec?.subheadline ||
+                  "Operating internationally from London, supporting enterprises and learners across the UK, Africa, Europe, and North America."}
               </p>
             </div>
 

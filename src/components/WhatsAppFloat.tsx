@@ -11,7 +11,7 @@ interface WhatsAppFloatProps {
  */
 export function WhatsAppFloat({ href }: WhatsAppFloatProps) {
   return (
-    <div className="fixed right-4 bottom-4 z-40 flex items-center gap-2.5 sm:right-6 sm:bottom-6">
+    <div className="fixed bottom-4 left-4 z-40 flex items-center gap-2.5 sm:bottom-6 sm:left-6">
       <a
         href={href}
         target="_blank"

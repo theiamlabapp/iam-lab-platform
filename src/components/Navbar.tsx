@@ -5,18 +5,38 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { BrandLogo } from "./BrandLogo";
 
-const NAV_LINKS = [
+export interface NavbarLinkItem {
+  href: string;
+  label: string;
+}
+
+const DEFAULT_NAV_LINKS: NavbarLinkItem[] = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/services", label: "Services & Solutions" },
   { href: "/academy", label: "IAM Academy" },
   { href: "/contact", label: "Contact" },
-] as const;
+];
 
-export function Navbar({ whatsappHref }: { whatsappHref?: string } = {}) {
+export function Navbar({
+  whatsappHref,
+  navLinks = DEFAULT_NAV_LINKS,
+  ctaLabel = "Talk to an IAM Specialist",
+  logoSrc,
+  officialEmail = "info@theiamlab.com",
+  whatsappDisplay = "+234 803 865 2760",
+}: {
+  whatsappHref?: string;
+  navLinks?: NavbarLinkItem[];
+  ctaLabel?: string;
+  logoSrc?: string;
+  officialEmail?: string;
+  whatsappDisplay?: string;
+} = {}) {
   const specialistHref =
     whatsappHref ||
     "https://wa.me/2348038652760?text=Hello%20The%20IAM%20Lab%20team%2C%20I%20would%20like%20to%20speak%20with%20an%20IAM%20specialist.";
+  const links = navLinks.length > 0 ? navLinks : DEFAULT_NAV_LINKS;
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [prevPathname, setPrevPathname] = useState(pathname);
@@ -74,6 +94,7 @@ export function Navbar({ whatsappHref }: { whatsappHref?: string } = {}) {
               priority
               variant="dark"
               surface="plain"
+              srcOverride={logoSrc}
               className="w-[82px] sm:w-[96px]"
             />
           </Link>
@@ -83,7 +104,7 @@ export function Navbar({ whatsappHref }: { whatsappHref?: string } = {}) {
             aria-label="Main Navigation"
             className="hidden items-center gap-8 lg:flex xl:gap-10"
           >
-            {NAV_LINKS.map((link) => {
+            {links.map((link) => {
               const isActive =
                 link.href === "/"
                   ? pathname === "/"
@@ -120,7 +141,7 @@ export function Navbar({ whatsappHref }: { whatsappHref?: string } = {}) {
               rel="noopener noreferrer"
               className="hidden items-center justify-center border border-[#D89A43] bg-[#D89A43] px-5 py-2.5 text-[11px] font-bold tracking-[0.12em] text-[#0B1424] uppercase shadow-xs transition-all hover:bg-[#c58832] hover:border-[#c58832] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0B1424] sm:inline-flex"
             >
-              Talk to an IAM Specialist
+              {ctaLabel}
             </a>
 
             <button
@@ -152,7 +173,12 @@ export function Navbar({ whatsappHref }: { whatsappHref?: string } = {}) {
           className="fixed inset-0 z-50 flex flex-col bg-white text-[#0B1424] lg:hidden"
         >
           <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-            <BrandLogo variant="dark" surface="plain" className="w-[84px]" />
+            <BrandLogo
+              variant="dark"
+              surface="plain"
+              srcOverride={logoSrc}
+              className="w-[84px]"
+            />
             <button
               ref={closeBtnRef}
               type="button"
@@ -169,7 +195,7 @@ export function Navbar({ whatsappHref }: { whatsappHref?: string } = {}) {
 
           <div className="flex-1 overflow-y-auto px-6 py-8">
             <nav className="flex flex-col divide-y divide-slate-100">
-              {NAV_LINKS.map((link) => {
+              {links.map((link) => {
                 const isActive =
                   link.href === "/"
                     ? pathname === "/"
@@ -201,10 +227,10 @@ export function Navbar({ whatsappHref }: { whatsappHref?: string } = {}) {
                 onClick={() => setMobileOpen(false)}
                 className="flex w-full items-center justify-center bg-[#D89A43] px-6 py-3.5 text-xs font-bold tracking-[0.12em] text-[#0B1424] uppercase hover:bg-[#c58832]"
               >
-                Talk to an IAM Specialist
+                {ctaLabel}
               </a>
               <p className="mt-6 text-xs text-slate-500">
-                info@theiamlab.com &middot; WhatsApp +234 803 865 2760
+                {officialEmail} &middot; WhatsApp {whatsappDisplay}
               </p>
             </div>
           </div>

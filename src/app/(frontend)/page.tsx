@@ -15,6 +15,7 @@ import { HomeHero } from "@/components/HomeHero";
 import { IdentityFabricVisual } from "@/components/IdentityFabricVisual";
 import { InteractivePillarsExplorer } from "@/components/InteractivePillarsExplorer";
 import { FadeIn, ImageReveal } from "@/components/MotionWrappers";
+import { SubtleNetworkBackdrop } from "@/components/SubtleNetworkBackdrop";
 import {
   findSection,
   getCustomSections,
@@ -50,7 +51,7 @@ const DEFAULT_CHALLENGES = [
   },
 ];
 
-const WORKFORCE_CAPABILITIES = [
+const DEFAULT_WORKFORCE_CAPABILITIES = [
   {
     title: "Defensible Identity Blueprints",
     detail:
@@ -80,6 +81,7 @@ const WORKFORCE_CAPABILITIES = [
 const BUILTIN_HOME_SECTIONS = new Set([
   "hero",
   "challenges_ledger",
+  "identity_fabric",
   "advisory_editorial",
   "workforce_capabilities",
   "services_list",
@@ -102,26 +104,52 @@ export default async function HomePage({
   const whatsappHref = getWhatsAppHref(siteSettings.whatsapp_number);
   const heroSec = findSection(pageData, "hero");
   const challengesSec = findSection(pageData, "challenges_ledger");
+  const fabricSec = findSection(pageData, "identity_fabric");
   const advisorySec = findSection(pageData, "advisory_editorial");
   const workforceSec = findSection(pageData, "workforce_capabilities");
+  const servicesSec = findSection(pageData, "services_list");
+  const deliverySec = findSection(pageData, "delivery_timeline");
   const academySec = findSection(pageData, "academy_feature");
   const closingSec = findSection(pageData, "closing_cta");
   const customSections = getCustomSections(pageData, BUILTIN_HOME_SECTIONS);
 
   const challengeIcons = [Network, KeyRound, ShieldAlert];
   const challengeCards =
-    Array.isArray(challengesSec?.items) && challengesSec.items.length >= 3
+    Array.isArray(challengesSec?.items) && challengesSec.items.length > 0
       ? challengesSec.items.slice(0, 3).map((item, idx) => ({
           id: String(item.num || item.id || idx),
-          title: String(item.title || DEFAULT_CHALLENGES[idx].title),
+          title: String(item.title || DEFAULT_CHALLENGES[idx % 3].title),
           description: String(
             item.description ||
               item.friction ||
-              DEFAULT_CHALLENGES[idx].description
+              DEFAULT_CHALLENGES[idx % 3].description
           ),
           Icon: challengeIcons[idx % challengeIcons.length],
         }))
       : DEFAULT_CHALLENGES;
+
+  const workforceCapabilities =
+    Array.isArray(workforceSec?.items) && workforceSec.items.length > 0
+      ? workforceSec.items.map((item, idx) => {
+          const fallback =
+            DEFAULT_WORKFORCE_CAPABILITIES[
+              idx % DEFAULT_WORKFORCE_CAPABILITIES.length
+            ];
+          return {
+            title: String(item.title || item.name || fallback.title),
+            detail: String(
+              item.detail || item.description || fallback.detail
+            ),
+            Icon: fallback.Icon,
+          };
+        })
+      : DEFAULT_WORKFORCE_CAPABILITIES;
+
+  const heroCarouselItems = Array.isArray(heroSec?.carouselItems)
+    ? (heroSec.carouselItems as Array<Record<string, unknown>>)
+    : Array.isArray(heroSec?.items)
+    ? (heroSec.items as Array<Record<string, unknown>>)
+    : undefined;
 
   return (
     <>
@@ -131,7 +159,7 @@ export default async function HomePage({
         </div>
       )}
 
-      {/* 1. Hero + Manual Interactive Numbered Service Slider */}
+      {/* 1. Hero + Continuous Horizontal Service Carousel */}
       <HomeHero
         badge={heroSec?.badge}
         headline={heroSec?.headline || pageData?.hero_headline}
@@ -141,6 +169,7 @@ export default async function HomePage({
         ctaPrimaryHref={heroSec?.ctaPrimary?.href}
         ctaSecondaryLabel={heroSec?.ctaSecondary?.label}
         ctaSecondaryHref={heroSec?.ctaSecondary?.href}
+        carouselItems={heroCarouselItems}
       />
 
       {/* 2. Enterprise Identity Challenges (3 Visual Cards) + Connected Identity Fabric */}
@@ -155,10 +184,13 @@ export default async function HomePage({
               <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
             </div>
             <h2 className="mt-4 text-[1.65rem] leading-[1.2] font-extrabold tracking-tight text-white sm:text-4xl lg:text-[2.6rem]">
-              {challengesSec?.title || "Identity processes need clear control."}
+              {challengesSec?.title ||
+                challengesSec?.headline ||
+                "Identity processes need clear control."}
             </h2>
             <p className="mt-4 text-base leading-relaxed text-slate-300">
               {challengesSec?.subtitle ||
+                challengesSec?.subheadline ||
                 "As organisations grow, managing the right access for the right people becomes more complex. A well-designed IAM approach makes identity processes controlled, traceable, and workable."}
             </p>
           </FadeIn>
@@ -191,12 +223,12 @@ export default async function HomePage({
 
           {/* Interactive Connected Identity Control Fabric */}
           <FadeIn delay={0.1} className="mt-14">
-            <IdentityFabricVisual />
+            <IdentityFabricVisual cmsDomains={fabricSec?.items} />
           </FadeIn>
         </div>
       </section>
 
-      {/* 3. Editorial Introduction — A Practical, Accountable Approach (Standalone Photography) */}
+      {/* 3. Editorial Introduction — A Practical, Accountable Approach */}
       <section className="border-b border-slate-200 bg-[#F7F6F2] py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
@@ -233,10 +265,13 @@ export default async function HomePage({
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-6">
                 <Link
-                  href="/about"
+                  href={advisorySec?.ctaPrimary?.href || "/about"}
                   className="inline-flex items-center gap-2 border-b-2 border-[#D89A43] pb-1 text-sm font-bold text-[#0B1424] transition-colors hover:text-[#B07424]"
                 >
-                  <span>Learn about our approach and leadership</span>
+                  <span>
+                    {advisorySec?.ctaPrimary?.label ||
+                      "Learn about our approach and leadership"}
+                  </span>
                   <span>&rarr;</span>
                 </Link>
               </div>
@@ -245,9 +280,11 @@ export default async function HomePage({
         </div>
       </section>
 
-      {/* 4. Engineering & Operational Depth — Consistent Lucide Icons, Standalone Photo */}
-      <section className="border-b border-slate-200 bg-white py-24 sm:py-32">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+      {/* 4. Engineering & Operational Depth (White Surface + Subtle Network Pattern Backdrop) */}
+      <section className="relative overflow-hidden border-b border-slate-200 bg-white py-24 sm:py-32">
+        <SubtleNetworkBackdrop />
+
+        <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
             <FadeIn className="lg:col-span-6">
               <div className="flex items-center gap-3">
@@ -268,7 +305,7 @@ export default async function HomePage({
               </p>
 
               <div className="mt-10 grid grid-cols-1 gap-6 border-t border-slate-200 pt-8 sm:grid-cols-2">
-                {WORKFORCE_CAPABILITIES.map((cap) => {
+                {workforceCapabilities.map((cap) => {
                   const CapIcon = cap.Icon;
                   return (
                     <div key={cap.title} className="space-y-2">
@@ -310,27 +347,29 @@ export default async function HomePage({
               <div className="flex items-center gap-3">
                 <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
                 <span className="font-mono text-xs font-semibold tracking-[0.25em] text-[#D89A43] uppercase">
-                  Six Core Practice Pillars
+                  {servicesSec?.badge || "Six Core Practice Pillars"}
                 </span>
               </div>
               <h2 className="mt-4 text-[1.65rem] leading-[1.2] font-extrabold tracking-tight text-white sm:text-4xl">
-                Scoped IAM consulting &amp; implementation support.
+                {servicesSec?.headline ||
+                  "Scoped IAM consulting & implementation support."}
               </h2>
               <p className="mt-3 text-base leading-relaxed text-slate-300">
-                Select any practice area below to review scope, problem focus, and expected outcomes.
+                {servicesSec?.subheadline ||
+                  "Select any practice area below to review scope, problem focus, and expected outcomes."}
               </p>
             </FadeIn>
 
             <Link
-              href="/services"
+              href={servicesSec?.ctaPrimary?.href || "/services"}
               className="inline-flex shrink-0 items-center justify-center whitespace-nowrap border border-white/20 px-5 py-2.5 text-xs font-bold tracking-wider text-white uppercase transition-colors hover:border-[#D89A43] hover:text-[#D89A43]"
             >
-              View Services &amp; Solutions &rarr;
+              {servicesSec?.ctaPrimary?.label || "View Services & Solutions"} &rarr;
             </Link>
           </div>
 
           <FadeIn delay={0.1}>
-            <InteractivePillarsExplorer />
+            <InteractivePillarsExplorer cmsItems={servicesSec?.items} />
           </FadeIn>
         </div>
       </section>
@@ -342,23 +381,24 @@ export default async function HomePage({
             <div className="flex items-center justify-center gap-3">
               <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
               <span className="font-mono text-xs font-semibold tracking-[0.25em] text-[#B07424] uppercase">
-                Service Delivery Model
+                {deliverySec?.badge || "Service Delivery Model"}
               </span>
               <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
             </div>
             <h2 className="mt-4 text-[1.65rem] leading-[1.2] font-extrabold tracking-tight text-[#0B1424] sm:text-4xl">
-              How we engage and deliver clarity.
+              {deliverySec?.headline || "How we engage and deliver clarity."}
             </h2>
             <p className="mt-4 text-base leading-relaxed text-slate-600">
-              A transparent, milestone-based engagement workflow from discovery call through knowledge transfer.
+              {deliverySec?.subheadline ||
+                "A transparent, milestone-based engagement workflow from discovery call through knowledge transfer."}
             </p>
           </FadeIn>
 
-          <DeliveryTimeline theme="light" />
+          <DeliveryTimeline theme="light" cmsItems={deliverySec?.items} />
         </div>
       </section>
 
-      {/* 7. IAM Academy — Build Your IAM Career (Preserved Split + Aligned Horizontal Buttons) */}
+      {/* 7. IAM Academy — Build Your IAM Career */}
       <section className="relative overflow-hidden border-b border-white/10 bg-[#0B1424] py-24 sm:py-32">
         <div className="pointer-events-none absolute inset-0 z-0">
           <Image
@@ -392,18 +432,18 @@ export default async function HomePage({
 
               <div className="mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-nowrap sm:items-center">
                 <Link
-                  href="/academy"
+                  href={academySec?.ctaPrimary?.href || "/academy"}
                   className="inline-flex min-h-[48px] items-center justify-center whitespace-nowrap bg-[#D89A43] px-5 py-3 text-xs font-bold tracking-[0.12em] text-[#0B1424] uppercase transition-colors hover:bg-[#e5aa57] xl:px-6"
                 >
-                  Explore IAM Academy &rarr;
+                  {academySec?.ctaPrimary?.label || "Explore IAM Academy"} &rarr;
                 </Link>
                 <a
-                  href={siteSettings.selar_store_url}
+                  href={academySec?.ctaSecondary?.href || siteSettings.selar_store_url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex min-h-[48px] items-center justify-center whitespace-nowrap border border-white/25 bg-white/5 px-5 py-3 text-xs font-semibold tracking-wider text-white uppercase transition-colors hover:border-[#D89A43] hover:text-[#D89A43] xl:px-6"
                 >
-                  Browse IAM Books &amp; Resources &rarr;
+                  {academySec?.ctaSecondary?.label || "Browse IAM Books & Resources"} &rarr;
                 </a>
               </div>
             </FadeIn>
@@ -412,7 +452,7 @@ export default async function HomePage({
               <div className="border border-white/15 bg-[#14243B]/60 p-3 backdrop-blur-sm">
                 <div className="relative aspect-[16/10] w-full overflow-hidden">
                   <Image
-                    src="/brand/iam-academy-hero.jpg"
+                    src={String(academySec?.secondaryImage || "/brand/iam-academy-hero.jpg")}
                     alt="Enterprise identity architecture hierarchy workstation in IAM Academy lab"
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
@@ -462,18 +502,27 @@ export default async function HomePage({
 
           <div className="mt-10 flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:flex-nowrap sm:items-center">
             <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={closingSec?.ctaPrimary?.href || whatsappHref}
+              target={
+                closingSec?.ctaPrimary?.href?.startsWith("/") ? undefined : "_blank"
+              }
+              rel={
+                closingSec?.ctaPrimary?.href?.startsWith("/")
+                  ? undefined
+                  : "noopener noreferrer"
+              }
               className="inline-flex min-h-[50px] items-center justify-center whitespace-nowrap bg-[#D89A43] px-7 py-3.5 text-xs font-bold tracking-[0.14em] text-[#0B1424] uppercase shadow-xl transition-colors hover:bg-[#e5aa57]"
             >
               {closingSec?.ctaPrimary?.label || "Talk to an IAM Specialist"} &rarr;
             </a>
             <Link
-              href="/contact?type=enterprise_consulting"
+              href={
+                closingSec?.ctaSecondary?.href ||
+                "/contact?type=enterprise_consulting#contact-form"
+              }
               className="inline-flex min-h-[50px] items-center justify-center whitespace-nowrap border border-white/25 bg-white/5 px-7 py-3.5 text-xs font-semibold tracking-wider text-white uppercase transition-colors hover:border-[#D89A43] hover:text-[#D89A43]"
             >
-              Submit Written Enquiry
+              {closingSec?.ctaSecondary?.label || "Submit Written Enquiry"}
             </Link>
           </div>
         </FadeIn>

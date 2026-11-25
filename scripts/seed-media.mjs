@@ -99,6 +99,42 @@ const BRAND_CATALOG = [
     caption: "Enterprise console sign-in photography",
   },
   {
+    filename: "service-strategy.jpg",
+    category: "consulting",
+    alt: "Senior IAM strategy consultants reviewing enterprise identity architecture plans with executive client in London boardroom",
+    caption: "Service 1: IAM Strategy, Assessment & Advisory",
+  },
+  {
+    filename: "service-governance.jpg",
+    category: "identity",
+    alt: "Identity governance specialist reviewing access compliance and audit controls in executive office",
+    caption: "Service 2: Identity Governance & Access Management",
+  },
+  {
+    filename: "service-lifecycle.jpg",
+    category: "identity",
+    alt: "Enterprise identity engineers collaborating on automated provisioning workflows at dual workstation monitors",
+    caption: "Service 3: Identity Lifecycle & Provisioning Automation",
+  },
+  {
+    filename: "service-sso.jpg",
+    category: "identity",
+    alt: "Enterprise security architect configuring authentication and single sign-on controls in London financial district office",
+    caption: "Service 4: Authentication, SSO & Access Modernisation",
+  },
+  {
+    filename: "service-pam.jpg",
+    category: "identity",
+    alt: "Infrastructure engineers overseeing privileged access infrastructure beside glass-partitioned enterprise server racks",
+    caption: "Service 5: Privileged Access Management (PAM)",
+  },
+  {
+    filename: "service-implementation.jpg",
+    category: "consulting",
+    alt: "Senior IAM consultant guiding platform integration and knowledge transfer at executive workstation",
+    caption: "Service 6: IAM Implementation, Integration & Technical Support",
+  },
+  {
     filename: "security-infrastructure.jpg",
     category: "identity",
     alt: "High-assurance enterprise network infrastructure racks and structured cabling",

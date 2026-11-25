@@ -24,6 +24,7 @@ interface HomeHeroProps {
   ctaPrimaryHref?: string;
   ctaSecondaryLabel?: string;
   ctaSecondaryHref?: string;
+  carouselItems?: Array<Record<string, unknown>>;
 }
 
 interface HeroServiceCard {
@@ -86,8 +87,23 @@ export function HomeHero({
   ctaPrimaryHref,
   ctaSecondaryLabel,
   ctaSecondaryHref,
+  carouselItems,
 }: HomeHeroProps = {}) {
   const shouldReduceMotion = useReducedMotion();
+
+  const resolvedCards: HeroServiceCard[] =
+    Array.isArray(carouselItems) && carouselItems.length > 0
+      ? carouselItems.map((item, idx) => {
+          const fallback = HERO_SERVICE_CARDS[idx % HERO_SERVICE_CARDS.length];
+          return {
+            id: String(item.id || fallback.id),
+            label: String(item.label || item.title || item.name || fallback.label),
+            summary: String(item.summary || item.description || fallback.summary),
+            href: String(item.href || fallback.href),
+            Icon: fallback.Icon,
+          };
+        })
+      : HERO_SERVICE_CARDS;
 
   const displayBadge =
     badge || "Identity Security • IAM Consulting • Professional Learning";
@@ -355,7 +371,7 @@ export function HomeHero({
           >
             {shouldReduceMotion ? (
               <div className="flex gap-4 overflow-x-auto pb-2">
-                {HERO_SERVICE_CARDS.map((card) => {
+                {resolvedCards.map((card) => {
                   const CardIcon = card.Icon;
                   return (
                     <Link
@@ -381,7 +397,7 @@ export function HomeHero({
             ) : (
               <div ref={trackRef} className="flex w-max will-change-transform">
                 <div ref={firstSetRef} className="flex shrink-0 gap-4 pr-4">
-                  {HERO_SERVICE_CARDS.map((card) => {
+                  {resolvedCards.map((card) => {
                     const CardIcon = card.Icon;
                     return (
                       <Link
@@ -417,7 +433,7 @@ export function HomeHero({
                 </div>
 
                 <div className="flex shrink-0 gap-4 pr-4" aria-hidden="true">
-                  {HERO_SERVICE_CARDS.map((card) => {
+                  {resolvedCards.map((card) => {
                     const CardIcon = card.Icon;
                     return (
                       <Link

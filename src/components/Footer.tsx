@@ -21,6 +21,7 @@ export async function Footer() {
               <BrandLogo
                 variant="light"
                 surface="plain"
+                srcOverride={settings.logo_light_url}
                 className="w-[98px] sm:w-[112px]"
               />
             </Link>
@@ -82,6 +83,26 @@ export async function Footer() {
                   <span>LinkedIn &rarr;</span>
                 </a>
               )}
+              {settings.instagram_url && (
+                <a
+                  href={settings.instagram_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wider text-slate-400 uppercase transition-colors hover:text-[#D89A43]"
+                >
+                  <span>Instagram &rarr;</span>
+                </a>
+              )}
+              {settings.twitter_url && (
+                <a
+                  href={settings.twitter_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wider text-slate-400 uppercase transition-colors hover:text-[#D89A43]"
+                >
+                  <span>X &rarr;</span>
+                </a>
+              )}
             </div>
           </div>
 
@@ -91,31 +112,13 @@ export async function Footer() {
               Navigation
             </p>
             <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/" className="text-slate-400 transition-colors hover:text-white">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="text-slate-400 transition-colors hover:text-white">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/services" className="text-slate-400 transition-colors hover:text-white">
-                  Services &amp; Solutions
-                </Link>
-              </li>
-              <li>
-                <Link href="/academy" className="text-slate-400 transition-colors hover:text-white">
-                  IAM Academy
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-slate-400 transition-colors hover:text-white">
-                  Contact &amp; Enquiry
-                </Link>
-              </li>
+              {settings.nav_links.map((nav) => (
+                <li key={nav.href}>
+                  <Link href={nav.href} className="text-slate-400 transition-colors hover:text-white">
+                    {nav.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -186,12 +189,9 @@ export async function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-slate-500 sm:flex-row">
           <p>
-            Copyright <CopyrightYear /> {settings.company_name}. All rights reserved.
+            Copyright <CopyrightYear /> {settings.company_name}. {settings.footer_copyright_suffix}
           </p>
           <div className="flex flex-wrap items-center gap-5">
-            <Link href="/contact" className="text-slate-400 transition-colors hover:text-white">
-              Privacy &amp; Enquiry Notice
-            </Link>
             <span>
               Powered by{" "}
               <a

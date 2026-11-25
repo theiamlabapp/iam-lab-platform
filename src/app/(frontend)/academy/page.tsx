@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     "Learn IAM. Practise with purpose. Build capability across structured learning pathways, technical labs, mentorship, and career resources.",
 };
 
-const FORMATS = [
+const DEFAULT_FORMATS = [
   {
     id: "community",
     title: "Live community learning",
@@ -68,6 +68,8 @@ const BUILTIN_ACADEMY_SECTIONS = new Set([
   "learning_formats",
   "selar_bookstore",
   "integrity_notice",
+  "faqs_list",
+  "closing_cta",
 ]);
 
 export default async function AcademyPage({
@@ -82,7 +84,26 @@ export default async function AcademyPage({
   ]);
 
   const heroSec = findSection(pageData, "hero");
+  const pathwaysSec = findSection(pageData, "learning_pathways");
+  const formatsSec = findSection(pageData, "learning_formats");
+  const selarSec = findSection(pageData, "selar_bookstore");
+  const integritySec = findSection(pageData, "integrity_notice");
+  const faqSec = findSection(pageData, "faqs_list");
+  const closingSec = findSection(pageData, "closing_cta");
   const customSections = getCustomSections(pageData, BUILTIN_ACADEMY_SECTIONS);
+
+  const formats =
+    Array.isArray(formatsSec?.items) && formatsSec.items.length > 0
+      ? formatsSec.items.map((item, idx) => {
+          const fallback = DEFAULT_FORMATS[idx % DEFAULT_FORMATS.length];
+          return {
+            id: String(item.id || fallback.id),
+            title: String(item.title || item.name || fallback.title),
+            desc: String(item.desc || item.description || fallback.desc),
+            Icon: fallback.Icon,
+          };
+        })
+      : DEFAULT_FORMATS;
 
   return (
     <>
@@ -129,18 +150,18 @@ export default async function AcademyPage({
 
             <div className="mt-10 flex flex-col items-stretch gap-3.5 sm:flex-row sm:flex-nowrap sm:items-center">
               <Link
-                href="/contact?type=individual_learning"
+                href={heroSec?.ctaPrimary?.href || "/contact?type=individual_learning"}
                 className="inline-flex min-h-[48px] items-center justify-center whitespace-nowrap bg-[#D89A43] px-7 py-3 text-xs font-bold tracking-[0.13em] text-[#0B1424] uppercase transition-colors hover:bg-[#e5aa57]"
               >
-                Enquire About Training &rarr;
+                {heroSec?.ctaPrimary?.label || "Enquire About Training"} &rarr;
               </Link>
               <a
-                href={siteSettings.selar_store_url}
+                href={heroSec?.ctaSecondary?.href || siteSettings.selar_store_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex min-h-[48px] items-center justify-center whitespace-nowrap border border-white/25 bg-white/5 px-7 py-3 text-xs font-semibold tracking-wider text-white uppercase transition-colors hover:border-[#D89A43] hover:text-[#D89A43]"
               >
-                Browse Books &amp; Resources &rarr;
+                {heroSec?.ctaSecondary?.label || "Browse Books & Resources"} &rarr;
               </a>
             </div>
           </FadeIn>
@@ -153,19 +174,20 @@ export default async function AcademyPage({
           <FadeIn className="mb-14 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
             <div className="max-w-2xl">
               <span className="font-mono text-xs font-bold tracking-[0.22em] text-[#B07424] uppercase">
-                Recommended Learning Pathways
+                {pathwaysSec?.badge || "Recommended Learning Pathways"}
               </span>
               <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[#0B1424] sm:text-4xl">
-                Six structured progression pathways.
+                {pathwaysSec?.headline || "Six structured progression pathways."}
               </h2>
             </div>
             <p className="max-w-md text-sm leading-relaxed text-slate-600">
-              Choose a pathway below to review focus areas, suggested audience, and next steps.
+              {pathwaysSec?.subheadline ||
+                "Choose a pathway below to review focus areas, suggested audience, and next steps."}
             </p>
           </FadeIn>
 
           <FadeIn delay={0.1}>
-            <AcademyPathwayExplorer />
+            <AcademyPathwayExplorer cmsItems={pathwaysSec?.items} />
           </FadeIn>
         </div>
       </section>
@@ -176,19 +198,20 @@ export default async function AcademyPage({
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
             <FadeIn className="lg:col-span-5">
               <span className="font-mono text-xs font-bold tracking-[0.25em] text-[#D89A43] uppercase">
-                Learning Formats
+                {formatsSec?.badge || "Learning Formats"}
               </span>
               <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-                Practitioner-focused training built for clarity.
+                {formatsSec?.headline || "Practitioner-focused training built for clarity."}
               </h2>
               <p className="mt-4 text-base leading-relaxed text-slate-300">
-                Combining conceptual clarity, scenario-based labs, structured mentorship, and career pathway preparation.
+                {formatsSec?.subheadline ||
+                  "Combining conceptual clarity, scenario-based labs, structured mentorship, and career pathway preparation."}
               </p>
 
               <div className="mt-8 border border-white/15 bg-[#14243B]/50 p-3">
                 <div className="relative aspect-[16/10] w-full overflow-hidden">
                   <Image
-                    src="/brand/iam-academy-hero.jpg"
+                    src={formatsSec?.bgImage || "/brand/iam-academy-hero.jpg"}
                     alt="Enterprise identity workstation inside IAM Academy seminar"
                     fill
                     sizes="(max-width: 1024px) 100vw, 40vw"
@@ -200,7 +223,7 @@ export default async function AcademyPage({
 
             <ImageReveal delay={0.1} className="lg:col-span-7">
               <div className="divide-y divide-white/10 border-t border-b border-white/10">
-                {FORMATS.map((f) => {
+                {formats.map((f) => {
                   const FormatIcon = f.Icon;
                   return (
                     <div
@@ -232,22 +255,24 @@ export default async function AcademyPage({
             <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
               <div className="max-w-2xl">
                 <span className="font-mono text-xs font-bold tracking-wider text-[#B07424] uppercase">
-                  Books &amp; Digital Resources
+                  {selarSec?.badge || "Books & Digital Resources"}
                 </span>
                 <h2 className="mt-2 text-2xl font-extrabold text-[#0B1424] sm:text-3xl">
-                  Guides, Workbooks &amp; Interview Preparation Packs
+                  {selarSec?.headline ||
+                    "Guides, Workbooks & Interview Preparation Packs"}
                 </h2>
                 <p className="mt-2.5 text-sm leading-relaxed text-slate-700">
-                  Access guides and learning material addressing IAM foundations, platform skills, automation, and interview preparation directly via The IAM Lab&apos;s Selar store.
+                  {selarSec?.subheadline ||
+                    "Access guides and learning material addressing IAM foundations, platform skills, automation, and interview preparation directly via The IAM Lab's Selar store."}
                 </p>
               </div>
               <a
-                href={siteSettings.selar_store_url}
+                href={selarSec?.ctaPrimary?.href || siteSettings.selar_store_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex shrink-0 items-center justify-center whitespace-nowrap bg-[#0B1424] px-7 py-4 text-xs font-bold tracking-wider text-white uppercase transition-colors hover:bg-[#14243B]"
               >
-                Browse Books &amp; Resources &rarr;
+                {selarSec?.ctaPrimary?.label || "Browse Books & Resources"} &rarr;
               </a>
             </div>
           </div>
@@ -256,14 +281,15 @@ export default async function AcademyPage({
             <div className="flex items-center gap-2.5 text-[#B07424]">
               <ShieldCheck className="h-4.5 w-4.5 shrink-0" aria-hidden="true" />
               <p className="font-mono text-xs font-bold tracking-wider uppercase">
-                Learning Integrity Notice
+                {integritySec?.badge || "Learning Integrity Notice"}
               </p>
             </div>
             <h3 className="mt-3 text-lg font-bold text-[#0B1424]">
-              Focused on True Practitioner Competence
+              {integritySec?.headline || "Focused on True Practitioner Competence"}
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-600">
-              Training and mentorship support professional development; completion does not guarantee employment, certification, or a specific career outcome. Session schedules, trainer availability, and learning requirements are published once confirmed.
+              {integritySec?.subheadline ||
+                "Training and mentorship support professional development; completion does not guarantee employment, certification, or a specific career outcome. Session schedules, trainer availability, and learning requirements are published once confirmed."}
             </p>
           </div>
         </div>
@@ -274,13 +300,22 @@ export default async function AcademyPage({
         <div className="mx-auto max-w-4xl px-5 sm:px-8">
           <div className="mb-12 text-center">
             <span className="font-mono text-xs font-bold tracking-[0.25em] text-[#D89A43] uppercase">
-              Frequently Asked Questions
+              {faqSec?.badge || "Frequently Asked Questions"}
             </span>
             <h2 className="mt-3 text-3xl font-extrabold text-white sm:text-4xl">
-              IAM Academy questions &amp; programme scope.
+              {faqSec?.headline || "IAM Academy questions & programme scope."}
             </h2>
           </div>
-          <AcademyFaq />
+          <AcademyFaq
+            items={
+              Array.isArray(faqSec?.items)
+                ? faqSec.items.map((i) => ({
+                    question: String(i.question || ""),
+                    answer: String(i.answer || ""),
+                  }))
+                : undefined
+            }
+          />
         </div>
       </section>
 
@@ -290,25 +325,27 @@ export default async function AcademyPage({
       <section className="bg-[#0B1424] py-20 text-center">
         <div className="mx-auto max-w-3xl px-5">
           <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
-            Ask about IAM Academy pathways or mentorship.
+            {closingSec?.headline ||
+              "Ask about IAM Academy pathways or mentorship."}
           </h2>
           <p className="mt-4 text-base text-slate-300">
-            Share your current background and learning goals to discuss confirmed programme schedules or a consultation.
+            {closingSec?.subheadline ||
+              "Share your current background and learning goals to discuss confirmed programme schedules or a consultation."}
           </p>
           <div className="mt-9 flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:flex-nowrap sm:items-center">
             <Link
-              href="/contact?type=individual_learning"
-              className="inline-flex min-h-[50px] items-center justify-center whitespace-nowrap bg-[#D89A43] px-7 py-3.5 text-xs font-bold tracking-[0.13em] text-[#0B1424] uppercase transition-colors hover:bg-[#e5aa57]"
+              href={closingSec?.ctaPrimary?.href || "/contact?type=individual_learning"}
+              className="inline-flex min-h-[50px] items-center justify-center bg-[#D89A43] px-4 py-3.5 text-center text-[11px] font-bold tracking-wide text-[#0B1424] uppercase transition-colors hover:bg-[#e5aa57] sm:px-7 sm:text-xs sm:tracking-[0.13em] sm:whitespace-nowrap"
             >
-              Book a Career Pathway Consultation &rarr;
+              {closingSec?.ctaPrimary?.label || "Book a Career Pathway Consultation"} &rarr;
             </Link>
             <a
-              href={siteSettings.selar_store_url}
+              href={closingSec?.ctaSecondary?.href || siteSettings.selar_store_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-[50px] items-center justify-center whitespace-nowrap border border-white/25 bg-white/5 px-7 py-3.5 text-xs font-semibold tracking-wider text-white uppercase transition-colors hover:border-[#D89A43] hover:text-[#D89A43]"
+              className="inline-flex min-h-[50px] items-center justify-center border border-white/25 bg-white/5 px-4 py-3.5 text-center text-[11px] font-semibold tracking-wider text-white uppercase transition-colors hover:border-[#D89A43] hover:text-[#D89A43] sm:px-7 sm:text-xs sm:whitespace-nowrap"
             >
-              Browse Books &amp; Resources
+              {closingSec?.ctaSecondary?.label || "Browse Books & Resources"}
             </a>
           </div>
         </div>

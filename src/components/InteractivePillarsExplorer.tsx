@@ -78,12 +78,30 @@ const DEFAULT_PILLARS: PillarItem[] = [
  */
 export function InteractivePillarsExplorer({
   pillars = DEFAULT_PILLARS,
+  cmsItems,
 }: {
   pillars?: PillarItem[];
+  cmsItems?: Array<Record<string, unknown>>;
 }) {
+  const resolvedPillars: PillarItem[] =
+    Array.isArray(cmsItems) && cmsItems.length > 0
+      ? cmsItems.map((item, idx) => {
+          const fallback = DEFAULT_PILLARS[idx % DEFAULT_PILLARS.length];
+          return {
+            id: String(item.id || fallback.id),
+            name: String(item.name || item.title || fallback.name),
+            description: String(
+              item.description || item.service || fallback.description
+            ),
+            anchor: String(item.anchor || item.href || fallback.anchor),
+            Icon: fallback.Icon,
+          };
+        })
+      : pillars;
+
   const [activeIdx, setActiveIdx] = useState(0);
   const shouldReduceMotion = useReducedMotion();
-  const active = pillars[activeIdx] || pillars[0];
+  const active = resolvedPillars[activeIdx] || resolvedPillars[0];
   const ActiveIcon = active.Icon;
 
   return (
@@ -95,7 +113,7 @@ export function InteractivePillarsExplorer({
           aria-label="Six Core IAM Practice Pillars"
           className="divide-y divide-white/10 border-b border-white/10 lg:col-span-5 lg:border-b-0 lg:border-r"
         >
-          {pillars.map((pillar, idx) => {
+          {resolvedPillars.map((pillar, idx) => {
             const isSelected = idx === activeIdx;
             const PillarIcon = pillar.Icon;
             return (

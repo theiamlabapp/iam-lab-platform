@@ -103,12 +103,40 @@ const CONNECTIONS = [
  * Connected Identity Decision Fabric Diagram
  * Enlarged topology SVG, removed extraneous hint text, single horizontal desktop tab bar.
  */
-export function IdentityFabricVisual() {
+export function IdentityFabricVisual({
+  cmsDomains,
+}: {
+  cmsDomains?: Array<Record<string, unknown>>;
+} = {}) {
   const [selectedId, setSelectedId] = useState<string>("governance");
   const shouldReduceMotion = useReducedMotion();
 
+  const resolvedDomains: FabricDomain[] =
+    Array.isArray(cmsDomains) && cmsDomains.length > 0
+      ? FABRIC_DOMAINS.map((fallback, idx) => {
+          const override = cmsDomains[idx];
+          if (!override) return fallback;
+          const rawControls = override.controls;
+          const controls = Array.isArray(rawControls)
+            ? rawControls.map((c) => String(c))
+            : typeof rawControls === "string" && rawControls.trim()
+            ? rawControls
+                .split(/[\n,]/)
+                .map((s) => s.trim())
+                .filter(Boolean)
+            : fallback.controls;
+          return {
+            ...fallback,
+            tabLabel: String(override.tabLabel || override.shortTitle || fallback.tabLabel),
+            title: String(override.title || override.name || fallback.title),
+            summary: String(override.summary || override.description || fallback.summary),
+            controls,
+          };
+        })
+      : FABRIC_DOMAINS;
+
   const activeDomain =
-    FABRIC_DOMAINS.find((d) => d.id === selectedId) || FABRIC_DOMAINS[1];
+    resolvedDomains.find((d) => d.id === selectedId) || resolvedDomains[1] || resolvedDomains[0];
   const ActiveIcon = activeDomain.Icon;
 
   return (
@@ -326,14 +354,14 @@ export function IdentityFabricVisual() {
           </div>
         </div>
 
-        {/* Bottom: Full-Width Horizontal Domain Controls (Single Row on Desktop) */}
-        <div className="border-t border-white/10 bg-[#0B1424] px-5 py-4 sm:px-8 lg:col-span-12">
+        {/* Bottom: Full-Width Horizontal Domain Controls (2x2 Grid on Mobile, Single Row on Desktop) */}
+        <div className="border-t border-white/10 bg-[#0B1424] px-3 py-3.5 sm:px-8 sm:py-4 lg:col-span-12">
           <div
             role="tablist"
             aria-label="Identity Fabric Domain Selectors"
-            className="flex flex-wrap items-center gap-2 lg:flex-nowrap lg:justify-between"
+            className="grid grid-cols-2 gap-2 lg:flex lg:flex-nowrap lg:items-center lg:justify-between"
           >
-            {FABRIC_DOMAINS.map((d) => {
+            {resolvedDomains.map((d) => {
               const TabIcon = d.Icon;
               const isSelected = d.id === selectedId;
               return (
@@ -343,14 +371,14 @@ export function IdentityFabricVisual() {
                   role="tab"
                   aria-selected={isSelected}
                   onClick={() => setSelectedId(d.id)}
-                  className={`inline-flex items-center justify-center gap-2 border px-3 py-2 font-mono text-[11px] whitespace-nowrap uppercase transition-colors lg:flex-1 ${
+                  className={`inline-flex min-w-0 items-center justify-center gap-1.5 border px-2 py-2 font-mono text-[10px] tracking-tight whitespace-nowrap uppercase transition-colors sm:gap-2 sm:px-3 sm:text-[11px] lg:flex-1 ${
                     isSelected
                       ? "border-[#D89A43] bg-[#D89A43]/15 font-bold text-[#D89A43]"
                       : "border-white/15 bg-transparent text-slate-300 hover:border-white/40 hover:text-white"
                   }`}
                 >
                   <TabIcon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                  <span>{d.tabLabel}</span>
+                  <span className="truncate">{d.tabLabel}</span>
                 </button>
               );
             })}

@@ -12,7 +12,9 @@ import {
 } from "lucide-react";
 import { CustomCmsSections } from "@/components/CustomCmsSections";
 import { DeliveryTimeline } from "@/components/DeliveryTimeline";
-import { FadeIn } from "@/components/MotionWrappers";
+import { FadeIn, ImageReveal } from "@/components/MotionWrappers";
+import { ServicesMobileTabs } from "@/components/ServicesMobileTabs";
+import { SubtleNetworkBackdrop } from "@/components/SubtleNetworkBackdrop";
 import {
   findSection,
   getCustomSections,
@@ -28,7 +30,7 @@ export const metadata: Metadata = {
     "Explore The IAM Lab's six practice areas: IAM Strategy, Assessment & Advisory, Identity Governance & Access Management, Identity Lifecycle & Provisioning Automation, Authentication & SSO, PAM, and IAM Implementation & Technical Support.",
 };
 
-const SIX_SERVICES = [
+const DEFAULT_SERVICES = [
   {
     id: "strategy",
     serviceParam: "service_strategy",
@@ -44,6 +46,9 @@ const SIX_SERVICES = [
       "Organisations planning a new IAM programme, modernisation, security improvement, or independent review.",
     technologyContext:
       "Existing directories, cloud identity providers, IGA and PAM environments, according to scope.",
+    image: "/brand/service-strategy.jpg",
+    imageAlt:
+      "Senior IAM strategy consultants reviewing enterprise identity architecture plans with executive client in London boardroom",
     Icon: Compass,
   },
   {
@@ -61,6 +66,9 @@ const SIX_SERVICES = [
       "IT, cybersecurity, risk, compliance, and application-owner teams.",
     technologyContext:
       "Microsoft Entra ID, SailPoint, and other relevant governance platforms, subject to confirmed delivery capability.",
+    image: "/brand/service-governance.jpg",
+    imageAlt:
+      "Identity governance specialist reviewing access compliance and audit controls in executive office",
     Icon: Users,
   },
   {
@@ -78,6 +86,9 @@ const SIX_SERVICES = [
       "Organisations managing multiple departments, applications, or identity repositories.",
     technologyContext:
       "Microsoft Entra ID, Microsoft Graph, PowerShell, identity directories, and agreed connectors.",
+    image: "/brand/service-lifecycle.jpg",
+    imageAlt:
+      "Enterprise identity engineers collaborating on automated provisioning workflows at dual workstation monitors",
     Icon: Workflow,
   },
   {
@@ -94,6 +105,9 @@ const SIX_SERVICES = [
     suitableFor: "Organisations modernising user and application access.",
     technologyContext:
       "Microsoft Entra ID, Okta, and relevant authentication protocols, subject to the agreed project.",
+    image: "/brand/service-sso.jpg",
+    imageAlt:
+      "Enterprise security architect configuring authentication and single sign-on controls in London financial district office",
     Icon: LockKeyhole,
   },
   {
@@ -111,6 +125,9 @@ const SIX_SERVICES = [
       "Security operations, infrastructure, cloud, and platform engineering teams.",
     technologyContext:
       "CyberArk and Microsoft Entra privileged identity capabilities, where in project scope.",
+    image: "/brand/service-pam.jpg",
+    imageAlt:
+      "Infrastructure engineers overseeing privileged access infrastructure beside glass-partitioned enterprise server racks",
     Icon: KeyRound,
   },
   {
@@ -128,9 +145,12 @@ const SIX_SERVICES = [
       "Organisations implementing or improving an IAM capability and technology partners requiring specialist input.",
     technologyContext:
       "Scope confirmed per engagement; technology choices follow client requirements and existing architecture.",
+    image: "/brand/service-implementation.jpg",
+    imageAlt:
+      "Senior IAM consultant guiding platform integration and knowledge transfer at executive workstation",
     Icon: ServerCog,
   },
-] as const;
+];
 
 const BUILTIN_SERVICES_SECTIONS = new Set([
   "hero",
@@ -149,7 +169,39 @@ export default async function ServicesPage({
   const pageData = await getPageData("services", { allowDraft });
 
   const heroSec = findSection(pageData, "hero");
+  const servicesSec = findSection(pageData, "services_list");
+  const deliverySec = findSection(pageData, "delivery_timeline");
+  const futureSec = findSection(pageData, "future_capability");
+  const closingSec = findSection(pageData, "closing_cta");
   const customSections = getCustomSections(pageData, BUILTIN_SERVICES_SECTIONS);
+
+  const services =
+    Array.isArray(servicesSec?.items) && servicesSec.items.length > 0
+      ? servicesSec.items.map((item, idx) => {
+          const fallback = DEFAULT_SERVICES[idx % DEFAULT_SERVICES.length];
+          return {
+            id: String(item.id || fallback.id),
+            serviceParam: String(item.serviceParam || fallback.serviceParam),
+            shortTitle: String(item.shortTitle || fallback.shortTitle),
+            name: String(item.name || item.title || fallback.name),
+            service: String(item.service || item.description || fallback.service),
+            problem: String(item.problem || fallback.problem),
+            outcomes: String(item.outcomes || fallback.outcomes),
+            suitableFor: String(item.suitableFor || fallback.suitableFor),
+            technologyContext: String(
+              item.technologyContext || fallback.technologyContext
+            ),
+            image: String(item.image || fallback.image),
+            imageAlt: String(item.imageAlt || fallback.imageAlt),
+            Icon: fallback.Icon,
+          };
+        })
+      : DEFAULT_SERVICES;
+
+  const mobileTabs = services.map((s) => ({
+    id: s.id,
+    label: s.shortTitle,
+  }));
 
   return (
     <>
@@ -197,13 +249,16 @@ export default async function ServicesPage({
         </div>
       </section>
 
-      {/* 2. Sticky Anchor Bar */}
+      {/* 2a. Mobile-Only Compact Horizontal Scrollable Quick Navigation */}
+      <ServicesMobileTabs tabs={mobileTabs} />
+
+      {/* 2b. Desktop-Only Preserved Sticky Anchor Bar */}
       <nav
         aria-label="Consulting Services Quick Navigation"
-        className="sticky top-[84px] z-30 border-b border-slate-200 bg-white/95 backdrop-blur-md sm:top-[93px]"
+        className="sticky top-[80px] z-30 hidden border-b border-slate-200 bg-white/95 backdrop-blur-md lg:block"
       >
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-2 px-5 py-3 sm:px-8 lg:px-12">
-          {SIX_SERVICES.map((s) => {
+          {services.map((s) => {
             const NavIcon = s.Icon;
             return (
               <a
@@ -219,125 +274,165 @@ export default async function ServicesPage({
         </div>
       </nav>
 
-      {/* 3. Clean Editorial Enterprise Consulting Grid (6 Practice Areas) */}
-      <section className="border-b border-slate-200 bg-[#F7F6F2] py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-          <FadeIn className="mb-12 max-w-2xl">
+      {/* 3. Alternating Photographic & Consulting Practice Areas (White + Subtle Network Backdrop) */}
+      <section className="relative overflow-hidden border-b border-slate-200 bg-white py-20 sm:py-28">
+        <SubtleNetworkBackdrop />
+
+        <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+          <FadeIn className="mb-14 max-w-2xl">
             <span className="font-mono text-xs font-bold tracking-[0.22em] text-[#B07424] uppercase">
-              Practice Areas
+              {servicesSec?.badge || "Practice Areas"}
             </span>
             <h2 className="mt-3 text-[1.65rem] leading-[1.2] font-extrabold tracking-tight text-[#0B1424] sm:text-4xl">
-              Scoped consulting &amp; implementation services.
+              {servicesSec?.headline ||
+                "Scoped consulting & implementation services."}
             </h2>
           </FadeIn>
 
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-            {SIX_SERVICES.map((s, idx) => {
+          <div className="space-y-10 sm:space-y-12">
+            {services.map((s, idx) => {
               const ServiceIcon = s.Icon;
+              const imageRightOnDesktop = idx % 2 === 0;
               return (
-                <FadeIn
+                <article
                   key={s.id}
                   id={s.id}
-                  delay={idx * 0.05}
-                  className="scroll-mt-44 flex flex-col justify-between border border-slate-200 bg-white p-7 transition-colors hover:border-[#D89A43]/70 sm:p-9"
+                  className="scroll-mt-36 overflow-hidden border border-slate-200 bg-[#F7F6F2]/85 shadow-xs transition-colors hover:border-[#D89A43]/70 sm:scroll-mt-40"
                 >
-                  <div>
-                    <div className="flex items-start gap-4 border-b border-slate-100 pb-6">
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-slate-200 bg-[#F7F6F2] text-[#B07424]">
-                        <ServiceIcon className="h-5 w-5" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-extrabold tracking-tight text-[#0B1424] sm:text-2xl">
-                          {s.name}
-                        </h3>
-                      </div>
-                    </div>
-
-                    <dl className="mt-6 space-y-4 text-sm">
-                      <div>
-                        <dt className="font-mono text-[10px] font-bold tracking-wider text-[#B07424] uppercase">
-                          Service Scope
-                        </dt>
-                        <dd className="mt-1 leading-relaxed text-slate-700">
-                          {s.service}
-                        </dd>
-                      </div>
-
-                      <div className="border-t border-slate-100 pt-4">
-                        <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
-                          Problem Addressed
-                        </dt>
-                        <dd className="mt-1 leading-relaxed text-slate-600">
-                          {s.problem}
-                        </dd>
-                      </div>
-
-                      <div className="border-t border-slate-100 pt-4">
-                        <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
-                          Outcomes
-                        </dt>
-                        <dd className="mt-1 leading-relaxed text-slate-700">
-                          {s.outcomes}
-                        </dd>
-                      </div>
-
-                      <div className="grid grid-cols-1 gap-4 border-t border-slate-100 pt-4 sm:grid-cols-2">
-                        <div>
-                          <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
-                            Suitable For
-                          </dt>
-                          <dd className="mt-1 text-xs leading-relaxed text-slate-600">
-                            {s.suitableFor}
-                          </dd>
-                        </div>
-
-                        <div>
-                          <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
-                            Technology Context
-                          </dt>
-                          <dd className="mt-1 text-xs leading-relaxed text-slate-600">
-                            {s.technologyContext}
-                          </dd>
-                        </div>
-                      </div>
-                    </dl>
-                  </div>
-
-                  <div className="mt-8 border-t border-slate-100 pt-6">
-                    <Link
-                      href={`/contact?type=enterprise_consulting&service=${s.serviceParam}`}
-                      className="inline-flex items-center gap-2 whitespace-nowrap bg-[#0B1424] px-5 py-3 text-xs font-bold tracking-wider text-white uppercase transition-colors hover:bg-[#14243B]"
+                  <div className="grid grid-cols-1 items-stretch lg:grid-cols-12">
+                    {/* Corporate Photography Panel (Stacks Top on Mobile, Alternates Left/Right on Desktop) */}
+                    <ImageReveal
+                      delay={0.05}
+                      className={`order-1 relative min-h-[240px] border-b border-slate-200 bg-[#0B1424] sm:min-h-[320px] lg:col-span-5 lg:min-h-full lg:border-b-0 ${
+                        imageRightOnDesktop
+                          ? "lg:order-2 lg:border-l"
+                          : "lg:order-1 lg:border-r"
+                      }`}
                     >
-                      <span>Request Consultation</span>
-                      <span aria-hidden="true">&rarr;</span>
-                    </Link>
+                      <div className="relative aspect-[16/10] h-full w-full lg:aspect-auto">
+                        <Image
+                          src={s.image}
+                          alt={s.imageAlt}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 42vw"
+                          className="object-cover object-center"
+                        />
+                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0B1424]/45 via-transparent to-transparent" />
+                      </div>
+                    </ImageReveal>
+
+                    {/* Consulting Scope Details */}
+                    <FadeIn
+                      delay={0.05}
+                      className={`order-2 flex flex-col justify-between bg-white p-7 sm:p-10 lg:col-span-7 ${
+                        imageRightOnDesktop ? "lg:order-1" : "lg:order-2"
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-start gap-4 border-b border-slate-100 pb-6">
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-slate-200 bg-[#F7F6F2] text-[#B07424]">
+                            <ServiceIcon className="h-5 w-5" aria-hidden="true" />
+                          </div>
+                          <div>
+                            <span className="font-mono text-[10px] font-bold tracking-[0.2em] text-[#B07424] uppercase">
+                              0{idx + 1} &middot; {s.shortTitle}
+                            </span>
+                            <h3 className="mt-1 text-xl font-extrabold tracking-tight text-[#0B1424] sm:text-2xl">
+                              {s.name}
+                            </h3>
+                          </div>
+                        </div>
+
+                        <dl className="mt-6 space-y-4 text-sm">
+                          <div>
+                            <dt className="font-mono text-[10px] font-bold tracking-wider text-[#B07424] uppercase">
+                              Service Scope
+                            </dt>
+                            <dd className="mt-1 leading-relaxed text-slate-700">
+                              {s.service}
+                            </dd>
+                          </div>
+
+                          <div className="grid grid-cols-1 gap-4 border-t border-slate-100 pt-4 sm:grid-cols-2">
+                            <div>
+                              <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+                                Problem Addressed
+                              </dt>
+                              <dd className="mt-1 leading-relaxed text-slate-600">
+                                {s.problem}
+                              </dd>
+                            </div>
+
+                            <div>
+                              <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+                                Outcomes
+                              </dt>
+                              <dd className="mt-1 leading-relaxed text-slate-700">
+                                {s.outcomes}
+                              </dd>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 gap-4 border-t border-slate-100 pt-4 sm:grid-cols-2">
+                            <div>
+                              <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+                                Suitable For
+                              </dt>
+                              <dd className="mt-1 text-xs leading-relaxed text-slate-600">
+                                {s.suitableFor}
+                              </dd>
+                            </div>
+
+                            <div>
+                              <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+                                Technology Context
+                              </dt>
+                              <dd className="mt-1 text-xs leading-relaxed text-slate-600">
+                                {s.technologyContext}
+                              </dd>
+                            </div>
+                          </div>
+                        </dl>
+                      </div>
+
+                      <div className="mt-8 border-t border-slate-100 pt-6">
+                        <Link
+                          href={`/contact?type=enterprise_consulting&service=${s.serviceParam}#contact-form`}
+                          className="inline-flex items-center gap-2 whitespace-nowrap bg-[#0B1424] px-5 py-3 text-xs font-bold tracking-wider text-white uppercase transition-colors hover:bg-[#14243B]"
+                        >
+                          <span>Request Consultation</span>
+                          <span aria-hidden="true">&rarr;</span>
+                        </Link>
+                      </div>
+                    </FadeIn>
                   </div>
-                </FadeIn>
+                </article>
               );
             })}
           </div>
         </div>
       </section>
 
-      {/* 4. Preserved Service Delivery Model Section */}
+      {/* 4. Preserved Service Delivery Model Section (Untouched Visual Treatment) */}
       <section className="border-b border-white/10 bg-[#0B1424] py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
           <FadeIn className="mb-14 max-w-3xl">
             <div className="flex items-center gap-3">
               <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
               <span className="font-mono text-xs font-semibold tracking-[0.25em] text-[#D89A43] uppercase">
-                Service Delivery Model
+                {deliverySec?.badge || "Service Delivery Model"}
               </span>
             </div>
             <h2 className="mt-4 text-[1.65rem] leading-[1.2] font-extrabold tracking-tight text-white sm:text-4xl">
-              How we engage and deliver clarity.
+              {deliverySec?.headline || "How we engage and deliver clarity."}
             </h2>
             <p className="mt-4 text-base leading-relaxed text-slate-300">
-              Select each phase below to inspect how we scope deliverables and transfer operational knowledge.
+              {deliverySec?.subheadline ||
+                "Select each phase below to inspect how we scope deliverables and transfer operational knowledge."}
             </p>
           </FadeIn>
 
-          <DeliveryTimeline theme="dark" />
+          <DeliveryTimeline theme="dark" cmsItems={deliverySec?.items} />
         </div>
       </section>
 
@@ -348,11 +443,13 @@ export default async function ServicesPage({
             <div className="flex items-center gap-2 text-[#B07424]">
               <Clock className="h-4 w-4 shrink-0" aria-hidden="true" />
               <p className="font-mono text-xs font-bold tracking-wider uppercase">
-                Future Capability &mdash; Not a Live Service Yet
+                {futureSec?.badge ||
+                  "Future Capability — Not a Live Service Yet"}
               </p>
             </div>
             <p className="text-sm leading-relaxed text-slate-600">
-              An IAM specialist network or talent placement service may be introduced later once vetting, contractor agreements, quality assurance, client delivery obligations, and relevant legal arrangements are established.
+              {futureSec?.subheadline ||
+                "An IAM specialist network or talent placement service may be introduced later once vetting, contractor agreements, quality assurance, client delivery obligations, and relevant legal arrangements are established."}
             </p>
           </div>
         </div>
@@ -364,7 +461,7 @@ export default async function ServicesPage({
       <section className="relative overflow-hidden bg-[#0B1424] py-24 text-center">
         <div className="pointer-events-none absolute inset-0 z-0">
           <Image
-            src="/brand/executive-consulting.jpg"
+            src={closingSec?.bgImage || "/brand/executive-consulting.jpg"}
             alt="Executive advisory consultation suite"
             fill
             sizes="100vw"
@@ -375,17 +472,22 @@ export default async function ServicesPage({
 
         <div className="relative z-10 mx-auto max-w-3xl px-5">
           <h2 className="text-[1.7rem] leading-[1.2] font-extrabold text-white sm:text-4xl">
-            Tell us about your identity security priorities.
+            {closingSec?.headline ||
+              "Tell us about your identity security priorities."}
           </h2>
           <p className="mt-4 text-base text-slate-300">
-            We&apos;ll discuss what support is appropriate and how a scoped engagement could work.
+            {closingSec?.subheadline ||
+              "We'll discuss what support is appropriate and how a scoped engagement could work."}
           </p>
           <div className="mt-9">
             <Link
-              href="/contact?type=enterprise_consulting"
+              href={
+                closingSec?.ctaPrimary?.href ||
+                "/contact?type=enterprise_consulting#contact-form"
+              }
               className="inline-flex min-h-[50px] items-center justify-center whitespace-nowrap bg-[#D89A43] px-8 py-3.5 text-xs font-bold tracking-[0.14em] text-[#0B1424] uppercase transition-colors hover:bg-[#e5aa57]"
             >
-              Request a Consultation &rarr;
+              {closingSec?.ctaPrimary?.label || "Request a Consultation"} &rarr;
             </Link>
           </div>
         </div>

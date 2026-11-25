@@ -47,6 +47,42 @@ export const SiteSettings: GlobalConfig = {
                 "Secure identities. Simplify access. Strengthen your business.",
               label: "Official Brand Tagline",
             },
+            {
+              name: "logoLightUrl",
+              type: "text",
+              defaultValue: "/brand/the-iam-lab-logo-light.png",
+              label: "Footer Logo Asset Path (Light Variant for Dark Backgrounds)",
+            },
+            {
+              name: "logoDarkUrl",
+              type: "text",
+              defaultValue: "/brand/the-iam-lab-logo-dark.png",
+              label: "Header Logo Asset Path (Dark Variant for White Surfaces)",
+            },
+            {
+              name: "headerCtaLabel",
+              type: "text",
+              defaultValue: "Talk to an IAM Specialist",
+              label: "Header Primary CTA Button Text",
+            },
+            {
+              name: "footerCopyrightSuffix",
+              type: "text",
+              defaultValue: "All rights reserved.",
+              label: "Footer Copyright Suffix Text",
+            },
+            {
+              name: "navLinks",
+              type: "json",
+              defaultValue: [
+                { label: "Home", href: "/" },
+                { label: "About", href: "/about" },
+                { label: "Services & Solutions", href: "/services" },
+                { label: "IAM Academy", href: "/academy" },
+                { label: "Contact", href: "/contact" },
+              ],
+              label: "Navigation Menu Items (JSON Array of { label, href })",
+            },
           ],
         },
         {
@@ -108,8 +144,12 @@ export const SiteSettings: GlobalConfig = {
             {
               name: "linkedinUrl",
               type: "text",
-              defaultValue: "https://www.linkedin.com/company/theiamlab",
-              label: "Official LinkedIn Page URL",
+              label: "Official LinkedIn Page URL (Publish once confirmed by client)",
+            },
+            {
+              name: "instagramUrl",
+              type: "text",
+              label: "Official Instagram Profile URL (Optional)",
             },
             {
               name: "twitterUrl",

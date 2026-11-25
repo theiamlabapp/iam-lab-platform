@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { ChevronDown, HelpCircle } from "lucide-react";
 
-interface FaqItem {
+export interface FaqItem {
   question: string;
   answer: string;
 }
 
-const FAQS: FaqItem[] = [
+const DEFAULT_FAQS: FaqItem[] = [
   {
     question: "Do I need IAM experience to start?",
     answer:
@@ -36,8 +36,19 @@ const FAQS: FaqItem[] = [
   },
 ];
 
-export function AcademyFaq() {
+export function AcademyFaq({
+  items,
+}: {
+  items?: Array<{ question?: string; answer?: string }>;
+} = {}) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const faqList: FaqItem[] =
+    Array.isArray(items) && items.length > 0
+      ? items.map((item, idx) => ({
+          question: String(item.question || DEFAULT_FAQS[idx % DEFAULT_FAQS.length].question),
+          answer: String(item.answer || DEFAULT_FAQS[idx % DEFAULT_FAQS.length].answer),
+        }))
+      : DEFAULT_FAQS;
 
   const toggle = (idx: number) => {
     setOpenIndex(openIndex === idx ? null : idx);
@@ -45,7 +56,7 @@ export function AcademyFaq() {
 
   return (
     <div className="divide-y divide-white/10 border-t border-b border-white/10">
-      {FAQS.map((faq, idx) => {
+      {faqList.map((faq, idx) => {
         const isOpen = openIndex === idx;
         return (
           <div key={faq.question} className="transition-colors hover:bg-white/[0.02]">

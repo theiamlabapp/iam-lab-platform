@@ -28,6 +28,11 @@ export interface PageData {
   updated_at?: string;
 }
 
+export interface NavLinkItem {
+  label: string;
+  href: string;
+}
+
 export interface SiteSettingsData {
   company_name: string;
   tagline: string;
@@ -39,7 +44,13 @@ export interface SiteSettingsData {
   map_embed_url: string;
   selar_store_url: string;
   linkedin_url: string;
+  instagram_url: string;
   twitter_url: string;
+  logo_light_url: string;
+  logo_dark_url: string;
+  header_cta_label: string;
+  footer_copyright_suffix: string;
+  nav_links: NavLinkItem[];
 }
 
 export const OFFICIAL_WHATSAPP_FALLBACK = "+234 803 865 2760";
@@ -64,8 +75,20 @@ export const DEFAULT_SITE_SETTINGS: SiteSettingsData = {
   map_embed_url:
     "https://maps.google.com/maps?q=128+City+Road,+London,+EC1V+2NX,+United+Kingdom&t=m&z=16&ie=UTF8&iwloc=&output=embed",
   selar_store_url: "https://selar.com/m/chiemezie-uzoma1",
-  linkedin_url: "https://www.linkedin.com/company/theiamlab",
+  linkedin_url: "",
+  instagram_url: "",
   twitter_url: "",
+  logo_light_url: "/brand/the-iam-lab-logo-light.png",
+  logo_dark_url: "/brand/the-iam-lab-logo-dark.png",
+  header_cta_label: "Talk to an IAM Specialist",
+  footer_copyright_suffix: "All rights reserved.",
+  nav_links: [
+    { label: "Home", href: "/" },
+    { label: "About", href: "/about" },
+    { label: "Services & Solutions", href: "/services" },
+    { label: "IAM Academy", href: "/academy" },
+    { label: "Contact", href: "/contact" },
+  ],
 };
 
 /**
@@ -136,7 +159,7 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
 
   try {
     const res = await pool.query(
-      `SELECT company_name, tagline, official_email, location, address, phone, whatsapp_number, map_embed_url, selar_store_url, linkedin_url, twitter_url
+      `SELECT company_name, tagline, official_email, location, address, phone, whatsapp_number, map_embed_url, selar_store_url, linkedin_url, instagram_url, twitter_url, logo_light_url, logo_dark_url, header_cta_label, footer_copyright_suffix, nav_links
        FROM site_settings
        ORDER BY id ASC
        LIMIT 1;`
@@ -144,6 +167,12 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
     if (res.rows.length === 0) return DEFAULT_SITE_SETTINGS;
 
     const r = res.rows[0];
+    const parsedNav = Array.isArray(r.nav_links) && r.nav_links.length > 0
+      ? r.nav_links
+          .filter((item: unknown): item is NavLinkItem => Boolean(item && typeof item === "object" && "label" in item && "href" in item))
+          .map((item: NavLinkItem) => ({ label: String(item.label), href: String(item.href) }))
+      : DEFAULT_SITE_SETTINGS.nav_links;
+
     return {
       company_name: r.company_name || DEFAULT_SITE_SETTINGS.company_name,
       tagline: r.tagline || DEFAULT_SITE_SETTINGS.tagline,
@@ -157,8 +186,15 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
           ? r.map_embed_url
           : DEFAULT_SITE_SETTINGS.map_embed_url,
       selar_store_url: r.selar_store_url || DEFAULT_SITE_SETTINGS.selar_store_url,
-      linkedin_url: r.linkedin_url || DEFAULT_SITE_SETTINGS.linkedin_url,
-      twitter_url: r.twitter_url || "",
+      linkedin_url: r.linkedin_url ? String(r.linkedin_url).trim() : "",
+      instagram_url: r.instagram_url ? String(r.instagram_url).trim() : "",
+      twitter_url: r.twitter_url ? String(r.twitter_url).trim() : "",
+      logo_light_url: r.logo_light_url || DEFAULT_SITE_SETTINGS.logo_light_url,
+      logo_dark_url: r.logo_dark_url || DEFAULT_SITE_SETTINGS.logo_dark_url,
+      header_cta_label: r.header_cta_label || DEFAULT_SITE_SETTINGS.header_cta_label,
+      footer_copyright_suffix:
+        r.footer_copyright_suffix || DEFAULT_SITE_SETTINGS.footer_copyright_suffix,
+      nav_links: parsedNav.length > 0 ? parsedNav : DEFAULT_SITE_SETTINGS.nav_links,
     };
   } catch {
     return DEFAULT_SITE_SETTINGS;

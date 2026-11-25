@@ -4,6 +4,7 @@ interface BrandLogoProps {
   priority?: boolean;
   variant?: "dark" | "light";
   surface?: "plain" | "card";
+  srcOverride?: string;
   className?: string;
 }
 
@@ -15,12 +16,14 @@ export function BrandLogo({
   priority = false,
   variant = "dark",
   surface = "plain",
+  srcOverride,
   className = "w-[88px] sm:w-[104px]",
 }: BrandLogoProps) {
   const src =
-    variant === "light"
+    srcOverride ||
+    (variant === "light"
       ? "/brand/the-iam-lab-logo-light.png"
-      : "/brand/the-iam-lab-logo-dark.png";
+      : "/brand/the-iam-lab-logo-dark.png");
 
   const image = (
     <Image
@@ -36,7 +39,7 @@ export function BrandLogo({
 
   if (surface === "card") {
     return (
-      <span className="inline-flex items-center rounded bg-white px-3 py-1.5 shadow-sm border border-slate-200/80">
+      <span className="inline-flex items-center rounded border border-slate-200/80 bg-white px-3 py-1.5 shadow-sm">
         {image}
       </span>
     );

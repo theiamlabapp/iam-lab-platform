@@ -85,12 +85,29 @@ const DEFAULT_PATHWAYS: AcademyPathway[] = [
  */
 export function AcademyPathwayExplorer({
   pathways = DEFAULT_PATHWAYS,
+  cmsItems,
 }: {
   pathways?: AcademyPathway[];
+  cmsItems?: Array<Record<string, unknown>>;
 }) {
+  const resolvedPathways: AcademyPathway[] =
+    Array.isArray(cmsItems) && cmsItems.length > 0
+      ? cmsItems.map((item, idx) => {
+          const fallback = DEFAULT_PATHWAYS[idx % DEFAULT_PATHWAYS.length];
+          return {
+            code: String(item.code || fallback.code),
+            tier: String(item.tier || fallback.tier),
+            name: String(item.name || item.title || fallback.name),
+            audience: String(item.audience || fallback.audience),
+            focus: String(item.focus || item.description || fallback.focus),
+            Icon: fallback.Icon,
+          };
+        })
+      : pathways;
+
   const [selected, setSelected] = useState(0);
   const shouldReduceMotion = useReducedMotion();
-  const active = pathways[selected] || pathways[0];
+  const active = resolvedPathways[selected] || resolvedPathways[0];
   const ActiveIcon = active.Icon;
 
   return (
@@ -101,7 +118,7 @@ export function AcademyPathwayExplorer({
         aria-label="IAM Academy Pathways"
         className="grid grid-cols-2 border-b border-slate-200 bg-[#F7F6F2] sm:grid-cols-3 lg:grid-cols-6"
       >
-        {pathways.map((p, idx) => {
+        {resolvedPathways.map((p, idx) => {
           const isCurrent = idx === selected;
           const PathwayIcon = p.Icon;
           return (
@@ -195,13 +212,13 @@ export function AcademyPathwayExplorer({
               <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:flex-nowrap sm:items-center">
                 <Link
                   href={`/contact?type=individual_learning&service=${active.code}`}
-                  className="inline-flex items-center justify-center whitespace-nowrap bg-[#0B1424] px-5 py-3 text-xs font-bold tracking-wider text-white uppercase transition-colors hover:bg-[#14243B]"
+                  className="inline-flex items-center justify-center bg-[#0B1424] px-3.5 py-3 text-center text-[11px] font-bold tracking-wide text-white uppercase transition-colors hover:bg-[#14243B] sm:px-5 sm:text-xs sm:tracking-wider sm:whitespace-nowrap"
                 >
                   Enquire About Training &rarr;
                 </Link>
                 <Link
                   href={`/contact?type=individual_learning&service=${active.code}`}
-                  className="inline-flex items-center justify-center whitespace-nowrap border border-slate-300 bg-white px-5 py-3 text-xs font-bold tracking-wider text-[#0B1424] uppercase transition-colors hover:border-[#D89A43]"
+                  className="inline-flex items-center justify-center border border-slate-300 bg-white px-3.5 py-3 text-center text-[11px] font-bold tracking-wide text-[#0B1424] uppercase transition-colors hover:border-[#D89A43] sm:px-5 sm:text-xs sm:tracking-wider sm:whitespace-nowrap"
                 >
                   Book a Career Pathway Consultation
                 </Link>
