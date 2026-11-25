@@ -192,7 +192,7 @@ const initialPages = [
     hero_headline:
       "Secure identities. Simplify access. Strengthen your business.",
     hero_subheadline:
-      "The IAM Lab supports organisations with practical identity and access management expertise — from access governance and identity lifecycle automation to authentication, privileged access and IAM improvement initiatives. We also help professionals build meaningful IAM skills through structured learning and hands-on guidance.",
+      "The IAM Lab supports organisations with practical identity and access management expertise, from access governance and identity lifecycle automation to authentication, privileged access and IAM improvement initiatives. We also help professionals build meaningful IAM skills through structured learning and hands-on guidance.",
     status: "published",
     sections: [
       {
@@ -201,7 +201,7 @@ const initialPages = [
         headline:
           "Secure identities. Simplify access. Strengthen your business.",
         subheadline:
-          "The IAM Lab supports organisations with practical identity and access management expertise — from access governance and identity lifecycle automation to authentication, privileged access and IAM improvement initiatives. We also help professionals build meaningful IAM skills through structured learning and hands-on guidance.",
+          "The IAM Lab supports organisations with practical identity and access management expertise, from access governance and identity lifecycle automation to authentication, privileged access and IAM improvement initiatives. We also help professionals build meaningful IAM skills through structured learning and hands-on guidance.",
         ctaPrimary: {
           label: "Discuss an IAM Project",
           href: "/contact?type=enterprise_consulting#contact-form",
@@ -938,16 +938,16 @@ const initialPages = [
             title: "Consulting, Implementation & Assessments",
             description:
               "Discuss consulting architecture, employee enablement, identity risk reviews, or an active modernisation project.",
-            ctaLabel: "Request a Business Consultation",
-            href: "/contact?type=enterprise_consulting#contact-form",
+            ctaLabel: "Talk to an IAM Specialist",
+            href: "whatsapp",
           },
           {
             badge: "ROUTE 02 // FOR INDIVIDUALS",
             title: "IAM Academy Pathways & Mentorship",
             description:
               "Explore structured learning pathways, cohorts, one-to-one mentorship, or curated study guides on IAM Academy.",
-            ctaLabel: "Ask About IAM Academy",
-            href: "/academy",
+            ctaLabel: "Books & Resources",
+            href: "https://selar.com/m/chiemezie-uzoma1",
           },
         ],
       },

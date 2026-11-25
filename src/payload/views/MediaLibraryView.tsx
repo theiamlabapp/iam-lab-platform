@@ -370,6 +370,7 @@ export function MediaLibraryView() {
               { id: "consulting", label: "Advisory & Office" },
               { id: "classroom", label: "IAM Academy" },
               { id: "identity", label: "Identity Operations" },
+              { id: "portrait", label: "Profile Portraits" },
               { id: "logo", label: "Brand Logos" },
             ].map((cat) => (
               <button
@@ -711,6 +712,7 @@ export function MediaLibraryView() {
                     <option value="consulting">Advisory &amp; Office</option>
                     <option value="classroom">IAM Academy</option>
                     <option value="identity">Identity Operations</option>
+                    <option value="portrait">Profile Portraits</option>
                     <option value="logo">Brand Logos</option>
                   </select>
                 </div>
@@ -887,6 +889,7 @@ export function MediaLibraryView() {
                     <option value="consulting">Advisory &amp; Office</option>
                     <option value="classroom">IAM Academy</option>
                     <option value="identity">Identity Operations</option>
+                    <option value="portrait">Profile Portraits</option>
                     <option value="logo">Brand Logos</option>
                   </select>
                 </div>

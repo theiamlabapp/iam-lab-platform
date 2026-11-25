@@ -6,6 +6,7 @@ import type { Access, AccessArgs } from "payload";
  */
 export const ADMIN_ROLES = new Set(["super_admin", "admin"]);
 export const EDITORIAL_ROLES = new Set(["super_admin", "admin", "editor", "academy_manager"]);
+export const ENQUIRY_ROLES = new Set(["super_admin", "admin", "academy_manager"]);
 export const STAFF_ROLES = new Set([
   "super_admin",
   "admin",
@@ -27,6 +28,11 @@ export const isAdminAccess: Access = (args) => {
 export const isEditorialAccess: Access = (args) => {
   const role = getUserRole(args);
   return Boolean(role && EDITORIAL_ROLES.has(role));
+};
+
+export const isEnquiryAccess: Access = (args) => {
+  const role = getUserRole(args);
+  return Boolean(role && ENQUIRY_ROLES.has(role));
 };
 
 export const isStaffAccess: Access = (args) => {

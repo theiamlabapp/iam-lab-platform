@@ -3,8 +3,10 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { Suspense } from "react";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 import { BackToTopButton } from "@/components/BackToTopButton";
+import { NavigationProgress } from "@/components/NavigationProgress";
 import { getSiteSettings, getWhatsAppHref } from "@/lib/getPageData";
 
 const geistSans = Geist({
@@ -100,6 +102,9 @@ export default async function FrontendRootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
     >
       <body className="min-h-full flex flex-col bg-[#0B1424] text-slate-100 selection:bg-[#d6a15c]/30 selection:text-[#d6a15c]">
+        <Suspense fallback={null}>
+          <NavigationProgress />
+        </Suspense>
         <Navbar
           whatsappHref={whatsappHref}
           navLinks={settings.nav_links}

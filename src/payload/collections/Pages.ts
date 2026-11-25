@@ -12,6 +12,7 @@ export const Pages: CollectionConfig = {
     useAsTitle: "title",
     defaultColumns: ["title", "slug", "status", "updatedAt"],
     group: "Content Management",
+    hideAPIURL: true,
     components: {
       views: {
         list: {

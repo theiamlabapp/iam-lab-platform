@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { Client } from "pg";
+import { getSiteSettings } from "@/lib/getPageData";
+import { verifyRecaptchaToken } from "@/lib/recaptcha";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const DEFAULT_TARGET_EMAIL = "info@theiamlab.com";
@@ -39,6 +41,7 @@ export async function POST(req: Request) {
     serviceOrPathway = "",
     message,
     privacyAccepted,
+    recaptchaToken = "",
   } = body as Record<string, string | boolean>;
 
   if (!name || typeof name !== "string" || name.trim().length < 2) {
@@ -71,6 +74,31 @@ export async function POST(req: Request) {
       { ok: false, message: "Privacy notice acknowledgement is required." },
       { status: 400 }
     );
+  }
+
+  // Server-side Google reCAPTCHA check when enabled in Global Site Settings
+  const siteSettings = await getSiteSettings();
+  if (siteSettings.recaptcha_enabled) {
+    const forwardedFor = req.headers.get("x-forwarded-for") || "";
+    const remoteIp = forwardedFor.split(",")[0]?.trim() || undefined;
+    const verification = await verifyRecaptchaToken({
+      token: typeof recaptchaToken === "string" ? recaptchaToken : "",
+      expectedVersion: siteSettings.recaptcha_version,
+      expectedAction: "contact_submit",
+      remoteIp,
+    });
+    if (!verification.valid) {
+      const status = verification.reason?.includes("not configured") ? 503 : 400;
+      return NextResponse.json(
+        {
+          ok: false,
+          message:
+            verification.reason ||
+            "Security verification failed. Please retry and submit again.",
+        },
+        { status }
+      );
+    }
   }
 
   const cleanName = String(name).trim();

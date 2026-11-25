@@ -10,6 +10,9 @@ import { AccountView as AccountView_8 } from "@/payload/views/AccountView";
 import { PagesListView as PagesListView_9 } from "@/payload/views/PagesListView";
 import { EnquiriesListView as EnquiriesListView_10 } from "@/payload/views/EnquiriesListView";
 import { UsersListView as UsersListView_11 } from "@/payload/views/UsersListView";
+import { MediaSelectorField as MediaSelectorField_12 } from "@/payload/components/MediaSelectorField";
+import { NavLinksVisualEditor as NavLinksVisualEditor_13 } from "@/payload/components/NavLinksVisualEditor";
+import { RecaptchaStatusField as RecaptchaStatusField_14 } from "@/payload/components/RecaptchaStatusField";
 
 export const importMap = {
   "/src/payload/components/Logo#Logo": Logo_0,
@@ -36,4 +39,10 @@ export const importMap = {
   "src/payload/views/EnquiriesListView#EnquiriesListView": EnquiriesListView_10,
   "/src/payload/views/UsersListView#UsersListView": UsersListView_11,
   "src/payload/views/UsersListView#UsersListView": UsersListView_11,
+  "/src/payload/components/MediaSelectorField#MediaSelectorField": MediaSelectorField_12,
+  "src/payload/components/MediaSelectorField#MediaSelectorField": MediaSelectorField_12,
+  "/src/payload/components/NavLinksVisualEditor#NavLinksVisualEditor": NavLinksVisualEditor_13,
+  "src/payload/components/NavLinksVisualEditor#NavLinksVisualEditor": NavLinksVisualEditor_13,
+  "/src/payload/components/RecaptchaStatusField#RecaptchaStatusField": RecaptchaStatusField_14,
+  "src/payload/components/RecaptchaStatusField#RecaptchaStatusField": RecaptchaStatusField_14,
 };

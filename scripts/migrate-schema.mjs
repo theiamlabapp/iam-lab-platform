@@ -88,8 +88,11 @@ async function migrate() {
     ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS logo_dark_url TEXT DEFAULT '/brand/the-iam-lab-logo-dark.png';
     ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS header_cta_label TEXT DEFAULT 'Talk to an IAM Specialist';
     ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS footer_copyright_suffix TEXT DEFAULT 'All rights reserved.';
-    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS nav_links JSONB DEFAULT '[{"label":"Home","href":"/"},{"label":"About","href":"/about"},{"label":"Services & Solutions","href":"/services"},{"label":"IAM Academy","href":"/academy"},{"label":"Contact","href":"/contact"}]'::jsonb;
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS nav_links JSONB DEFAULT '[{"label":"Home","href":"/","visible":true},{"label":"About","href":"/about","visible":true},{"label":"Services & Solutions","href":"/services","visible":true},{"label":"IAM Academy","href":"/academy","visible":true},{"label":"Contact","href":"/contact","visible":true}]'::jsonb;
     ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS instagram_url TEXT DEFAULT '';
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS recaptcha_enabled BOOLEAN DEFAULT false;
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS recaptcha_version VARCHAR(32) DEFAULT 'v2_checkbox';
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS recaptcha_site_key TEXT DEFAULT '6LdwnjEuAAAAANcFI8csi-ssLQ0qO9flyReX3Pzi';
   `);
   await client.query(`DELETE FROM site_settings WHERE id > 1;`);
   await client.query(

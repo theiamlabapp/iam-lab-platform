@@ -55,6 +55,7 @@ export const Users: CollectionConfig = {
     useAsTitle: "email",
     defaultColumns: ["name", "email", "role", "jobTitle", "createdAt"],
     group: "Administration",
+    hideAPIURL: true,
     components: {
       views: {
         list: {

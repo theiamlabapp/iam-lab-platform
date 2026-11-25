@@ -111,7 +111,7 @@ export function HomeHero({
     headline || "Secure identities. Simplify access. Strengthen your business.";
   const displaySubheadline =
     subheadline ||
-    "The IAM Lab supports organisations with practical identity and access management expertise — from access governance and identity lifecycle automation to authentication, privileged access and IAM improvement initiatives. We also help professionals build meaningful IAM skills through structured learning and hands-on guidance.";
+    "The IAM Lab supports organisations with practical identity and access management expertise, from access governance and identity lifecycle automation to authentication, privileged access and IAM improvement initiatives. We also help professionals build meaningful IAM skills through structured learning and hands-on guidance.";
   const displayBg = bgImage || "/brand/hero-enterprise.jpg";
   const primaryLabel = ctaPrimaryLabel || "Discuss an IAM Project";
   const primaryHref = ctaPrimaryHref || "/contact?type=enterprise_consulting";

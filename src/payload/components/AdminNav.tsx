@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -32,10 +32,59 @@ export function AdminNav(props: AdminNavProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user: authUser } = useAuth();
   const liveUser = (authUser as unknown as AdminNavProps["user"] | null) || null;
+  const [liveOverride, setLiveOverride] = useState<{
+    name?: string;
+    avatarUrl?: string;
+  }>({});
+
+  useEffect(() => {
+    let mounted = true;
+    fetch("/api/admin/profile", { credentials: "include" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (mounted && data?.profile) {
+          setLiveOverride({
+            name: data.profile.name || undefined,
+            avatarUrl: data.profile.avatarUrl || "",
+          });
+        }
+      })
+      .catch(() => {
+        // ignore background hydrate failure
+      });
+
+    const onProfileUpdated = (e: Event) => {
+      const detail = (e as CustomEvent<{ name?: string; avatarUrl?: string }>).detail;
+      if (detail) {
+        setLiveOverride({
+          name: detail.name,
+          avatarUrl: detail.avatarUrl ?? "",
+        });
+      }
+    };
+    window.addEventListener("iam-profile-updated", onProfileUpdated);
+    return () => {
+      mounted = false;
+      window.removeEventListener("iam-profile-updated", onProfileUpdated);
+    };
+  }, []);
+
+  const role = liveUser?.role || props.user?.role || "admin";
+  const isAdmin = role === "super_admin" || role === "admin";
+  const canViewEnquiries =
+    isAdmin || role === "academy_manager";
+
   const activeUser = {
-    name: liveUser?.name || props.user?.name || "Administrator",
+    name:
+      liveOverride.name ||
+      liveUser?.name ||
+      props.user?.name ||
+      "Administrator",
     email: liveUser?.email || props.user?.email || "info@theiamlab.com",
-    avatarUrl: liveUser?.avatarUrl || props.user?.avatarUrl || "",
+    avatarUrl:
+      liveOverride.avatarUrl !== undefined
+        ? liveOverride.avatarUrl
+        : liveUser?.avatarUrl || props.user?.avatarUrl || "",
   };
 
   const navGroups: NavGroup[] = [
@@ -86,46 +135,54 @@ export function AdminNav(props: AdminNavProps) {
         },
       ],
     },
-    {
-      group: "CLIENT MANAGEMENT",
-      items: [
-        {
-          label: "Client Enquiries",
-          href: "/admin/collections/enquiries",
-          icon: (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-              <polyline points="22,6 12,13 2,6" />
-            </svg>
-          ),
-        },
-      ],
-    },
+    ...(canViewEnquiries
+      ? [
+          {
+            group: "CLIENT MANAGEMENT",
+            items: [
+              {
+                label: "Client Enquiries",
+                href: "/admin/collections/enquiries",
+                icon: (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                  </svg>
+                ),
+              },
+            ],
+          },
+        ]
+      : []),
     {
       group: "ADMINISTRATION",
       items: [
-        {
-          label: "Users & Administrators",
-          href: "/admin/collections/users",
-          icon: (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
-          ),
-        },
-        {
-          label: "Global Site Settings",
-          href: "/admin/globals/site-settings",
-          icon: (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="3" />
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-            </svg>
-          ),
-        },
+        ...(isAdmin
+          ? [
+              {
+                label: "Users & Administrators",
+                href: "/admin/collections/users",
+                icon: (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                ),
+              },
+              {
+                label: "Global Site Settings",
+                href: "/admin/globals/site-settings",
+                icon: (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="3" />
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                  </svg>
+                ),
+              },
+            ]
+          : []),
         {
           label: "My Profile & Account",
           href: "/admin/account",

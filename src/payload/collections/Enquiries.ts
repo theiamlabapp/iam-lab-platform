@@ -1,5 +1,5 @@
 import type { CollectionConfig } from "payload";
-import { isAdminAccess, isStaffAccess } from "../access/roles";
+import { isAdminAccess, isEnquiryAccess } from "../access/roles";
 
 export const Enquiries: CollectionConfig = {
   slug: "enquiries",
@@ -20,6 +20,7 @@ export const Enquiries: CollectionConfig = {
     description:
       "Inbound corporate consulting requests and IAM Academy cohort applications.",
     group: "Client Management",
+    hideAPIURL: true,
     components: {
       views: {
         list: {
@@ -29,9 +30,9 @@ export const Enquiries: CollectionConfig = {
     },
   },
   access: {
-    read: isStaffAccess,
+    read: isEnquiryAccess,
     create: () => true, // Public contact form submission
-    update: isStaffAccess,
+    update: isEnquiryAccess,
     delete: isAdminAccess,
   },
   fields: [

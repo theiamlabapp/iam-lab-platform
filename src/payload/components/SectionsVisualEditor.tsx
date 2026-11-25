@@ -601,7 +601,7 @@ export function SectionsVisualEditor({ path }: { path: string }) {
             }}
           >
             <span style={{ fontSize: "12px", fontWeight: 700, color: "#0B1424" }}>
-              Editing Section: <code style={{ color: "#B07424" }}>{String(currentSec.type)}</code>
+              {getSectionTitle(currentSec, safeActiveIdx)}
             </span>
 
             <div style={{ display: "flex", gap: "6px" }}>
@@ -767,7 +767,7 @@ export function SectionsVisualEditor({ path }: { path: string }) {
                       Section Photography / Background Image
                     </label>
                     <p style={{ margin: "0 0 10px 0", fontSize: "12px", color: "#64748B" }}>
-                      Active Path: <code>{String(currentSec.bgImage || "/brand/hero-enterprise.jpg")}</code>
+                      Selected image: <strong>{String(currentSec.bgImage || "/brand/hero-enterprise.jpg").split("/").pop()}</strong>
                     </p>
                     <button
                       type="button"
@@ -807,7 +807,7 @@ export function SectionsVisualEditor({ path }: { path: string }) {
                       Feature Showcase Image
                     </label>
                     <p style={{ margin: "0 0 10px 0", fontSize: "12px", color: "#64748B" }}>
-                      Active Path: <code>{String(currentSec.secondaryImage || "/brand/iam-academy-hero.jpg")}</code>
+                      Selected image: <strong>{String(currentSec.secondaryImage || "/brand/iam-academy-hero.jpg").split("/").pop()}</strong>
                     </p>
                     <button
                       type="button"
@@ -1017,7 +1017,7 @@ export function SectionsVisualEditor({ path }: { path: string }) {
                                     {cfg.label}
                                   </div>
                                   <div style={{ fontSize: "11px", color: "#64748B", marginTop: "2px", marginBottom: "6px" }}>
-                                    <code>{imgVal || "None selected"}</code>
+                                    <strong>{imgVal ? imgVal.split("/").pop() : "No photo selected"}</strong>
                                   </div>
                                   <div style={{ display: "flex", gap: "8px" }}>
                                     <button

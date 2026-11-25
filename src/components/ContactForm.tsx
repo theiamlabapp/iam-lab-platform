@@ -1,7 +1,26 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+
+declare global {
+  interface Window {
+    grecaptcha?: {
+      ready: (cb: () => void) => void;
+      render: (
+        container: HTMLElement,
+        opts: {
+          sitekey: string;
+          callback?: (token: string) => void;
+          "expired-callback"?: () => void;
+          "error-callback"?: () => void;
+        }
+      ) => number;
+      reset: (widgetId?: number) => void;
+      execute: (siteKey: string, opts: { action: string }) => Promise<string>;
+    };
+  }
+}
 
 const ENQUIRY_TYPES = [
   { value: "enterprise_consulting", label: "Enterprise Consulting" },
@@ -31,7 +50,15 @@ const SERVICE_PATHWAY_OPTIONS = [
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-export function ContactForm() {
+export function ContactForm({
+  recaptchaEnabled = false,
+  recaptchaVersion = "v2_checkbox",
+  recaptchaSiteKey = "",
+}: {
+  recaptchaEnabled?: boolean;
+  recaptchaVersion?: "v2_checkbox" | "v3";
+  recaptchaSiteKey?: string;
+} = {}) {
   const searchParams = useSearchParams();
   const typeParam = searchParams.get("type");
   const serviceParam = searchParams.get("service") || "";
@@ -79,7 +106,7 @@ export function ContactForm() {
     serviceOrPathway: defaultService,
     message: "",
     privacyAccepted: false,
-    company_hp: "", // Honeypot spam trap
+    company_hp: "",
   });
 
   const [prevQueryKey, setPrevQueryKey] = useState(`${typeParam}|${serviceParam}`);
@@ -97,6 +124,68 @@ export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [recaptchaToken, setRecaptchaToken] = useState("");
+
+  const recaptchaContainerRef = useRef<HTMLDivElement | null>(null);
+  const widgetIdRef = useRef<number | null>(null);
+
+  const shouldUseRecaptcha = Boolean(recaptchaEnabled && recaptchaSiteKey);
+
+  useEffect(() => {
+    if (!shouldUseRecaptcha || typeof window === "undefined") return;
+
+    const scriptId = "iam-google-recaptcha-script";
+    const desiredSrc =
+      recaptchaVersion === "v3"
+        ? `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(recaptchaSiteKey)}`
+        : "https://www.google.com/recaptcha/api.js?render=explicit";
+
+    const mountV2Widget = () => {
+      if (
+        recaptchaVersion !== "v2_checkbox" ||
+        !recaptchaContainerRef.current ||
+        !window.grecaptcha?.ready
+      ) {
+        return;
+      }
+      window.grecaptcha.ready(() => {
+        if (!recaptchaContainerRef.current || widgetIdRef.current !== null) return;
+        widgetIdRef.current = window.grecaptcha!.render(recaptchaContainerRef.current, {
+          sitekey: recaptchaSiteKey,
+          callback: (token: string) => {
+            setRecaptchaToken(token);
+            setErrors((prev) => {
+              if (!prev.recaptcha) return prev;
+              const next = { ...prev };
+              delete next.recaptcha;
+              return next;
+            });
+          },
+          "expired-callback": () => {
+            setRecaptchaToken("");
+          },
+          "error-callback": () => {
+            setRecaptchaToken("");
+          },
+        });
+      });
+    };
+
+    const existing = document.getElementById(scriptId) as HTMLScriptElement | null;
+    if (existing) {
+      if (window.grecaptcha) mountV2Widget();
+      else existing.addEventListener("load", mountV2Widget, { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.id = scriptId;
+    script.src = desiredSrc;
+    script.async = true;
+    script.defer = true;
+    script.addEventListener("load", mountV2Widget);
+    document.head.appendChild(script);
+  }, [shouldUseRecaptcha, recaptchaSiteKey, recaptchaVersion]);
 
   const validate = () => {
     const errs: Record<string, string> = {};
@@ -121,6 +210,9 @@ export function ContactForm() {
       errs.privacyAccepted =
         "You must acknowledge that The IAM Lab will process your details to respond.";
     }
+    if (shouldUseRecaptcha && recaptchaVersion === "v2_checkbox" && !recaptchaToken) {
+      errs.recaptcha = "Please complete the security verification checkbox.";
+    }
 
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -134,25 +226,56 @@ export function ContactForm() {
     setServerError(null);
 
     try {
+      let tokenToSend = recaptchaToken;
+
+      if (shouldUseRecaptcha && recaptchaVersion === "v3") {
+        if (!window.grecaptcha?.ready || !window.grecaptcha?.execute) {
+          throw new Error(
+            "Security verification service is still loading. Please try again in a moment."
+          );
+        }
+        tokenToSend = await new Promise<string>((resolve, reject) => {
+          window.grecaptcha!.ready(() => {
+            window.grecaptcha!
+              .execute(recaptchaSiteKey, { action: "contact_submit" })
+              .then(resolve)
+              .catch(reject);
+          });
+        });
+      }
+
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          recaptchaToken: tokenToSend,
+        }),
       });
 
       const data = await res.json().catch(() => ({}));
 
       if (res.ok && data.ok) {
         setSubmitted(true);
+        setRecaptchaToken("");
+        if (widgetIdRef.current !== null && window.grecaptcha?.reset) {
+          window.grecaptcha.reset(widgetIdRef.current);
+        }
       } else {
         setServerError(
           data.message ||
             "Unable to submit enquiry right now. Please email info@theiamlab.com directly."
         );
+        if (recaptchaVersion === "v2_checkbox" && widgetIdRef.current !== null && window.grecaptcha?.reset) {
+          window.grecaptcha.reset(widgetIdRef.current);
+          setRecaptchaToken("");
+        }
       }
-    } catch {
+    } catch (err) {
       setServerError(
-        "Network connection error. Please email info@theiamlab.com directly."
+        err instanceof Error
+          ? err.message
+          : "Network connection error. Please email info@theiamlab.com directly."
       );
     } finally {
       setIsSubmitting(false);
@@ -164,7 +287,7 @@ export function ContactForm() {
       <div
         role="status"
         aria-live="polite"
-        className="border border-[#D89A43] bg-[#F7F6F2] p-8 sm:p-12 text-center text-[#0B1424]"
+        className="border border-[#D89A43] bg-[#F7F6F2] p-8 text-center text-[#0B1424] sm:p-12"
       >
         <div className="mx-auto flex h-14 w-14 items-center justify-center bg-[#0B1424] text-[#D89A43]">
           <svg
@@ -180,7 +303,7 @@ export function ContactForm() {
         <h3 className="mt-4 text-2xl font-bold text-[#0B1424]">
           Thank You for Contacting The IAM Lab
         </h3>
-        <p className="mt-3 text-sm leading-relaxed text-slate-700 max-w-md mx-auto">
+        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-slate-700">
           Thank you for contacting The IAM Lab. Your enquiry has been received. Our team will review your message and respond using the contact details provided.
         </p>
         <div className="mt-6">
@@ -188,6 +311,7 @@ export function ContactForm() {
             type="button"
             onClick={() => {
               setSubmitted(false);
+              setRecaptchaToken("");
               setFormData({
                 enquiryType: defaultCategory,
                 name: "",
@@ -200,7 +324,7 @@ export function ContactForm() {
                 company_hp: "",
               });
             }}
-            className="text-xs font-bold text-[#0B1424] underline hover:text-[#D89A43]"
+            className="cursor-pointer text-xs font-bold text-[#0B1424] underline hover:text-[#D89A43]"
           >
             Submit another enquiry &rarr;
           </button>
@@ -215,7 +339,7 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="enquiryType"
-          className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#14243B]"
+          className="block font-mono text-xs font-semibold tracking-wider text-[#14243B] uppercase"
         >
           Enquiry Track <span className="text-rose-600">*</span>
         </label>
@@ -225,7 +349,7 @@ export function ContactForm() {
           onChange={(e) =>
             setFormData({ ...formData, enquiryType: e.target.value })
           }
-          className="mt-2 block w-full border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-3 text-sm font-medium text-[#0B1424] transition-colors focus:border-[#D89A43] focus:bg-white focus:outline-none"
+          className="mt-2 block w-full cursor-pointer border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-3 text-sm font-medium text-[#0B1424] transition-colors focus:border-[#D89A43] focus:bg-white focus:outline-none"
         >
           {ENQUIRY_TYPES.map((t) => (
             <option key={t.value} value={t.value} className="bg-white text-[#0B1424]">
@@ -243,7 +367,7 @@ export function ContactForm() {
         <div>
           <label
             htmlFor="name"
-            className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#14243B]"
+            className="block font-mono text-xs font-semibold tracking-wider text-[#14243B] uppercase"
           >
             Full Name <span className="text-rose-600">*</span>
           </label>
@@ -267,7 +391,7 @@ export function ContactForm() {
         <div>
           <label
             htmlFor="email"
-            className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#14243B]"
+            className="block font-mono text-xs font-semibold tracking-wider text-[#14243B] uppercase"
           >
             Work Email Address <span className="text-rose-600">*</span>
           </label>
@@ -294,7 +418,7 @@ export function ContactForm() {
         <div>
           <label
             htmlFor="organisation"
-            className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#14243B]"
+            className="block font-mono text-xs font-semibold tracking-wider text-[#14243B] uppercase"
           >
             Organisation / Company{" "}
             <span className="text-[10px] text-slate-500">(Optional)</span>
@@ -315,7 +439,7 @@ export function ContactForm() {
         <div>
           <label
             htmlFor="phone"
-            className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#14243B]"
+            className="block font-mono text-xs font-semibold tracking-wider text-[#14243B] uppercase"
           >
             Phone / WhatsApp{" "}
             <span className="text-[10px] text-slate-500">(Optional)</span>
@@ -338,7 +462,7 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="serviceOrPathway"
-          className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#14243B]"
+          className="block font-mono text-xs font-semibold tracking-wider text-[#14243B] uppercase"
         >
           Specific Service or Learning Pathway{" "}
           <span className="text-[10px] text-slate-500">(Optional)</span>
@@ -349,7 +473,7 @@ export function ContactForm() {
           onChange={(e) =>
             setFormData({ ...formData, serviceOrPathway: e.target.value })
           }
-          className="mt-2 block w-full border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-3 text-sm font-medium text-[#0B1424] focus:border-[#D89A43] focus:bg-white focus:outline-none"
+          className="mt-2 block w-full cursor-pointer border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-3 text-sm font-medium text-[#0B1424] focus:border-[#D89A43] focus:bg-white focus:outline-none"
         >
           {SERVICE_PATHWAY_OPTIONS.map((opt, i) => (
             <option
@@ -368,7 +492,7 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="message"
-          className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#14243B]"
+          className="block font-mono text-xs font-semibold tracking-wider text-[#14243B] uppercase"
         >
           Project Details / Requirements <span className="text-rose-600">*</span>
         </label>
@@ -404,14 +528,14 @@ export function ContactForm() {
 
       {/* Privacy Notice Acknowledgement */}
       <div>
-        <label className="flex items-start gap-3 cursor-pointer">
+        <label className="flex cursor-pointer items-start gap-3">
           <input
             type="checkbox"
             checked={formData.privacyAccepted}
             onChange={(e) =>
               setFormData({ ...formData, privacyAccepted: e.target.checked })
             }
-            className="mt-1 h-4 w-4 rounded-none border-slate-300 text-[#0B1424] focus:ring-[#D89A43]"
+            className="mt-1 h-4 w-4 cursor-pointer rounded-none border-slate-300 text-[#0B1424] focus:ring-[#D89A43]"
           />
           <span className="text-xs leading-relaxed text-slate-600">
             I acknowledge that The IAM Lab will process the details submitted
@@ -422,6 +546,22 @@ export function ContactForm() {
           <p className="mt-1.5 text-xs text-rose-600">{errors.privacyAccepted}</p>
         )}
       </div>
+
+      {/* Google reCAPTCHA Verification (when enabled in Global Site Settings) */}
+      {shouldUseRecaptcha && recaptchaVersion === "v2_checkbox" && (
+        <div>
+          <div ref={recaptchaContainerRef} />
+          {errors.recaptcha && (
+            <p className="mt-1.5 text-xs text-rose-600">{errors.recaptcha}</p>
+          )}
+        </div>
+      )}
+
+      {shouldUseRecaptcha && recaptchaVersion === "v3" && (
+        <p className="text-[11px] text-slate-500">
+          Protected by Google reCAPTCHA v3 verification upon submission.
+        </p>
+      )}
 
       {serverError && (
         <div
@@ -436,7 +576,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="inline-flex min-h-[48px] w-full items-center justify-center bg-[#0B1424] px-8 py-3 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#14243B] disabled:cursor-wait disabled:opacity-70 sm:w-auto"
+        className="inline-flex min-h-[48px] w-full cursor-pointer items-center justify-center bg-[#0B1424] px-8 py-3 text-xs font-bold tracking-wider text-white uppercase transition-colors hover:bg-[#14243B] disabled:cursor-wait disabled:opacity-70 sm:w-auto"
       >
         {isSubmitting ? "Transmitting..." : "Submit Consultation Request"}
       </button>

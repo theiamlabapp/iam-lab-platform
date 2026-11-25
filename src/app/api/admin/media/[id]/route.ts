@@ -2,7 +2,7 @@ import path from "path";
 import { NextResponse } from "next/server";
 import sharp from "sharp";
 import { getDbPool } from "@/lib/dbPool";
-import { getAuthenticatedStaffUser } from "@/payload/access/serverAuth";
+import { getAuthenticatedStaffUser, hasAdminClearance, hasEditorialClearance } from "@/payload/access/serverAuth";
 
 const ALLOWED_MIME_TYPES = new Set([
   "image/jpeg",
@@ -27,6 +27,9 @@ export async function PATCH(
   const user = await getAuthenticatedStaffUser(req.headers);
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (!hasEditorialClearance(user)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const { id } = await context.params;
@@ -183,6 +186,12 @@ export async function DELETE(
   const user = await getAuthenticatedStaffUser(req.headers);
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (!hasAdminClearance(user)) {
+    return NextResponse.json(
+      { error: "Only administrators can delete media assets." },
+      { status: 403 }
+    );
   }
 
   const { id } = await context.params;

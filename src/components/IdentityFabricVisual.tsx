@@ -371,7 +371,7 @@ export function IdentityFabricVisual({
                   role="tab"
                   aria-selected={isSelected}
                   onClick={() => setSelectedId(d.id)}
-                  className={`inline-flex min-w-0 items-center justify-center gap-1.5 border px-2 py-2 font-mono text-[10px] tracking-tight whitespace-nowrap uppercase transition-colors sm:gap-2 sm:px-3 sm:text-[11px] lg:flex-1 ${
+                  className={`inline-flex min-w-0 cursor-pointer items-center justify-center gap-1.5 border px-2 py-2 font-mono text-[10px] tracking-tight whitespace-nowrap uppercase transition-colors sm:gap-2 sm:px-3 sm:text-[11px] lg:flex-1 ${
                     isSelected
                       ? "border-[#D89A43] bg-[#D89A43]/15 font-bold text-[#D89A43]"
                       : "border-white/15 bg-transparent text-slate-300 hover:border-white/40 hover:text-white"

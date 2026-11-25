@@ -7,8 +7,9 @@ export const SiteSettings: GlobalConfig = {
   label: "Global Site Settings",
   admin: {
     group: "Administration",
+    hideAPIURL: true,
     description:
-      "Authoritative brand details, contact channels, London headquarters location, and external resource URLs.",
+      "Manage brand logos, navigation menu items, contact details, London office location, external links, and contact spam protection.",
   },
   hooks: {
     afterChange: [
@@ -30,8 +31,8 @@ export const SiteSettings: GlobalConfig = {
       type: "tabs",
       tabs: [
         {
-          label: "Brand Identity",
-          description: "Core company naming and tagline across the public site.",
+          label: "Brand Identity & Navigation",
+          description: "Core company naming, brand logos, header action button, and website navigation links.",
           fields: [
             {
               name: "companyName",
@@ -48,16 +49,26 @@ export const SiteSettings: GlobalConfig = {
               label: "Official Brand Tagline",
             },
             {
-              name: "logoLightUrl",
-              type: "text",
-              defaultValue: "/brand/the-iam-lab-logo-light.png",
-              label: "Footer Logo Asset Path (Light Variant for Dark Backgrounds)",
-            },
-            {
               name: "logoDarkUrl",
               type: "text",
               defaultValue: "/brand/the-iam-lab-logo-dark.png",
-              label: "Header Logo Asset Path (Dark Variant for White Surfaces)",
+              label: "Header Logo (Dark Variant for White Surfaces)",
+              admin: {
+                components: {
+                  Field: "/src/payload/components/MediaSelectorField#MediaSelectorField",
+                },
+              },
+            },
+            {
+              name: "logoLightUrl",
+              type: "text",
+              defaultValue: "/brand/the-iam-lab-logo-light.png",
+              label: "Footer Logo (Light Variant for Dark Backgrounds)",
+              admin: {
+                components: {
+                  Field: "/src/payload/components/MediaSelectorField#MediaSelectorField",
+                },
+              },
             },
             {
               name: "headerCtaLabel",
@@ -75,13 +86,18 @@ export const SiteSettings: GlobalConfig = {
               name: "navLinks",
               type: "json",
               defaultValue: [
-                { label: "Home", href: "/" },
-                { label: "About", href: "/about" },
-                { label: "Services & Solutions", href: "/services" },
-                { label: "IAM Academy", href: "/academy" },
-                { label: "Contact", href: "/contact" },
+                { label: "Home", href: "/", visible: true },
+                { label: "About", href: "/about", visible: true },
+                { label: "Services & Solutions", href: "/services", visible: true },
+                { label: "IAM Academy", href: "/academy", visible: true },
+                { label: "Contact", href: "/contact", visible: true },
               ],
-              label: "Navigation Menu Items (JSON Array of { label, href })",
+              label: "Website Navigation Menu",
+              admin: {
+                components: {
+                  Field: "/src/payload/components/NavLinksVisualEditor#NavLinksVisualEditor",
+                },
+              },
             },
           ],
         },
@@ -155,6 +171,50 @@ export const SiteSettings: GlobalConfig = {
               name: "twitterUrl",
               type: "text",
               label: "X (Twitter) Profile URL (Optional)",
+            },
+          ],
+        },
+        {
+          label: "Security & Spam Protection",
+          description:
+            "Manage Google reCAPTCHA on the public Contact form. The private secret key is protected exclusively in server environment variables.",
+          fields: [
+            {
+              name: "recaptchaEnabled",
+              type: "checkbox",
+              defaultValue: false,
+              label: "Enable Google reCAPTCHA on Public Contact Form",
+            },
+            {
+              name: "recaptchaVersion",
+              type: "select",
+              defaultValue: "v2_checkbox",
+              options: [
+                {
+                  label: "reCAPTCHA v2 (I'm not a robot Checkbox)",
+                  value: "v2_checkbox",
+                },
+                {
+                  label: "reCAPTCHA v3 (Score-based Invisible Verification)",
+                  value: "v3",
+                },
+              ],
+              label: "Configured Google reCAPTCHA Version",
+            },
+            {
+              name: "recaptchaSiteKey",
+              type: "text",
+              defaultValue: "6LdwnjEuAAAAANcFI8csi-ssLQ0qO9flyReX3Pzi",
+              label: "Google reCAPTCHA Public Site Key",
+            },
+            {
+              name: "recaptchaStatusNotice",
+              type: "ui",
+              admin: {
+                components: {
+                  Field: "/src/payload/components/RecaptchaStatusField#RecaptchaStatusField",
+                },
+              },
             },
           ],
         },

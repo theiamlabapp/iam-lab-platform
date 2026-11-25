@@ -2,25 +2,25 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  getCurrentProfileAction,
-  updateProfileAction,
-} from "../actions/updateProfileAction";
+import { useRouter } from "next/navigation";
 
 interface MediaChoice {
   filename: string;
   url: string;
+  category?: string;
+  sourceType?: string;
 }
 
 export function AccountView() {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [email, setEmail] = useState("info@theiamlab.com");
+  const [email, setEmail] = useState("");
   const [role, setRole] = useState("admin");
   const [name, setName] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [phone, setPhone] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("/brand/the-iam-lab-logo-dark.png");
-  const [mediaChoices, setMediaChoices] = useState<MediaChoice[]>([]);
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [portraitChoices, setPortraitChoices] = useState<MediaChoice[]>([]);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState<{
@@ -28,39 +28,76 @@ export function AccountView() {
     text: string;
   } | null>(null);
 
+  const syncSidebarIdentity = (nextName: string, nextAvatar: string) => {
+    try {
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent("iam-profile-updated", {
+            detail: { name: nextName, avatarUrl: nextAvatar },
+          })
+        );
+      }
+      router.refresh();
+    } catch {
+      // ignore client refresh errors
+    }
+  };
+
   useEffect(() => {
     let mounted = true;
     async function hydrate() {
       try {
         const [profileRes, mediaRes] = await Promise.all([
-          getCurrentProfileAction(),
+          fetch("/api/admin/profile", { credentials: "include" }).then(async (r) => ({
+            ok: r.ok,
+            data: await r.json().catch(() => ({})),
+          })),
           fetch("/api/admin/media", { credentials: "include" }).then((r) =>
             r.ok ? r.json() : { assets: [] }
           ),
         ]);
 
         if (!mounted) return;
-        if (profileRes.success && profileRes.profile) {
-          setEmail(profileRes.profile.email);
-          setRole(profileRes.profile.role);
-          setName(profileRes.profile.name || "Administrator");
-          setJobTitle(profileRes.profile.jobTitle || "Super Administrator");
-          setPhone(profileRes.profile.phone || "");
-          setAvatarUrl(
-            profileRes.profile.avatarUrl || "/brand/the-iam-lab-logo-dark.png"
-          );
+
+        if (profileRes.ok && profileRes.data?.profile) {
+          const p = profileRes.data.profile;
+          setEmail(p.email || "");
+          setRole(p.role || "admin");
+          setName(p.name || "");
+          setJobTitle(p.jobTitle || "");
+          setPhone(p.phone || "");
+          setAvatarUrl(p.avatarUrl || "");
+        } else {
+          setFeedback({
+            type: "error",
+            text:
+              profileRes.data?.error ||
+              "Unable to load your profile session. Please sign in again.",
+          });
         }
 
         if (Array.isArray(mediaRes?.assets)) {
-          setMediaChoices(
-            mediaRes.assets.slice(0, 6).map((a: { filename: string; url: string }) => ({
-              filename: a.filename,
-              url: a.url,
-            }))
+          setPortraitChoices(
+            mediaRes.assets
+              .filter(
+                (a: MediaChoice) =>
+                  a.category === "portrait" && a.sourceType === "uploaded"
+              )
+              .slice(0, 4)
+              .map((a: MediaChoice) => ({
+                filename: a.filename,
+                url: a.url,
+              }))
           );
         }
       } catch (err) {
         console.error("[AccountView] Load error:", err);
+        if (mounted) {
+          setFeedback({
+            type: "error",
+            text: "Network error loading profile details.",
+          });
+        }
       } finally {
         if (mounted) setLoading(false);
       }
@@ -71,6 +108,37 @@ export function AccountView() {
     };
   }, []);
 
+  const persistProfile = async (overrides?: {
+    name?: string;
+    jobTitle?: string;
+    phone?: string;
+    avatarUrl?: string;
+  }) => {
+    const nextName = (overrides?.name ?? name).trim();
+    const nextTitle = (overrides?.jobTitle ?? jobTitle).trim();
+    const nextPhone = (overrides?.phone ?? phone).trim();
+    const nextAvatar = overrides?.avatarUrl !== undefined ? overrides.avatarUrl : avatarUrl;
+
+    const res = await fetch("/api/admin/profile", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        name: nextName,
+        jobTitle: nextTitle,
+        phone: nextPhone,
+        avatarUrl: nextAvatar,
+      }),
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(data.error || "Unable to save profile.");
+    }
+    syncSidebarIdentity(nextName, nextAvatar);
+    return data.profile;
+  };
+
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -80,29 +148,34 @@ export function AccountView() {
     try {
       const fd = new FormData();
       fd.append("file", file);
-      fd.append("alt", `${name || "Administrator"} profile portrait`);
-      fd.append("category", "consulting");
+      fd.append("alt", `${name || email || "Administrator"} portrait`);
+      fd.append("category", "portrait");
 
       const res = await fetch("/api/admin/media", {
         method: "POST",
         credentials: "include",
         body: fd,
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Avatar upload failed");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Portrait upload failed");
 
-      const uploadedUrl = data.asset.url as string;
+      const uploadedUrl = String(data.asset.url || "");
       setAvatarUrl(uploadedUrl);
-      await updateProfileAction({
-        name: name || "Administrator",
-        jobTitle,
-        phone,
+      setPortraitChoices((prev) =>
+        [{ filename: String(data.asset.filename || "Portrait"), url: uploadedUrl }, ...prev].slice(
+          0,
+          4
+        )
+      );
+
+      await persistProfile({
+        name: name || email.split("@")[0] || "Administrator",
         avatarUrl: uploadedUrl,
       });
 
       setFeedback({
         type: "success",
-        text: "Profile image uploaded, stored in database, and applied to your profile.",
+        text: "Profile portrait uploaded and saved across your account.",
       });
     } catch (err) {
       setFeedback({
@@ -114,34 +187,41 @@ export function AccountView() {
     }
   };
 
+  const handleRemoveAvatar = async () => {
+    setFeedback(null);
+    setSaving(true);
+    try {
+      setAvatarUrl("");
+      await persistProfile({ avatarUrl: "" });
+      setFeedback({
+        type: "success",
+        text: "Profile portrait removed. Using initial-based badge.",
+      });
+    } catch (err) {
+      setFeedback({
+        type: "error",
+        text: err instanceof Error ? err.message : "Could not remove portrait.",
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setFeedback(null);
     setSaving(true);
 
     try {
-      const res = await updateProfileAction({
-        name,
-        jobTitle,
-        phone,
-        avatarUrl,
+      await persistProfile();
+      setFeedback({
+        type: "success",
+        text: "Administrator profile details saved cleanly.",
       });
-
-      if (res.success) {
-        setFeedback({
-          type: "success",
-          text: "Administrator profile details saved to Supabase PostgreSQL.",
-        });
-      } else {
-        setFeedback({
-          type: "error",
-          text: res.error || "Failed to update profile.",
-        });
-      }
     } catch (err) {
       setFeedback({
         type: "error",
-        text: err instanceof Error ? err.message : "Network error updating profile.",
+        text: err instanceof Error ? err.message : "Unable to update profile.",
       });
     } finally {
       setSaving(false);
@@ -155,9 +235,10 @@ export function AccountView() {
         ? "Administrator"
         : role.replace(/_/g, " ");
 
+  const avatarInitial = (name || email || "A")[0].toUpperCase();
+
   return (
     <div className="iam-dash-container" style={{ maxWidth: "960px" }}>
-      {/* Header Bar matching Approved Dashboard */}
       <div className="iam-dash-intro">
         <div>
           <span className="iam-pill-amber" style={{ marginBottom: "8px", display: "inline-block" }}>
@@ -165,7 +246,7 @@ export function AccountView() {
           </span>
           <h1 className="iam-dash-welcome">Administrator Account &amp; Profile</h1>
           <p className="iam-dash-subwelcome">
-            Manage your display identity, uploaded portrait, contact details, and role clearance.
+            Manage your display name, uploaded profile portrait, contact details, and session status.
           </p>
         </div>
 
@@ -210,7 +291,7 @@ export function AccountView() {
             padding: "32px",
           }}
         >
-          {/* Avatar Upload & Selection */}
+          {/* Profile Portrait Section */}
           <div
             style={{
               display: "flex",
@@ -224,23 +305,30 @@ export function AccountView() {
           >
             <div
               style={{
-                width: "80px",
-                height: "80px",
+                width: "84px",
+                height: "84px",
                 borderRadius: "50%",
                 overflow: "hidden",
                 border: "2px solid #D89A43",
-                backgroundColor: "#F8FAFC",
+                backgroundColor: "#0B1424",
+                color: "#D89A43",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                fontSize: "26px",
+                fontWeight: 800,
                 flexShrink: 0,
               }}
             >
-              <img
-                src={avatarUrl || "/brand/the-iam-lab-logo-dark.png"}
-                alt="Administrator profile avatar"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
+              {avatarUrl ? (
+                <img
+                  src={avatarUrl}
+                  alt={name || "Profile portrait"}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              ) : (
+                <span>{avatarInitial}</span>
+              )}
             </div>
 
             <div style={{ flex: 1, minWidth: "240px" }}>
@@ -248,22 +336,22 @@ export function AccountView() {
                 Profile Portrait
               </h3>
               <p style={{ margin: "0 0 12px 0", fontSize: "12px", color: "#64748B" }}>
-                Upload a custom headshot (PNG/JPG/WebP) or choose from saved enterprise assets.
+                Upload your personal headshot (PNG/JPG/WebP). Separate from website logos.
               </p>
 
-              <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap", marginBottom: "10px" }}>
+              <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" }}>
                 <label
                   style={{
                     backgroundColor: "#0B1424",
                     color: "#FFFFFF",
                     borderRadius: "6px",
-                    padding: "7px 14px",
+                    padding: "8px 14px",
                     fontSize: "12px",
                     fontWeight: 600,
                     cursor: uploadingAvatar ? "wait" : "pointer",
                   }}
                 >
-                  {uploadingAvatar ? "Uploading Photo..." : "Upload New Photo"}
+                  {uploadingAvatar ? "Uploading Photo..." : avatarUrl ? "Replace Portrait" : "Upload New Photo"}
                   <input
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
@@ -272,7 +360,27 @@ export function AccountView() {
                   />
                 </label>
 
-                {mediaChoices.slice(0, 3).map((opt) => (
+                {avatarUrl && (
+                  <button
+                    type="button"
+                    onClick={handleRemoveAvatar}
+                    disabled={saving}
+                    style={{
+                      backgroundColor: "#F8FAFC",
+                      color: "#64748B",
+                      border: "1px solid #CBD5E1",
+                      borderRadius: "6px",
+                      padding: "7px 12px",
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                    }}
+                  >
+                    Remove Portrait
+                  </button>
+                )}
+
+                {portraitChoices.map((opt) => (
                   <button
                     key={opt.url}
                     type="button"
@@ -295,7 +403,7 @@ export function AccountView() {
             </div>
           </div>
 
-          {/* Account Credentials Grid */}
+          {/* Account Details Grid */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "24px" }}>
             <div>
               <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "#475569", textTransform: "uppercase", marginBottom: "6px" }}>
@@ -306,13 +414,14 @@ export function AccountView() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
+                placeholder="Enter full display name"
                 style={{ width: "100%", height: "40px", padding: "0 12px", borderRadius: "6px", border: "1px solid #CBD5E1", fontSize: "13px", boxSizing: "border-box" }}
               />
             </div>
 
             <div>
               <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "#475569", textTransform: "uppercase", marginBottom: "6px" }}>
-                Authoritative Email
+                Account Email (Read-only)
               </label>
               <input
                 type="email"
@@ -330,6 +439,7 @@ export function AccountView() {
                 type="text"
                 value={jobTitle}
                 onChange={(e) => setJobTitle(e.target.value)}
+                placeholder="e.g. Super Administrator"
                 style={{ width: "100%", height: "40px", padding: "0 12px", borderRadius: "6px", border: "1px solid #CBD5E1", fontSize: "13px", boxSizing: "border-box" }}
               />
             </div>
@@ -342,12 +452,12 @@ export function AccountView() {
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+                placeholder="Optional direct phone or WhatsApp"
                 style={{ width: "100%", height: "40px", padding: "0 12px", borderRadius: "6px", border: "1px solid #CBD5E1", fontSize: "13px", boxSizing: "border-box" }}
               />
             </div>
           </div>
 
-          {/* Access Role Notice */}
           <div
             style={{
               backgroundColor: "#F8FAFC",

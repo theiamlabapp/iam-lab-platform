@@ -8,6 +8,7 @@ import { BrandLogo } from "./BrandLogo";
 export interface NavbarLinkItem {
   href: string;
   label: string;
+  visible?: boolean;
 }
 
 const DEFAULT_NAV_LINKS: NavbarLinkItem[] = [
@@ -36,7 +37,8 @@ export function Navbar({
   const specialistHref =
     whatsappHref ||
     "https://wa.me/2348038652760?text=Hello%20The%20IAM%20Lab%20team%2C%20I%20would%20like%20to%20speak%20with%20an%20IAM%20specialist.";
-  const links = navLinks.length > 0 ? navLinks : DEFAULT_NAV_LINKS;
+  const visibleLinks = navLinks.filter((l) => l.visible !== false && l.label?.trim() && l.href?.trim());
+  const links = visibleLinks.length > 0 ? visibleLinks : DEFAULT_NAV_LINKS;
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [prevPathname, setPrevPathname] = useState(pathname);

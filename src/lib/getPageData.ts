@@ -31,6 +31,7 @@ export interface PageData {
 export interface NavLinkItem {
   label: string;
   href: string;
+  visible?: boolean;
 }
 
 export interface SiteSettingsData {
@@ -51,6 +52,9 @@ export interface SiteSettingsData {
   header_cta_label: string;
   footer_copyright_suffix: string;
   nav_links: NavLinkItem[];
+  recaptcha_enabled: boolean;
+  recaptcha_version: "v2_checkbox" | "v3";
+  recaptcha_site_key: string;
 }
 
 export const OFFICIAL_WHATSAPP_FALLBACK = "+234 803 865 2760";
@@ -83,12 +87,15 @@ export const DEFAULT_SITE_SETTINGS: SiteSettingsData = {
   header_cta_label: "Talk to an IAM Specialist",
   footer_copyright_suffix: "All rights reserved.",
   nav_links: [
-    { label: "Home", href: "/" },
-    { label: "About", href: "/about" },
-    { label: "Services & Solutions", href: "/services" },
-    { label: "IAM Academy", href: "/academy" },
-    { label: "Contact", href: "/contact" },
+    { label: "Home", href: "/", visible: true },
+    { label: "About", href: "/about", visible: true },
+    { label: "Services & Solutions", href: "/services", visible: true },
+    { label: "IAM Academy", href: "/academy", visible: true },
+    { label: "Contact", href: "/contact", visible: true },
   ],
+  recaptcha_enabled: false,
+  recaptcha_version: "v2_checkbox",
+  recaptcha_site_key: "6LdwnjEuAAAAANcFI8csi-ssLQ0qO9flyReX3Pzi",
 };
 
 /**
@@ -159,7 +166,7 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
 
   try {
     const res = await pool.query(
-      `SELECT company_name, tagline, official_email, location, address, phone, whatsapp_number, map_embed_url, selar_store_url, linkedin_url, instagram_url, twitter_url, logo_light_url, logo_dark_url, header_cta_label, footer_copyright_suffix, nav_links
+      `SELECT company_name, tagline, official_email, location, address, phone, whatsapp_number, map_embed_url, selar_store_url, linkedin_url, instagram_url, twitter_url, logo_light_url, logo_dark_url, header_cta_label, footer_copyright_suffix, nav_links, recaptcha_enabled, recaptcha_version, recaptcha_site_key
        FROM site_settings
        ORDER BY id ASC
        LIMIT 1;`
@@ -170,7 +177,12 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
     const parsedNav = Array.isArray(r.nav_links) && r.nav_links.length > 0
       ? r.nav_links
           .filter((item: unknown): item is NavLinkItem => Boolean(item && typeof item === "object" && "label" in item && "href" in item))
-          .map((item: NavLinkItem) => ({ label: String(item.label), href: String(item.href) }))
+          .map((item: NavLinkItem) => ({
+            label: String(item.label),
+            href: String(item.href),
+            visible: item.visible !== false,
+          }))
+          .filter((item: NavLinkItem) => item.visible !== false && item.label.trim().length > 0)
       : DEFAULT_SITE_SETTINGS.nav_links;
 
     return {
@@ -195,6 +207,12 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
       footer_copyright_suffix:
         r.footer_copyright_suffix || DEFAULT_SITE_SETTINGS.footer_copyright_suffix,
       nav_links: parsedNav.length > 0 ? parsedNav : DEFAULT_SITE_SETTINGS.nav_links,
+      recaptcha_enabled: Boolean(r.recaptcha_enabled),
+      recaptcha_version: r.recaptcha_version === "v3" ? "v3" : "v2_checkbox",
+      recaptcha_site_key:
+        typeof r.recaptcha_site_key === "string" && r.recaptcha_site_key.trim()
+          ? r.recaptcha_site_key.trim()
+          : DEFAULT_SITE_SETTINGS.recaptcha_site_key,
     };
   } catch {
     return DEFAULT_SITE_SETTINGS;

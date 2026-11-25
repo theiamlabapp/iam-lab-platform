@@ -1,7 +1,7 @@
 import configPromise from "@payload-config";
 import { headers } from "next/headers";
 import { getPayload } from "payload";
-import { ADMIN_ROLES, STAFF_ROLES } from "./roles";
+import { ADMIN_ROLES, EDITORIAL_ROLES, ENQUIRY_ROLES, STAFF_ROLES } from "./roles";
 
 export interface AuthenticatedUser {
   id: number | string;
@@ -51,4 +51,12 @@ export async function getAuthenticatedStaffUser(
  */
 export function hasAdminClearance(user: AuthenticatedUser | null): boolean {
   return Boolean(user && ADMIN_ROLES.has(user.role));
+}
+
+export function hasEditorialClearance(user: AuthenticatedUser | null): boolean {
+  return Boolean(user && EDITORIAL_ROLES.has(user.role));
+}
+
+export function hasEnquiryClearance(user: AuthenticatedUser | null): boolean {
+  return Boolean(user && ENQUIRY_ROLES.has(user.role));
 }

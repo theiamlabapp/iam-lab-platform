@@ -56,10 +56,19 @@ export default buildConfig({
   email: smtpEmailAdapter,
   editor: lexicalEditor(),
   secret: rawSecret,
-  serverURL:
-    process.env.NEXT_PUBLIC_SERVER_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://www.theiamlab.com"),
-  cors: "*",
+  serverURL: "",
+  cors: [
+    "https://www.theiamlab.com",
+    "https://theiamlab.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    ...(process.env.NEXT_PUBLIC_SERVER_URL ? [process.env.NEXT_PUBLIC_SERVER_URL] : []),
+    ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL}`] : []),
+    ...(process.env.VERCEL_BRANCH_URL ? [`https://${process.env.VERCEL_BRANCH_URL}`] : []),
+    ...(process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? [`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`]
+      : []),
+  ],
   csrf: [],
   typescript: {
     outputFile: path.resolve(dirname, "src/payload/payload-types.ts"),

@@ -2,7 +2,7 @@ import path from "path";
 import { NextResponse } from "next/server";
 import sharp from "sharp";
 import { getDbPool } from "@/lib/dbPool";
-import { getAuthenticatedStaffUser } from "@/payload/access/serverAuth";
+import { getAuthenticatedStaffUser, hasEditorialClearance } from "@/payload/access/serverAuth";
 
 const ALLOWED_MIME_TYPES = new Set([
   "image/jpeg",
@@ -135,6 +135,13 @@ export async function POST(req: Request) {
     const altInput = String(formData.get("alt") || "").trim();
     const captionInput = String(formData.get("caption") || "").trim();
     const categoryInput = String(formData.get("category") || "hero").trim();
+
+    if (!hasEditorialClearance(user) && categoryInput !== "portrait") {
+      return NextResponse.json(
+        { error: "Forbidden: Editorial clearance required to upload library assets." },
+        { status: 403 }
+      );
+    }
 
     if (!(file instanceof File)) {
       return NextResponse.json(

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { Suspense } from "react";
 import { ContactForm } from "@/components/ContactForm";
 import { CustomCmsSections } from "@/components/CustomCmsSections";
@@ -50,6 +49,28 @@ export default async function ContactPage({
   const trackItems = Array.isArray(tracksSec?.items) ? tracksSec.items : [];
   const track1 = trackItems[0] || {};
   const track2 = trackItems[1] || {};
+  const track1HrefRaw = String(track1.href || "").trim();
+  const track1Href =
+    !track1HrefRaw ||
+    track1HrefRaw === "whatsapp" ||
+    track1HrefRaw.includes("/contact")
+      ? whatsappHref
+      : track1HrefRaw;
+  const track1Label =
+    !track1.ctaLabel ||
+    String(track1.ctaLabel).includes("Business Consultation")
+      ? "Talk to an IAM Specialist"
+      : String(track1.ctaLabel);
+
+  const track2HrefRaw = String(track2.href || "").trim();
+  const track2Href =
+    !track2HrefRaw || track2HrefRaw === "/academy"
+      ? settings.selar_store_url
+      : track2HrefRaw;
+  const track2Label =
+    !track2.ctaLabel || String(track2.ctaLabel).includes("Ask About IAM Academy")
+      ? "Books & Resources"
+      : String(track2.ctaLabel);
 
   return (
     <>
@@ -133,17 +154,15 @@ export default async function ContactPage({
                   )}
                 </p>
                 <div className="mt-4">
-                  <Link
-                    href={String(
-                      track1.href || "/contact?type=enterprise_consulting#contact-form"
-                    )}
+                  <a
+                    href={track1Href}
+                    target={track1Href.startsWith("http") ? "_blank" : undefined}
+                    rel={track1Href.startsWith("http") ? "noopener noreferrer" : undefined}
                     className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0B1424] hover:text-[#B07424]"
                   >
-                    <span>
-                      {String(track1.ctaLabel || "Request a Business Consultation")}
-                    </span>
+                    <span>{track1Label}</span>
                     <span>&rarr;</span>
-                  </Link>
+                  </a>
                 </div>
               </div>
 
@@ -161,23 +180,15 @@ export default async function ContactPage({
                       "Explore structured learning pathways, cohorts, one-to-one mentorship, or curated study guides on IAM Academy."
                   )}
                 </p>
-                <div className="mt-4 flex flex-wrap items-center gap-4">
-                  <Link
-                    href={String(track2.href || "/academy")}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0B1424] hover:text-[#B07424]"
-                  >
-                    <span>
-                      {String(track2.ctaLabel || "Ask About IAM Academy")}
-                    </span>
-                    <span>&rarr;</span>
-                  </Link>
+                <div className="mt-4">
                   <a
-                    href={settings.selar_store_url}
+                    href={track2Href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#B07424] hover:text-[#0B1424]"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0B1424] hover:text-[#B07424]"
                   >
-                    <span>Books &amp; Resources &rarr;</span>
+                    <span>{track2Label}</span>
+                    <span>&rarr;</span>
                   </a>
                 </div>
               </div>
@@ -241,7 +252,11 @@ export default async function ContactPage({
                     </div>
                   }
                 >
-                  <ContactForm />
+                  <ContactForm
+                    recaptchaEnabled={settings.recaptcha_enabled}
+                    recaptchaVersion={settings.recaptcha_version}
+                    recaptchaSiteKey={settings.recaptcha_site_key}
+                  />
                 </Suspense>
               </div>
             </div>

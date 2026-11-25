@@ -45,9 +45,9 @@ export async function getCurrentProfileAction() {
         email: r.email as string,
         name: (r.name as string) || "",
         role: (r.role as string) || "admin",
-        jobTitle: (r.job_title as string) || "Super Administrator",
+        jobTitle: (r.job_title as string) || "Administrator",
         phone: (r.phone as string) || "",
-        avatarUrl: (r.avatar_url as string) || "/brand/the-iam-lab-logo-dark.png",
+        avatarUrl: typeof r.avatar_url === "string" ? r.avatar_url : "",
         createdAt: r.created_at ? String(r.created_at) : "",
         updatedAt: r.updated_at ? String(r.updated_at) : "",
       },
@@ -87,9 +87,9 @@ export async function updateProfileAction(args: UpdateProfileArgs) {
        WHERE id = $6;`,
       [
         name.trim(),
-        jobTitle?.trim() || "Super Administrator",
+        jobTitle?.trim() || "Administrator",
         phone?.trim() || "",
-        avatarUrl || "/brand/the-iam-lab-logo-dark.png",
+        avatarUrl?.trim() || null,
         timestamp,
         sessionUser.id,
       ]

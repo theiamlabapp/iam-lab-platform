@@ -10,6 +10,7 @@ export const Media: CollectionConfig = {
   },
   admin: {
     group: "Content Management",
+    hideAPIURL: true,
     components: {
       views: {
         list: {
@@ -45,6 +46,7 @@ export const Media: CollectionConfig = {
         { label: "Advisory & Consulting", value: "consulting" },
         { label: "IAM Academy", value: "classroom" },
         { label: "Identity Operations", value: "identity" },
+        { label: "Profile Portraits", value: "portrait" },
         { label: "Brand Logos", value: "logo" },
       ],
       label: "Asset Category",
