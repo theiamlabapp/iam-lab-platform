@@ -4,16 +4,19 @@ import { Suspense } from "react";
 import { ContactForm } from "@/components/ContactForm";
 import { CustomCmsSections } from "@/components/CustomCmsSections";
 import { FadeIn } from "@/components/MotionWrappers";
+import { SocialLinksBar } from "@/components/SocialLinksBar";
 import {
   findSection,
   getCustomSections,
   getPageData,
   getSiteSettings,
   getWhatsAppHref,
+  resolveCtaHref,
 } from "@/lib/getPageData";
 import { resolveDraftPreview } from "@/lib/previewHelper";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Contact & Consultation | Enterprise Advisory & Academy Admissions",
@@ -50,17 +53,15 @@ export default async function ContactPage({
   const track1 = trackItems[0] || {};
   const track2 = trackItems[1] || {};
   const track1HrefRaw = String(track1.href || "").trim();
-  const track1Href =
-    !track1HrefRaw ||
-    track1HrefRaw === "whatsapp" ||
-    track1HrefRaw.includes("/contact")
-      ? whatsappHref
-      : track1HrefRaw;
   const track1Label =
     !track1.ctaLabel ||
     String(track1.ctaLabel).includes("Business Consultation")
       ? "Talk to an IAM Specialist"
       : String(track1.ctaLabel);
+  const track1Href =
+    track1HrefRaw.includes("/contact")
+      ? whatsappHref
+      : resolveCtaHref(track1HrefRaw, track1Label, whatsappHref, whatsappHref);
 
   const track2HrefRaw = String(track2.href || "").trim();
   const track2Href =
@@ -226,6 +227,7 @@ export default async function ContactPage({
                   <span className="w-28 shrink-0 font-mono text-xs text-slate-500">Office:</span>
                   <span className="text-slate-800">{settings.address}</span>
                 </div>
+                <SocialLinksBar settings={settings} theme="light" showHeading />
               </div>
             </div>
 
@@ -264,7 +266,7 @@ export default async function ContactPage({
         </div>
       </section>
 
-      <CustomCmsSections sections={customSections} />
+      <CustomCmsSections sections={customSections} whatsappHref={whatsappHref} />
 
       {/* 3. Full-Width London Headquarters Google Map Section Below Form Before Footer */}
       <section className="border-b border-slate-200 bg-white pt-20 sm:pt-24">

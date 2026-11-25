@@ -142,7 +142,9 @@ export function EnquiriesFilterTable({ items }: { items: EnquiryItem[] }) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
-              width: "240px",
+              width: "100%",
+              maxWidth: "260px",
+              flex: "1 1 180px",
               height: "36px",
               padding: "0 12px",
               borderRadius: "6px",

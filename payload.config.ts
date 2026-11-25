@@ -38,12 +38,17 @@ export default buildConfig({
         Icon: "/src/payload/components/Icon#Icon",
       },
       Nav: "/src/payload/components/AdminNav#AdminNav",
+      actions: ["/src/payload/components/NotificationBell#NotificationBell"],
       views: {
         dashboard: {
           Component: "/src/payload/views/DashboardView#DashboardView",
         },
         account: {
           Component: "/src/payload/views/AccountView#AccountView",
+        },
+        notifications: {
+          Component: "/src/payload/views/NotificationsView#NotificationsView",
+          path: "/notifications",
         },
         login: {
           Component: "/src/payload/views/LoginView#LoginView",

@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { getDbPool } from "./dbPool";
 
 export interface PageSection extends Record<string, unknown> {
@@ -47,6 +48,15 @@ export interface SiteSettingsData {
   linkedin_url: string;
   instagram_url: string;
   twitter_url: string;
+  facebook_url: string;
+  tiktok_url: string;
+  youtube_url: string;
+  show_instagram: boolean;
+  show_facebook: boolean;
+  show_tiktok: boolean;
+  show_linkedin: boolean;
+  show_twitter: boolean;
+  show_youtube: boolean;
   logo_light_url: string;
   logo_dark_url: string;
   header_cta_label: string;
@@ -68,6 +78,24 @@ export function getWhatsAppHref(
   return `https://wa.me/${safeDigits}?text=${encodeURIComponent(message)}`;
 }
 
+/**
+ * Ensures any "Talk to an IAM Specialist" button or explicit "whatsapp" route
+ * consistently opens the verified WhatsApp link across all pages and CMS blocks.
+ */
+export function resolveCtaHref(
+  rawHref: unknown,
+  rawLabel: unknown,
+  whatsappHref: string,
+  fallback = "/contact"
+): string {
+  const label = String(rawLabel || "").trim().toLowerCase();
+  const href = String(rawHref || "").trim();
+  if (label === "talk to an iam specialist" || href.toLowerCase() === "whatsapp") {
+    return whatsappHref;
+  }
+  return href || fallback;
+}
+
 export const DEFAULT_SITE_SETTINGS: SiteSettingsData = {
   company_name: "The IAM Lab",
   tagline: "Secure identities. Simplify access. Strengthen your business.",
@@ -82,6 +110,15 @@ export const DEFAULT_SITE_SETTINGS: SiteSettingsData = {
   linkedin_url: "",
   instagram_url: "",
   twitter_url: "",
+  facebook_url: "",
+  tiktok_url: "",
+  youtube_url: "",
+  show_instagram: true,
+  show_facebook: true,
+  show_tiktok: true,
+  show_linkedin: true,
+  show_twitter: true,
+  show_youtube: true,
   logo_light_url: "/brand/the-iam-lab-logo-light.png",
   logo_dark_url: "/brand/the-iam-lab-logo-dark.png",
   header_cta_label: "Talk to an IAM Specialist",
@@ -105,6 +142,12 @@ export async function getPageData(
   slug: string,
   options?: { allowDraft?: boolean }
 ): Promise<PageData | null> {
+  try {
+    await connection();
+  } catch {
+    // Allow non-request invocation safely
+  }
+
   const pool = getDbPool();
   if (!pool) return null;
 
@@ -161,12 +204,18 @@ export function getCustomSections(
  * Fetches global site settings from Supabase with safe static defaults.
  */
 export async function getSiteSettings(): Promise<SiteSettingsData> {
+  try {
+    await connection();
+  } catch {
+    // Allow non-request invocation safely
+  }
+
   const pool = getDbPool();
   if (!pool) return DEFAULT_SITE_SETTINGS;
 
   try {
     const res = await pool.query(
-      `SELECT company_name, tagline, official_email, location, address, phone, whatsapp_number, map_embed_url, selar_store_url, linkedin_url, instagram_url, twitter_url, logo_light_url, logo_dark_url, header_cta_label, footer_copyright_suffix, nav_links, recaptcha_enabled, recaptcha_version, recaptcha_site_key
+      `SELECT company_name, tagline, official_email, location, address, phone, whatsapp_number, map_embed_url, selar_store_url, linkedin_url, instagram_url, twitter_url, facebook_url, tiktok_url, youtube_url, show_instagram, show_facebook, show_tiktok, show_linkedin, show_twitter, show_youtube, logo_light_url, logo_dark_url, header_cta_label, footer_copyright_suffix, nav_links, recaptcha_enabled, recaptcha_version, recaptcha_site_key
        FROM site_settings
        ORDER BY id ASC
        LIMIT 1;`
@@ -201,6 +250,15 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
       linkedin_url: r.linkedin_url ? String(r.linkedin_url).trim() : "",
       instagram_url: r.instagram_url ? String(r.instagram_url).trim() : "",
       twitter_url: r.twitter_url ? String(r.twitter_url).trim() : "",
+      facebook_url: r.facebook_url ? String(r.facebook_url).trim() : "",
+      tiktok_url: r.tiktok_url ? String(r.tiktok_url).trim() : "",
+      youtube_url: r.youtube_url ? String(r.youtube_url).trim() : "",
+      show_instagram: r.show_instagram !== false,
+      show_facebook: r.show_facebook !== false,
+      show_tiktok: r.show_tiktok !== false,
+      show_linkedin: r.show_linkedin !== false,
+      show_twitter: r.show_twitter !== false,
+      show_youtube: r.show_youtube !== false,
       logo_light_url: r.logo_light_url || DEFAULT_SITE_SETTINGS.logo_light_url,
       logo_dark_url: r.logo_dark_url || DEFAULT_SITE_SETTINGS.logo_dark_url,
       header_cta_label: r.header_cta_label || DEFAULT_SITE_SETTINGS.header_cta_label,

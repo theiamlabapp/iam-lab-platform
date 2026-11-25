@@ -22,10 +22,12 @@ import {
   getPageData,
   getSiteSettings,
   getWhatsAppHref,
+  resolveCtaHref,
 } from "@/lib/getPageData";
 import { resolveDraftPreview } from "@/lib/previewHelper";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const DEFAULT_CHALLENGES = [
   {
@@ -466,7 +468,7 @@ export default async function HomePage({
       </section>
 
       {/* Dynamic Administrator-Added Sections from Visual CMS */}
-      <CustomCmsSections sections={customSections} />
+      <CustomCmsSections sections={customSections} whatsappHref={whatsappHref} />
 
       {/* 8. Closing Executive Consultation Section */}
       <section className="relative overflow-hidden bg-[#0B1424] py-28 sm:py-36">
@@ -501,20 +503,26 @@ export default async function HomePage({
           </p>
 
           <div className="mt-10 flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:flex-nowrap sm:items-center">
-            <a
-              href={closingSec?.ctaPrimary?.href || whatsappHref}
-              target={
-                closingSec?.ctaPrimary?.href?.startsWith("/") ? undefined : "_blank"
-              }
-              rel={
-                closingSec?.ctaPrimary?.href?.startsWith("/")
-                  ? undefined
-                  : "noopener noreferrer"
-              }
-              className="inline-flex min-h-[50px] items-center justify-center whitespace-nowrap bg-[#D89A43] px-7 py-3.5 text-xs font-bold tracking-[0.14em] text-[#0B1424] uppercase shadow-xl transition-colors hover:bg-[#e5aa57]"
-            >
-              {closingSec?.ctaPrimary?.label || "Talk to an IAM Specialist"} &rarr;
-            </a>
+            {(() => {
+              const primaryLabel = closingSec?.ctaPrimary?.label || "Talk to an IAM Specialist";
+              const primaryHref = resolveCtaHref(
+                closingSec?.ctaPrimary?.href,
+                primaryLabel,
+                whatsappHref,
+                whatsappHref
+              );
+              const isExternal = primaryHref.startsWith("http");
+              return (
+                <a
+                  href={primaryHref}
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noopener noreferrer" : undefined}
+                  className="inline-flex min-h-[50px] items-center justify-center whitespace-nowrap bg-[#D89A43] px-7 py-3.5 text-xs font-bold tracking-[0.14em] text-[#0B1424] uppercase shadow-xl transition-colors hover:bg-[#e5aa57]"
+                >
+                  {primaryLabel} &rarr;
+                </a>
+              );
+            })()}
             <Link
               href={
                 closingSec?.ctaSecondary?.href ||

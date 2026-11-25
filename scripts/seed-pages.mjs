@@ -422,7 +422,7 @@ const initialPages = [
           "Supporting teams, organisations, and IAM professionals who want to improve identity security and capability.",
         ctaPrimary: {
           label: "Talk to an IAM Specialist",
-          href: "/contact?type=enterprise_consulting#contact-form",
+          href: "whatsapp",
         },
         ctaSecondary: {
           label: "Submit Written Enquiry",
@@ -586,7 +586,7 @@ const initialPages = [
           "Speak directly with a specialist or explore how our scoped services can support your team.",
         ctaPrimary: {
           label: "Talk to an IAM Specialist",
-          href: "/contact?type=enterprise_consulting#contact-form",
+          href: "whatsapp",
         },
         ctaSecondary: {
           label: "Explore Our Services",

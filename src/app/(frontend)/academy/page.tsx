@@ -18,10 +18,13 @@ import {
   getCustomSections,
   getPageData,
   getSiteSettings,
+  getWhatsAppHref,
+  resolveCtaHref,
 } from "@/lib/getPageData";
 import { resolveDraftPreview } from "@/lib/previewHelper";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "IAM Academy | Professional Identity Security Learning & Mentorship",
@@ -82,6 +85,7 @@ export default async function AcademyPage({
     getPageData("academy", { allowDraft }),
     getSiteSettings(),
   ]);
+  const whatsappHref = getWhatsAppHref(siteSettings.whatsapp_number);
 
   const heroSec = findSection(pageData, "hero");
   const pathwaysSec = findSection(pageData, "learning_pathways");
@@ -319,7 +323,7 @@ export default async function AcademyPage({
         </div>
       </section>
 
-      <CustomCmsSections sections={customSections} />
+      <CustomCmsSections sections={customSections} whatsappHref={whatsappHref} />
 
       {/* 6. Closing Enrollment CTA */}
       <section className="bg-[#0B1424] py-20 text-center">
@@ -333,12 +337,35 @@ export default async function AcademyPage({
               "Share your current background and learning goals to discuss confirmed programme schedules or a consultation."}
           </p>
           <div className="mt-9 flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:flex-nowrap sm:items-center">
-            <Link
-              href={closingSec?.ctaPrimary?.href || "/contact?type=individual_learning"}
-              className="inline-flex min-h-[50px] items-center justify-center bg-[#D89A43] px-4 py-3.5 text-center text-[11px] font-bold tracking-wide text-[#0B1424] uppercase transition-colors hover:bg-[#e5aa57] sm:px-7 sm:text-xs sm:tracking-[0.13em] sm:whitespace-nowrap"
-            >
-              {closingSec?.ctaPrimary?.label || "Book a Career Pathway Consultation"} &rarr;
-            </Link>
+            {(() => {
+              const primaryLabel =
+                closingSec?.ctaPrimary?.label ||
+                "Book a Career Pathway Consultation";
+              const primaryHref = resolveCtaHref(
+                closingSec?.ctaPrimary?.href,
+                primaryLabel,
+                whatsappHref,
+                "/contact?type=individual_learning"
+              );
+              const isExternal = primaryHref.startsWith("http");
+              return isExternal ? (
+                <a
+                  href={primaryHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-[50px] items-center justify-center bg-[#D89A43] px-4 py-3.5 text-center text-[11px] font-bold tracking-wide text-[#0B1424] uppercase transition-colors hover:bg-[#e5aa57] sm:px-7 sm:text-xs sm:tracking-[0.13em] sm:whitespace-nowrap"
+                >
+                  {primaryLabel} &rarr;
+                </a>
+              ) : (
+                <Link
+                  href={primaryHref}
+                  className="inline-flex min-h-[50px] items-center justify-center bg-[#D89A43] px-4 py-3.5 text-center text-[11px] font-bold tracking-wide text-[#0B1424] uppercase transition-colors hover:bg-[#e5aa57] sm:px-7 sm:text-xs sm:tracking-[0.13em] sm:whitespace-nowrap"
+                >
+                  {primaryLabel} &rarr;
+                </Link>
+              );
+            })()}
             <a
               href={closingSec?.ctaSecondary?.href || siteSettings.selar_store_url}
               target="_blank"

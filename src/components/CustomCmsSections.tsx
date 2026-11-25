@@ -1,13 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { PageSection } from "@/lib/getPageData";
+import { getWhatsAppHref, resolveCtaHref, type PageSection } from "@/lib/getPageData";
 import { FadeIn } from "./MotionWrappers";
 
 /**
  * Renders administrator-added custom sections appended in the Visual Page Editor.
  */
-export function CustomCmsSections({ sections }: { sections: PageSection[] }) {
+export function CustomCmsSections({
+  sections,
+  whatsappHref,
+}: {
+  sections: PageSection[];
+  whatsappHref?: string;
+}) {
   if (!sections || sections.length === 0) return null;
+  const fallbackWhatsapp = whatsappHref || getWhatsAppHref();
 
   return (
     <>
@@ -16,7 +23,10 @@ export function CustomCmsSections({ sections }: { sections: PageSection[] }) {
         const copy = sec.subheadline || sec.body || sec.desc || "";
         const badge = sec.badge || "Executive Overview";
         const ctaLabel = sec.ctaPrimary?.label;
-        const ctaHref = sec.ctaPrimary?.href;
+        const resolvedHref = ctaLabel
+          ? resolveCtaHref(sec.ctaPrimary?.href, ctaLabel, fallbackWhatsapp, "")
+          : "";
+        const isExternal = resolvedHref.startsWith("http");
         const bgImage = typeof sec.bgImage === "string" ? sec.bgImage : "";
 
         const isDark = idx % 2 === 1;
@@ -73,15 +83,27 @@ export function CustomCmsSections({ sections }: { sections: PageSection[] }) {
                   </p>
                 )}
 
-                {ctaLabel && ctaHref && (
+                {ctaLabel && resolvedHref && (
                   <div className="mt-8">
-                    <Link
-                      href={ctaHref}
-                      className="inline-flex items-center gap-2 bg-[#D89A43] px-6 py-3 text-xs font-bold tracking-wider text-[#0B1424] uppercase transition-colors hover:bg-[#e5aa57]"
-                    >
-                      <span>{ctaLabel}</span>
-                      <span>&rarr;</span>
-                    </Link>
+                    {isExternal ? (
+                      <a
+                        href={resolvedHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 bg-[#D89A43] px-6 py-3 text-xs font-bold tracking-wider text-[#0B1424] uppercase transition-colors hover:bg-[#e5aa57]"
+                      >
+                        <span>{ctaLabel}</span>
+                        <span>&rarr;</span>
+                      </a>
+                    ) : (
+                      <Link
+                        href={resolvedHref}
+                        className="inline-flex items-center gap-2 bg-[#D89A43] px-6 py-3 text-xs font-bold tracking-wider text-[#0B1424] uppercase transition-colors hover:bg-[#e5aa57]"
+                      >
+                        <span>{ctaLabel}</span>
+                        <span>&rarr;</span>
+                      </Link>
+                    )}
                   </div>
                 )}
               </FadeIn>

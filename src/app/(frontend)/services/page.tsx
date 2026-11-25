@@ -19,10 +19,14 @@ import {
   findSection,
   getCustomSections,
   getPageData,
+  getSiteSettings,
+  getWhatsAppHref,
+  resolveCtaHref,
 } from "@/lib/getPageData";
 import { resolveDraftPreview } from "@/lib/previewHelper";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Services & Solutions | Enterprise IAM Consulting",
@@ -166,7 +170,11 @@ export default async function ServicesPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const allowDraft = await resolveDraftPreview(searchParams);
-  const pageData = await getPageData("services", { allowDraft });
+  const [pageData, siteSettings] = await Promise.all([
+    getPageData("services", { allowDraft }),
+    getSiteSettings(),
+  ]);
+  const whatsappHref = getWhatsAppHref(siteSettings.whatsapp_number);
 
   const heroSec = findSection(pageData, "hero");
   const servicesSec = findSection(pageData, "services_list");
@@ -455,7 +463,7 @@ export default async function ServicesPage({
         </div>
       </section>
 
-      <CustomCmsSections sections={customSections} />
+      <CustomCmsSections sections={customSections} whatsappHref={whatsappHref} />
 
       {/* 6. Closing Consultation CTA */}
       <section className="relative overflow-hidden bg-[#0B1424] py-24 text-center">
@@ -480,15 +488,33 @@ export default async function ServicesPage({
               "We'll discuss what support is appropriate and how a scoped engagement could work."}
           </p>
           <div className="mt-9">
-            <Link
-              href={
-                closingSec?.ctaPrimary?.href ||
+            {(() => {
+              const label = closingSec?.ctaPrimary?.label || "Request a Consultation";
+              const href = resolveCtaHref(
+                closingSec?.ctaPrimary?.href,
+                label,
+                whatsappHref,
                 "/contact?type=enterprise_consulting#contact-form"
-              }
-              className="inline-flex min-h-[50px] items-center justify-center whitespace-nowrap bg-[#D89A43] px-8 py-3.5 text-xs font-bold tracking-[0.14em] text-[#0B1424] uppercase transition-colors hover:bg-[#e5aa57]"
-            >
-              {closingSec?.ctaPrimary?.label || "Request a Consultation"} &rarr;
-            </Link>
+              );
+              const external = href.startsWith("http");
+              return external ? (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-[50px] items-center justify-center whitespace-nowrap bg-[#D89A43] px-8 py-3.5 text-xs font-bold tracking-[0.14em] text-[#0B1424] uppercase transition-colors hover:bg-[#e5aa57]"
+                >
+                  {label} &rarr;
+                </a>
+              ) : (
+                <Link
+                  href={href}
+                  className="inline-flex min-h-[50px] items-center justify-center whitespace-nowrap bg-[#D89A43] px-8 py-3.5 text-xs font-bold tracking-[0.14em] text-[#0B1424] uppercase transition-colors hover:bg-[#e5aa57]"
+                >
+                  {label} &rarr;
+                </Link>
+              );
+            })()}
           </div>
         </div>
       </section>

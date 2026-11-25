@@ -320,7 +320,7 @@ export function MediaLibraryView() {
       )}
 
       {/* Metrics Strip */}
-      <div className="iam-metrics-quad" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
+      <div className="iam-metrics-quad iam-metrics-triple">
         <div className="iam-metric-item">
           <div className="iam-metric-head">
             <span className="iam-metric-title">Total Reconciled Assets</span>
@@ -403,7 +403,9 @@ export function MediaLibraryView() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
-              width: "280px",
+              width: "100%",
+              maxWidth: "280px",
+              flex: "1 1 200px",
               height: "36px",
               padding: "0 12px",
               borderRadius: "6px",
@@ -431,7 +433,7 @@ export function MediaLibraryView() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(290px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
             gap: "20px",
           }}
         >
@@ -698,7 +700,7 @@ export function MediaLibraryView() {
                 />
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+              <div className="iam-form-grid-2" style={{ gap: "12px" }}>
                 <div>
                   <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "#475569", textTransform: "uppercase", marginBottom: "6px" }}>
                     Category
@@ -853,7 +855,7 @@ export function MediaLibraryView() {
                 </button>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "14px" }}>
+              <div className="iam-form-grid-2" style={{ gap: "14px", marginBottom: "14px" }}>
                 <div>
                   <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "#475569", textTransform: "uppercase", marginBottom: "4px" }}>
                     Asset Filename

@@ -36,6 +36,7 @@ export function AdminNav(props: AdminNavProps) {
     name?: string;
     avatarUrl?: string;
   }>({});
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
 
   useEffect(() => {
     let mounted = true;
@@ -53,6 +54,23 @@ export function AdminNav(props: AdminNavProps) {
         // ignore background hydrate failure
       });
 
+    const loadUnread = () => {
+      fetch("/api/admin/notifications?limit=1", {
+        credentials: "include",
+        cache: "no-store",
+      })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (mounted && typeof data?.unreadCount === "number") {
+            setUnreadNotifications(data.unreadCount);
+          }
+        })
+        .catch(() => {
+          // ignore background notify count failure
+        });
+    };
+    loadUnread();
+
     const onProfileUpdated = (e: Event) => {
       const detail = (e as CustomEvent<{ name?: string; avatarUrl?: string }>).detail;
       if (detail) {
@@ -63,9 +81,11 @@ export function AdminNav(props: AdminNavProps) {
       }
     };
     window.addEventListener("iam-profile-updated", onProfileUpdated);
+    window.addEventListener("iam-notifications-updated", loadUnread);
     return () => {
       mounted = false;
       window.removeEventListener("iam-profile-updated", onProfileUpdated);
+      window.removeEventListener("iam-notifications-updated", loadUnread);
     };
   }, []);
 
@@ -147,6 +167,19 @@ export function AdminNav(props: AdminNavProps) {
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                     <polyline points="22,6 12,13 2,6" />
+                  </svg>
+                ),
+              },
+              {
+                label:
+                  unreadNotifications > 0
+                    ? `Notifications (${unreadNotifications})`
+                    : "Notifications",
+                href: "/admin/notifications",
+                icon: (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
                   </svg>
                 ),
               },

@@ -113,7 +113,7 @@ export async function UsersListView(props: { payload?: Payload }) {
       </div>
 
       {/* RBAC Overview Strip */}
-      <div className="iam-metrics-quad" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
+      <div className="iam-metrics-quad iam-metrics-triple">
         <div className="iam-metric-item">
           <div className="iam-metric-head">
             <span className="iam-metric-title">Total Registered Users</span>

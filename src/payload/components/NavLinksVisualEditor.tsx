@@ -265,7 +265,7 @@ export function NavLinksVisualEditor({ path }: { path: string }) {
                 </div>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+              <div className="iam-form-grid-2" style={{ gap: "12px" }}>
                 <div>
                   <label style={{ display: "block", fontSize: "10px", fontWeight: 700, color: "#475569", textTransform: "uppercase", marginBottom: "4px" }}>
                     Menu Label *

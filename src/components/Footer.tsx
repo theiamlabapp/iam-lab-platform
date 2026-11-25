@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getSiteSettings, getWhatsAppHref } from "@/lib/getPageData";
 import { BrandLogo } from "./BrandLogo";
 import { CopyrightYear } from "./CopyrightYear";
+import { SocialLinksBar } from "./SocialLinksBar";
 
 export async function Footer() {
   const settings = await getSiteSettings();
@@ -73,36 +74,7 @@ export async function Footer() {
                 <span>{settings.official_email}</span>
               </a>
 
-              {settings.linkedin_url && (
-                <a
-                  href={settings.linkedin_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wider text-slate-400 uppercase transition-colors hover:text-[#D89A43]"
-                >
-                  <span>LinkedIn &rarr;</span>
-                </a>
-              )}
-              {settings.instagram_url && (
-                <a
-                  href={settings.instagram_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wider text-slate-400 uppercase transition-colors hover:text-[#D89A43]"
-                >
-                  <span>Instagram &rarr;</span>
-                </a>
-              )}
-              {settings.twitter_url && (
-                <a
-                  href={settings.twitter_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wider text-slate-400 uppercase transition-colors hover:text-[#D89A43]"
-                >
-                  <span>X &rarr;</span>
-                </a>
-              )}
+              <SocialLinksBar settings={settings} theme="dark" />
             </div>
           </div>
 

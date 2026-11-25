@@ -73,7 +73,7 @@ export async function PagesListView(props: { payload?: Payload }) {
       </div>
 
       {/* Metrics Summary Strip */}
-      <div className="iam-metrics-quad" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
+      <div className="iam-metrics-quad iam-metrics-triple">
         <div className="iam-metric-item">
           <div className="iam-metric-head">
             <span className="iam-metric-title">Published Pages</span>

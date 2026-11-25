@@ -16,6 +16,11 @@ export const SiteSettings: GlobalConfig = {
       () => {
         try {
           revalidatePath("/", "layout");
+          revalidatePath("/");
+          revalidatePath("/about");
+          revalidatePath("/services");
+          revalidatePath("/academy");
+          revalidatePath("/contact");
         } catch {
           // ignore outside HTTP request
         }
@@ -148,7 +153,8 @@ export const SiteSettings: GlobalConfig = {
         },
         {
           label: "External Channels",
-          description: "Verified Selar store and approved social profile links.",
+          description:
+            "Manage your Selar store and public social media links. Only enabled platforms with a valid URL appear in the Footer and Contact page.",
           fields: [
             {
               name: "selarStoreUrl",
@@ -158,19 +164,76 @@ export const SiteSettings: GlobalConfig = {
               label: "Official Selar Bookstore URL",
             },
             {
-              name: "linkedinUrl",
-              type: "text",
-              label: "Official LinkedIn Page URL (Publish once confirmed by client)",
-            },
-            {
               name: "instagramUrl",
               type: "text",
-              label: "Official Instagram Profile URL (Optional)",
+              label: "Instagram Profile URL",
+              admin: { placeholder: "https://www.instagram.com/theiamlab" },
+            },
+            {
+              name: "showInstagram",
+              type: "checkbox",
+              defaultValue: true,
+              label: "Display Instagram icon on website",
+            },
+            {
+              name: "facebookUrl",
+              type: "text",
+              label: "Facebook Page URL",
+              admin: { placeholder: "https://www.facebook.com/theiamlab" },
+            },
+            {
+              name: "showFacebook",
+              type: "checkbox",
+              defaultValue: true,
+              label: "Display Facebook icon on website",
+            },
+            {
+              name: "tiktokUrl",
+              type: "text",
+              label: "TikTok Profile URL",
+              admin: { placeholder: "https://www.tiktok.com/@theiamlab" },
+            },
+            {
+              name: "showTiktok",
+              type: "checkbox",
+              defaultValue: true,
+              label: "Display TikTok icon on website",
+            },
+            {
+              name: "linkedinUrl",
+              type: "text",
+              label: "LinkedIn Page URL",
+              admin: { placeholder: "https://www.linkedin.com/company/theiamlab" },
+            },
+            {
+              name: "showLinkedin",
+              type: "checkbox",
+              defaultValue: true,
+              label: "Display LinkedIn icon on website",
             },
             {
               name: "twitterUrl",
               type: "text",
-              label: "X (Twitter) Profile URL (Optional)",
+              label: "X (Twitter) Profile URL",
+              admin: { placeholder: "https://x.com/theiamlab" },
+            },
+            {
+              name: "showTwitter",
+              type: "checkbox",
+              defaultValue: true,
+              label: "Display X (Twitter) icon on website",
+            },
+            {
+              name: "youtubeUrl",
+              type: "text",
+              label: "YouTube Channel URL",
+              admin: { placeholder: "https://www.youtube.com/@theiamlab" },
+            },
+            {
+              name: "showYoutube",
+              type: "checkbox",
+              defaultValue: true,
+              label: "Display YouTube icon on website",
             },
           ],
         },

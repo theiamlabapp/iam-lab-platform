@@ -22,17 +22,96 @@ export const Pages: CollectionConfig = {
     },
   },
   hooks: {
+    beforeChange: [
+      ({ data, originalDoc }) => {
+        if (!data || typeof data !== "object") return data;
+
+        const nextData = { ...data };
+        const orig = (originalDoc || {}) as Record<string, unknown>;
+        const rawSections = Array.isArray(nextData.sections)
+          ? nextData.sections
+          : Array.isArray(orig.sections)
+          ? orig.sections
+          : null;
+
+        if (!rawSections || rawSections.length === 0) return nextData;
+
+        const origSections = Array.isArray(orig.sections) ? orig.sections : [];
+        const heroIdx = rawSections.findIndex(
+          (s) => s && typeof s === "object" && (s as Record<string, unknown>).type === "hero"
+        );
+        if (heroIdx === -1) return nextData;
+
+        const nextHeroSec = { ...(rawSections[heroIdx] as Record<string, unknown>) };
+        const origHeroSec = (
+          origSections[heroIdx] && typeof origSections[heroIdx] === "object"
+            ? origSections[heroIdx]
+            : {}
+        ) as Record<string, unknown>;
+
+        // Keep top-level Hero Headline / Subheadline and sections[hero] 100% synchronised
+        if (
+          typeof nextData.heroHeadline === "string" &&
+          nextData.heroHeadline !== orig.heroHeadline
+        ) {
+          nextHeroSec.headline = nextData.heroHeadline;
+        } else if (
+          typeof nextHeroSec.headline === "string" &&
+          nextHeroSec.headline !== origHeroSec.headline
+        ) {
+          nextData.heroHeadline = nextHeroSec.headline;
+        } else if (typeof nextHeroSec.headline === "string" && !nextData.heroHeadline) {
+          nextData.heroHeadline = nextHeroSec.headline;
+        }
+
+        if (
+          typeof nextData.heroSubheadline === "string" &&
+          nextData.heroSubheadline !== orig.heroSubheadline
+        ) {
+          nextHeroSec.subheadline = nextData.heroSubheadline;
+        } else if (
+          typeof nextHeroSec.subheadline === "string" &&
+          nextHeroSec.subheadline !== origHeroSec.subheadline
+        ) {
+          nextData.heroSubheadline = nextHeroSec.subheadline;
+        } else if (typeof nextHeroSec.subheadline === "string" && !nextData.heroSubheadline) {
+          nextData.heroSubheadline = nextHeroSec.subheadline;
+        }
+
+        const updatedSections = [...rawSections];
+        updatedSections[heroIdx] = nextHeroSec;
+        nextData.sections = updatedSections;
+        return nextData;
+      },
+    ],
     afterChange: [
       ({ doc }) => {
         try {
           revalidatePath("/", "layout");
-          if (doc?.slug === "home") {
-            revalidatePath("/");
-          } else if (doc?.slug) {
+          revalidatePath("/");
+          revalidatePath("/about");
+          revalidatePath("/services");
+          revalidatePath("/academy");
+          revalidatePath("/contact");
+          if (doc?.slug && doc.slug !== "home") {
             revalidatePath(`/${String(doc.slug)}`);
           }
         } catch {
           // Ignore revalidation warnings outside HTTP request context
+        }
+      },
+    ],
+    afterDelete: [
+      () => {
+        try {
+          revalidatePath("/", "layout");
+          revalidatePath("/");
+          revalidatePath("/about");
+          revalidatePath("/services");
+          revalidatePath("/academy");
+          revalidatePath("/contact");
+        } catch {
+          // Ignore outside HTTP context
         }
       },
     ],

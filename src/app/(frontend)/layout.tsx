@@ -21,6 +21,9 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const SITE_URL = "https://www.theiamlab.com";
 const PAGE_TITLE = "The IAM Lab — Enterprise Identity Security & Professional Learning";
 const PAGE_DESCRIPTION =

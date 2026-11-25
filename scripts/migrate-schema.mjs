@@ -90,6 +90,15 @@ async function migrate() {
     ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS footer_copyright_suffix TEXT DEFAULT 'All rights reserved.';
     ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS nav_links JSONB DEFAULT '[{"label":"Home","href":"/","visible":true},{"label":"About","href":"/about","visible":true},{"label":"Services & Solutions","href":"/services","visible":true},{"label":"IAM Academy","href":"/academy","visible":true},{"label":"Contact","href":"/contact","visible":true}]'::jsonb;
     ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS instagram_url TEXT DEFAULT '';
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS facebook_url TEXT DEFAULT '';
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS tiktok_url TEXT DEFAULT '';
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS youtube_url TEXT DEFAULT '';
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS show_instagram BOOLEAN DEFAULT true;
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS show_facebook BOOLEAN DEFAULT true;
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS show_tiktok BOOLEAN DEFAULT true;
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS show_linkedin BOOLEAN DEFAULT true;
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS show_twitter BOOLEAN DEFAULT true;
+    ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS show_youtube BOOLEAN DEFAULT true;
     ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS recaptcha_enabled BOOLEAN DEFAULT false;
     ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS recaptcha_version VARCHAR(32) DEFAULT 'v2_checkbox';
     ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS recaptcha_site_key TEXT DEFAULT '6LdwnjEuAAAAANcFI8csi-ssLQ0qO9flyReX3Pzi';
@@ -113,6 +122,60 @@ async function migrate() {
     ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url TEXT;
   `);
   console.log("Updated users table columns.");
+
+  // 7. Persistent Admin Notifications table (auto-created for new website enquiries)
+  await client.query(`
+    CREATE TABLE IF NOT EXISTS notifications (
+      id SERIAL PRIMARY KEY,
+      enquiry_id INTEGER UNIQUE REFERENCES enquiries(id) ON DELETE CASCADE,
+      title TEXT NOT NULL,
+      message TEXT NOT NULL,
+      enquiry_name VARCHAR(255) NOT NULL DEFAULT '',
+      enquiry_email VARCHAR(255) NOT NULL DEFAULT '',
+      enquiry_type VARCHAR(64) NOT NULL DEFAULT 'general',
+      is_read BOOLEAN NOT NULL DEFAULT false,
+      read_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_notifications_unread_created
+      ON notifications (is_read, created_at DESC);
+  `);
+  console.log("Synchronized notifications table.");
+
+  // 8. Ensure seeded 'Talk to an IAM Specialist' CTAs in closing_cta route to WhatsApp cleanly
+  const pageRows = await client.query(`SELECT id, slug, sections FROM pages WHERE sections IS NOT NULL;`);
+  for (const row of pageRows.rows) {
+    if (!Array.isArray(row.sections)) continue;
+    let changed = false;
+    const nextSections = row.sections.map((sec) => {
+      if (
+        sec &&
+        typeof sec === "object" &&
+        sec.ctaPrimary &&
+        typeof sec.ctaPrimary === "object" &&
+        String(sec.ctaPrimary.label || "").trim().toLowerCase() === "talk to an iam specialist" &&
+        sec.ctaPrimary.href !== "whatsapp"
+      ) {
+        changed = true;
+        return {
+          ...sec,
+          ctaPrimary: {
+            ...sec.ctaPrimary,
+            href: "whatsapp",
+          },
+        };
+      }
+      return sec;
+    });
+    if (changed) {
+      await client.query(
+        `UPDATE pages SET sections = $1::jsonb WHERE id = $2;`,
+        [JSON.stringify(nextSections), row.id]
+      );
+      console.log(`Updated Specialist CTA destination on page: ${row.slug}`);
+    }
+  }
 
   await client.end();
   console.log("All database schema updates completed successfully.");

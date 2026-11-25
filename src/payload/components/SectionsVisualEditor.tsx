@@ -12,6 +12,7 @@ interface PickerAsset {
 }
 
 const ROUTE_DESTINATIONS = [
+  { label: "Talk to an IAM Specialist (WhatsApp)", value: "whatsapp" },
   { label: "Home Page (/)", value: "/" },
   { label: "About Us (/about)", value: "/about" },
   { label: "Services & Solutions (/services)", value: "/services" },
@@ -42,7 +43,7 @@ const ADDABLE_SECTION_TEMPLATES: Array<{ label: string; template: Record<string,
       bgImage: "/brand/team-collaboration.jpg",
       ctaPrimary: {
         label: "Talk to an IAM Specialist",
-        href: "/contact?type=enterprise_consulting#contact-form",
+        href: "whatsapp",
       },
     },
   },
@@ -71,7 +72,7 @@ const ADDABLE_SECTION_TEMPLATES: Array<{ label: string; template: Record<string,
       bgImage: "/brand/executive-consulting.jpg",
       ctaPrimary: {
         label: "Talk to an IAM Specialist",
-        href: "/contact?type=enterprise_consulting#contact-form",
+        href: "whatsapp",
       },
     },
   },
@@ -712,7 +713,7 @@ export function SectionsVisualEditor({ path }: { path: string }) {
 
             {/* Mission / Vision / Engagement Approach extra fields on About */}
             {currentSec.type === "mission_vision" && (
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", backgroundColor: "#F8FAFC", border: "1px solid #E2E8F0", padding: "14px", borderRadius: "6px" }}>
+              <div className="iam-form-grid-2" style={{ gap: "12px", backgroundColor: "#F8FAFC", border: "1px solid #E2E8F0", padding: "14px", borderRadius: "6px" }}>
                 <div>
                   <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "#475569", textTransform: "uppercase", marginBottom: "4px" }}>
                     Vision Heading
@@ -830,7 +831,7 @@ export function SectionsVisualEditor({ path }: { path: string }) {
               currentSec.type === "hero" ||
               currentSec.type === "closing_cta" ||
               currentSec.type === "editorial_feature") && (
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
+              <div className="iam-form-grid-2" style={{ gap: "14px" }}>
                 <div style={{ backgroundColor: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: "6px", padding: "14px" }}>
                   <span style={{ fontSize: "11px", fontWeight: 700, color: "#B07424", textTransform: "uppercase" }}>
                     Primary CTA Button
@@ -912,7 +913,7 @@ export function SectionsVisualEditor({ path }: { path: string }) {
                   </button>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                <div className="iam-form-grid-2" style={{ gap: "10px" }}>
                   {(currentSec.carouselItems as Array<Record<string, unknown>>).map((card, cIdx) => (
                     <div key={cIdx} style={{ backgroundColor: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: "6px", padding: "12px" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
@@ -1006,7 +1007,7 @@ export function SectionsVisualEditor({ path }: { path: string }) {
                         </button>
                       </div>
 
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                      <div className="iam-form-grid-2" style={{ gap: "10px" }}>
                         {ITEM_FIELD_CONFIG.filter((cfg) => cfg.key in item).map((cfg) => {
                           if (cfg.isImage) {
                             const imgVal = String(item[cfg.key] || "");

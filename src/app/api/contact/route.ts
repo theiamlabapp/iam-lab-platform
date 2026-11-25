@@ -131,9 +131,10 @@ export async function POST(req: Request) {
         ? cleanType
         : "general";
 
-      await client.query(
+      const insertRes = await client.query(
         `INSERT INTO enquiries (enquiry_type, name, email, organisation, phone, service_or_pathway, message, status, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $9)`,
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $9)
+         RETURNING id;`,
         [
           safeType,
           cleanName,
@@ -146,6 +147,57 @@ export async function POST(req: Request) {
           timestamp,
         ]
       );
+
+      const createdEnquiryId = Number(insertRes.rows[0]?.id || 0);
+      if (createdEnquiryId > 0) {
+        await client.query(`
+          CREATE TABLE IF NOT EXISTS notifications (
+            id SERIAL PRIMARY KEY,
+            enquiry_id INTEGER UNIQUE REFERENCES enquiries(id) ON DELETE CASCADE,
+            title TEXT NOT NULL,
+            message TEXT NOT NULL,
+            enquiry_name VARCHAR(255) NOT NULL DEFAULT '',
+            enquiry_email VARCHAR(255) NOT NULL DEFAULT '',
+            enquiry_type VARCHAR(64) NOT NULL DEFAULT 'general',
+            is_read BOOLEAN NOT NULL DEFAULT false,
+            read_at TIMESTAMPTZ,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+          );
+        `);
+
+        const typeLabelMap: Record<string, string> = {
+          enterprise_consulting: "Enterprise Consulting",
+          corporate_training: "Corporate Training",
+          individual_learning: "IAM Academy",
+          partnership: "Partnership Exploration",
+          general: "General Enquiry",
+        };
+        const categoryLabel = typeLabelMap[safeType] || "Website Enquiry";
+        const snippetSource = cleanOrg
+          ? `${cleanOrg} — ${cleanMsg}`
+          : cleanMsg;
+        const snippet =
+          snippetSource.length > 140
+            ? `${snippetSource.slice(0, 137)}...`
+            : snippetSource;
+
+        await client.query(
+          `INSERT INTO notifications (enquiry_id, title, message, enquiry_name, enquiry_email, enquiry_type, is_read, created_at, updated_at)
+           VALUES ($1, $2, $3, $4, $5, $6, false, $7, $7)
+           ON CONFLICT (enquiry_id) DO NOTHING;`,
+          [
+            createdEnquiryId,
+            `New ${categoryLabel} from ${cleanName}`,
+            snippet,
+            cleanName,
+            cleanEmail,
+            safeType,
+            timestamp,
+          ]
+        );
+      }
+
       await client.end();
     } catch (dbErr) {
       console.error("Database enquiry storage warning:", dbErr);

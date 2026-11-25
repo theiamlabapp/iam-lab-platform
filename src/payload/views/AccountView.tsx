@@ -404,7 +404,7 @@ export function AccountView() {
           </div>
 
           {/* Account Details Grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "24px" }}>
+          <div className="iam-form-grid-2" style={{ gap: "20px", marginBottom: "24px" }}>
             <div>
               <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "#475569", textTransform: "uppercase", marginBottom: "6px" }}>
                 Full Display Name

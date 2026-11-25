@@ -13,6 +13,8 @@ import { UsersListView as UsersListView_11 } from "@/payload/views/UsersListView
 import { MediaSelectorField as MediaSelectorField_12 } from "@/payload/components/MediaSelectorField";
 import { NavLinksVisualEditor as NavLinksVisualEditor_13 } from "@/payload/components/NavLinksVisualEditor";
 import { RecaptchaStatusField as RecaptchaStatusField_14 } from "@/payload/components/RecaptchaStatusField";
+import { NotificationBell as NotificationBell_15 } from "@/payload/components/NotificationBell";
+import { NotificationsView as NotificationsView_16 } from "@/payload/views/NotificationsView";
 
 export const importMap = {
   "/src/payload/components/Logo#Logo": Logo_0,
@@ -45,4 +47,8 @@ export const importMap = {
   "src/payload/components/NavLinksVisualEditor#NavLinksVisualEditor": NavLinksVisualEditor_13,
   "/src/payload/components/RecaptchaStatusField#RecaptchaStatusField": RecaptchaStatusField_14,
   "src/payload/components/RecaptchaStatusField#RecaptchaStatusField": RecaptchaStatusField_14,
+  "/src/payload/components/NotificationBell#NotificationBell": NotificationBell_15,
+  "src/payload/components/NotificationBell#NotificationBell": NotificationBell_15,
+  "/src/payload/views/NotificationsView#NotificationsView": NotificationsView_16,
+  "src/payload/views/NotificationsView#NotificationsView": NotificationsView_16,
 };
