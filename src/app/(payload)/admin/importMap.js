@@ -15,6 +15,10 @@ import { NavLinksVisualEditor as NavLinksVisualEditor_13 } from "@/payload/compo
 import { RecaptchaStatusField as RecaptchaStatusField_14 } from "@/payload/components/RecaptchaStatusField";
 import { NotificationBell as NotificationBell_15 } from "@/payload/components/NotificationBell";
 import { NotificationsView as NotificationsView_16 } from "@/payload/views/NotificationsView";
+import {
+  SocialChannelField as SocialChannelField_17,
+  HiddenToggleStateField as HiddenToggleStateField_18,
+} from "@/payload/components/SocialChannelField";
 
 export const importMap = {
   "/src/payload/components/Logo#Logo": Logo_0,
@@ -51,4 +55,8 @@ export const importMap = {
   "src/payload/components/NotificationBell#NotificationBell": NotificationBell_15,
   "/src/payload/views/NotificationsView#NotificationsView": NotificationsView_16,
   "src/payload/views/NotificationsView#NotificationsView": NotificationsView_16,
+  "/src/payload/components/SocialChannelField#SocialChannelField": SocialChannelField_17,
+  "src/payload/components/SocialChannelField#SocialChannelField": SocialChannelField_17,
+  "/src/payload/components/SocialChannelField#HiddenToggleStateField": HiddenToggleStateField_18,
+  "src/payload/components/SocialChannelField#HiddenToggleStateField": HiddenToggleStateField_18,
 };

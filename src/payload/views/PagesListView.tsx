@@ -60,11 +60,12 @@ export async function PagesListView(props: { payload?: Payload }) {
         </div>
 
         <div className="iam-dash-actions">
-          <Link href="/admin" className="iam-action-btn">
+          <Link href="/admin" prefetch={false} className="iam-action-btn">
             &larr; Dashboard
           </Link>
           <Link
             href="/admin/collections/pages/create"
+            prefetch={false}
             className="iam-action-btn iam-action-primary"
           >
             + Create Page
@@ -187,6 +188,7 @@ export async function PagesListView(props: { payload?: Payload }) {
                         </Link>
                         <Link
                           href={`/admin/collections/pages/${p.id}`}
+                          prefetch={false}
                           className="iam-btn-detail"
                           style={{ backgroundColor: "#0B1424", color: "#FFFFFF" }}
                         >

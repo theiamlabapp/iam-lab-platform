@@ -51,32 +51,193 @@ body:has(.iam-login-split) .template-minimal__wrap {
   box-sizing: border-box;
 }
 
-/* Left: Full-height photograph with subtle navy overlay */
-.iam-login-photo-panel {
+/* Left: Enterprise IAM Architectural Governance Visual Composition */
+.iam-login-visual-panel {
   position: relative;
   display: flex;
-  flex: 1 1 50%;
+  flex: 1 1 52%;
   min-height: 100vh;
-  background-color: #0B1424;
+  background: linear-gradient(155deg, #070E1B 0%, #0B1424 45%, #14243B 100%);
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 44px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+}
+
+.iam-login-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.iam-login-glow-top {
+  position: absolute;
+  top: -120px;
+  right: -80px;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(216, 154, 67, 0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.iam-login-glow-bottom {
+  position: absolute;
+  bottom: -140px;
+  left: -90px;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.16) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.iam-login-visual-inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.iam-login-visual-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background-color: rgba(216, 154, 67, 0.12);
+  border: 1px solid rgba(216, 154, 67, 0.35);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #D89A43;
+}
+
+.iam-login-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #D89A43;
+  box-shadow: 0 0 8px rgba(216, 154, 67, 0.8);
+}
+
+.iam-login-visual-title {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+}
+
+.iam-login-visual-desc {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #CBD5E1;
+}
+
+.iam-login-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.iam-login-glass-card {
+  background: rgba(15, 29, 51, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 16px 18px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 14px 30px rgba(4, 9, 18, 0.35);
+}
+
+.iam-login-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.iam-login-card-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #E2E8F0;
+}
+
+.iam-login-card-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #D89A43;
+  background: rgba(216, 154, 67, 0.12);
+  border: 1px solid rgba(216, 154, 67, 0.3);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.iam-login-topology-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.iam-login-mini-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.iam-login-mini-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.iam-login-status-ok {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #34D399;
+  background: rgba(16, 185, 129, 0.14);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.iam-login-mini-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 10px;
+}
+
+.iam-login-bar-track {
+  width: 100%;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
   overflow: hidden;
 }
 
-.iam-login-photo {
-  object-fit: cover;
-  object-position: center;
-  filter: contrast(105%) brightness(95%);
-}
-
-.iam-login-photo-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(11, 20, 36, 0.55) 0%,
-    rgba(20, 36, 59, 0.45) 50%,
-    rgba(11, 20, 36, 0.60) 100%
-  );
-  pointer-events: none;
+.iam-login-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #D89A43 0%, #F2BA63 100%);
 }
 
 /* Right: Clean authentication panel */
@@ -324,15 +485,30 @@ body:has(.iam-login-split) .template-minimal__wrap {
   .iam-login-split {
     flex-direction: column;
   }
-  .iam-login-photo-panel {
+  .iam-login-visual-panel {
+    flex: none;
+    min-height: auto;
+    padding: 22px 20px;
+  }
+  .iam-login-visual-inner {
+    max-width: 440px;
+    gap: 10px;
+  }
+  .iam-login-visual-title {
+    font-size: 19px;
+    margin-bottom: 2px;
+  }
+  .iam-login-visual-desc,
+  .iam-login-stage {
     display: none;
   }
   .iam-login-card-panel {
-    min-height: 100vh;
-    padding: 24px;
+    flex: 1 1 auto;
+    min-height: auto;
+    padding: 24px 18px 40px;
   }
   .iam-login-card-inner {
-    padding: 28px 24px;
+    padding: 28px 22px;
   }
 }
 
@@ -922,7 +1098,6 @@ a.btn--style-primary:hover {
   background-color: transparent !important;
   border: none !important;
   padding: 0 !important;
-  container-type: inline-size !important;
 }
 
 .document-fields {
@@ -1924,4 +2099,203 @@ a.btn--style-primary:hover {
   .iam-dash-welcome {
     font-size: 19px !important;
   }
+}
+
+/* --------------------------------------------------------------------------
+   6. MOBILE BACK-NAVIGATION BUTTON (.iam-mobile-back-btn)
+   Hidden on desktop (>= 768px) and excluded from Dashboard (/admin).
+   -------------------------------------------------------------------------- */
+.iam-mobile-back-btn {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .iam-mobile-back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 10px;
+    left: 56px;
+    z-index: 9995;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    border: 1px solid #CBD5E1;
+    background-color: #FFFFFF;
+    color: #0B1424;
+    box-shadow: 0 2px 6px rgba(11, 20, 36, 0.12);
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+  }
+
+  .iam-mobile-back-btn:hover,
+  .iam-mobile-back-btn:focus-visible {
+    background-color: #0B1424;
+    border-color: #D89A43;
+    color: #D89A43;
+    outline: none;
+  }
+
+  body:has(.iam-mobile-back-btn) .app-header {
+    padding-left: 100px !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   7. GLOBAL SITE SETTINGS — SOCIAL MEDIA CHANNEL TOGGLE CARDS
+   -------------------------------------------------------------------------- */
+.iam-social-card {
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 3px rgba(11, 20, 36, 0.04);
+}
+
+.iam-social-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.iam-social-platform {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.iam-social-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  background-color: #0B1424;
+  color: #D89A43;
+  flex-shrink: 0;
+}
+
+.iam-social-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0B1424;
+}
+
+.iam-social-sub {
+  display: block;
+  font-size: 11px;
+  color: #64748B;
+}
+
+.iam-toggle-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 4px 6px;
+  border-radius: 999px;
+  border: 1px solid #CBD5E1;
+  background-color: #F8FAFC;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.iam-toggle-switch:focus-visible {
+  outline: 2px solid #D89A43;
+  outline-offset: 2px;
+}
+
+.iam-toggle-on {
+  border-color: rgba(216, 154, 67, 0.55);
+  background-color: #0B1424;
+}
+
+.iam-toggle-off {
+  border-color: #CBD5E1;
+  background-color: #F1F5F9;
+}
+
+.iam-toggle-track {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background-color: #94A3B8;
+  transition: background-color 0.18s ease;
+}
+
+.iam-toggle-on .iam-toggle-track {
+  background-color: #D89A43;
+}
+
+.iam-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: transform 0.18s ease;
+}
+
+.iam-toggle-on .iam-toggle-thumb {
+  transform: translateX(16px);
+}
+
+.iam-toggle-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  min-width: 24px;
+  text-align: center;
+}
+
+.iam-toggle-on .iam-toggle-label {
+  color: #D89A43;
+}
+
+.iam-toggle-off .iam-toggle-label {
+  color: #64748B;
+}
+
+.iam-social-url-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.iam-social-url-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748B;
+}
+
+.iam-social-url-input {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 6px;
+  border: 1px solid #CBD5E1;
+  background-color: #FFFFFF;
+  color: #0B1424;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.iam-social-url-input:focus {
+  border-color: #D89A43;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(216, 154, 67, 0.16);
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-import { Client } from "pg";
+import { getDbPool } from "@/lib/dbPool";
 import { getSiteSettings } from "@/lib/getPageData";
 import { verifyRecaptchaToken } from "@/lib/recaptcha";
 
@@ -110,16 +110,10 @@ export async function POST(req: Request) {
   const cleanMsg = String(message).trim();
   const timestamp = new Date().toISOString();
 
-  // 1. Persist to PostgreSQL if DATABASE_URI is available
-  const rawDbUri = (process.env.DATABASE_URI || "").trim().replace(/^["']|["']$/g, "");
-  if (rawDbUri) {
+  // 1. Persist to PostgreSQL via shared pool if DATABASE_URI is configured
+  const pool = getDbPool();
+  if (pool) {
     try {
-      const client = new Client({
-        connectionString: rawDbUri,
-        ssl: { rejectUnauthorized: false },
-      });
-      await client.connect();
-
       const validEnquiryTypes = [
         "enterprise_consulting",
         "corporate_training",
@@ -131,7 +125,7 @@ export async function POST(req: Request) {
         ? cleanType
         : "general";
 
-      const insertRes = await client.query(
+      const insertRes = await pool.query(
         `INSERT INTO enquiries (enquiry_type, name, email, organisation, phone, service_or_pathway, message, status, created_at, updated_at)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $9)
          RETURNING id;`,
@@ -150,7 +144,7 @@ export async function POST(req: Request) {
 
       const createdEnquiryId = Number(insertRes.rows[0]?.id || 0);
       if (createdEnquiryId > 0) {
-        await client.query(`
+        await pool.query(`
           CREATE TABLE IF NOT EXISTS notifications (
             id SERIAL PRIMARY KEY,
             enquiry_id INTEGER UNIQUE REFERENCES enquiries(id) ON DELETE CASCADE,
@@ -182,7 +176,7 @@ export async function POST(req: Request) {
             ? `${snippetSource.slice(0, 137)}...`
             : snippetSource;
 
-        await client.query(
+        await pool.query(
           `INSERT INTO notifications (enquiry_id, title, message, enquiry_name, enquiry_email, enquiry_type, is_read, created_at, updated_at)
            VALUES ($1, $2, $3, $4, $5, $6, false, $7, $7)
            ON CONFLICT (enquiry_id) DO NOTHING;`,
@@ -197,8 +191,6 @@ export async function POST(req: Request) {
           ]
         );
       }
-
-      await client.end();
     } catch (dbErr) {
       console.error("Database enquiry storage warning:", dbErr);
       // Non-fatal: continue to email delivery

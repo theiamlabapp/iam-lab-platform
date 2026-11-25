@@ -251,7 +251,7 @@ export function AccountView() {
         </div>
 
         <div className="iam-dash-actions">
-          <Link href="/admin" className="iam-action-btn">
+          <Link href="/admin" prefetch={false} className="iam-action-btn">
             &larr; Dashboard
           </Link>
         </div>

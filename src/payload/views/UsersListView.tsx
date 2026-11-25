@@ -97,14 +97,15 @@ export async function UsersListView(props: { payload?: Payload }) {
         </div>
 
         <div className="iam-dash-actions">
-          <Link href="/admin" className="iam-action-btn">
+          <Link href="/admin" prefetch={false} className="iam-action-btn">
             &larr; Dashboard
           </Link>
-          <Link href="/admin/account" className="iam-action-btn">
+          <Link href="/admin/account" prefetch={false} className="iam-action-btn">
             My Profile
           </Link>
           <Link
             href="/admin/collections/users/create"
+            prefetch={false}
             className="iam-action-btn iam-action-primary"
           >
             + Add Account
@@ -234,6 +235,7 @@ export async function UsersListView(props: { payload?: Payload }) {
                     <td style={{ textAlign: "right" }}>
                       <Link
                         href={`/admin/collections/users/${u.id}`}
+                        prefetch={false}
                         className="iam-btn-detail"
                         style={{ backgroundColor: "#0B1424", color: "#FFFFFF" }}
                       >

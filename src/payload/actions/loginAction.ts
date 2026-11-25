@@ -56,7 +56,7 @@ export async function loginAdminAction(formData: {
         httpOnly: true,
         sameSite: "lax",
         secure: isHttps,
-        maxAge: 7200, // 2 hours
+        maxAge: 43200, // 12 hours matching tokenExpiration
       });
 
       const userDoc = result.user as unknown as Record<string, unknown>;

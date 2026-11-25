@@ -167,73 +167,133 @@ export const SiteSettings: GlobalConfig = {
               name: "instagramUrl",
               type: "text",
               label: "Instagram Profile URL",
-              admin: { placeholder: "https://www.instagram.com/theiamlab" },
+              admin: {
+                placeholder: "https://www.instagram.com/theiamlab",
+                components: {
+                  Field: "/src/payload/components/SocialChannelField#SocialChannelField",
+                },
+              },
             },
             {
               name: "showInstagram",
               type: "checkbox",
               defaultValue: true,
               label: "Display Instagram icon on website",
+              admin: {
+                components: {
+                  Field: "/src/payload/components/SocialChannelField#HiddenToggleStateField",
+                },
+              },
             },
             {
               name: "facebookUrl",
               type: "text",
               label: "Facebook Page URL",
-              admin: { placeholder: "https://www.facebook.com/theiamlab" },
+              admin: {
+                placeholder: "https://www.facebook.com/theiamlab",
+                components: {
+                  Field: "/src/payload/components/SocialChannelField#SocialChannelField",
+                },
+              },
             },
             {
               name: "showFacebook",
               type: "checkbox",
               defaultValue: true,
               label: "Display Facebook icon on website",
+              admin: {
+                components: {
+                  Field: "/src/payload/components/SocialChannelField#HiddenToggleStateField",
+                },
+              },
             },
             {
               name: "tiktokUrl",
               type: "text",
               label: "TikTok Profile URL",
-              admin: { placeholder: "https://www.tiktok.com/@theiamlab" },
+              admin: {
+                placeholder: "https://www.tiktok.com/@theiamlab",
+                components: {
+                  Field: "/src/payload/components/SocialChannelField#SocialChannelField",
+                },
+              },
             },
             {
               name: "showTiktok",
               type: "checkbox",
               defaultValue: true,
               label: "Display TikTok icon on website",
+              admin: {
+                components: {
+                  Field: "/src/payload/components/SocialChannelField#HiddenToggleStateField",
+                },
+              },
             },
             {
               name: "linkedinUrl",
               type: "text",
               label: "LinkedIn Page URL",
-              admin: { placeholder: "https://www.linkedin.com/company/theiamlab" },
+              admin: {
+                placeholder: "https://www.linkedin.com/company/theiamlab",
+                components: {
+                  Field: "/src/payload/components/SocialChannelField#SocialChannelField",
+                },
+              },
             },
             {
               name: "showLinkedin",
               type: "checkbox",
               defaultValue: true,
               label: "Display LinkedIn icon on website",
+              admin: {
+                components: {
+                  Field: "/src/payload/components/SocialChannelField#HiddenToggleStateField",
+                },
+              },
             },
             {
               name: "twitterUrl",
               type: "text",
               label: "X (Twitter) Profile URL",
-              admin: { placeholder: "https://x.com/theiamlab" },
+              admin: {
+                placeholder: "https://x.com/theiamlab",
+                components: {
+                  Field: "/src/payload/components/SocialChannelField#SocialChannelField",
+                },
+              },
             },
             {
               name: "showTwitter",
               type: "checkbox",
               defaultValue: true,
               label: "Display X (Twitter) icon on website",
+              admin: {
+                components: {
+                  Field: "/src/payload/components/SocialChannelField#HiddenToggleStateField",
+                },
+              },
             },
             {
               name: "youtubeUrl",
               type: "text",
               label: "YouTube Channel URL",
-              admin: { placeholder: "https://www.youtube.com/@theiamlab" },
+              admin: {
+                placeholder: "https://www.youtube.com/@theiamlab",
+                components: {
+                  Field: "/src/payload/components/SocialChannelField#SocialChannelField",
+                },
+              },
             },
             {
               name: "showYoutube",
               type: "checkbox",
               defaultValue: true,
               label: "Display YouTube icon on website",
+              admin: {
+                components: {
+                  Field: "/src/payload/components/SocialChannelField#HiddenToggleStateField",
+                },
+              },
             },
           ],
         },

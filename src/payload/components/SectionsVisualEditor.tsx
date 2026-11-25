@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useDocumentInfo, useField } from "@payloadcms/ui";
+import { AdminComponentErrorBoundary } from "./AdminComponentErrorBoundary";
 
 interface PickerAsset {
   id: number | string;
@@ -215,13 +216,35 @@ const ITEM_FIELD_CONFIG: Array<{
   { key: "answer", label: "FAQ Answer", multiline: true },
 ];
 
-export function SectionsVisualEditor({ path }: { path: string }) {
-  const { value = [], setValue } = useField<Array<Record<string, unknown>>>({ path });
-  const { initialData } = useDocumentInfo();
+function normalizeSectionsValue(raw: unknown): Array<Record<string, unknown>> {
+  if (Array.isArray(raw)) {
+    return raw.filter((item): item is Record<string, unknown> => Boolean(item && typeof item === "object"));
+  }
+  if (typeof raw === "string") {
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        return parsed.filter((item): item is Record<string, unknown> => Boolean(item && typeof item === "object"));
+      }
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
 
-  const slug = String(initialData?.slug || "home");
+function SectionsVisualEditorInner({
+  path,
+  docSlug,
+}: {
+  path: string;
+  docSlug: string;
+}) {
+  const { value = [], setValue } = useField<Array<Record<string, unknown>>>({ path });
+
+  const slug = docSlug;
   const liveRoute = slug === "home" ? "/" : `/${slug}`;
-  const sections: Array<Record<string, unknown>> = Array.isArray(value) ? value : [];
+  const sections = normalizeSectionsValue(value);
 
   const [activeTab, setActiveTab] = useState(0);
   const [mediaAssets, setMediaAssets] = useState<PickerAsset[]>([]);
@@ -1213,6 +1236,20 @@ export function SectionsVisualEditor({ path }: { path: string }) {
         </div>
       )}
     </div>
+  );
+}
+
+export function SectionsVisualEditor({ path }: { path: string }) {
+  const { initialData, id: docId } = useDocumentInfo();
+  const docSlug = String(initialData?.slug || "home");
+  return (
+    <AdminComponentErrorBoundary componentName="Website Pages Visual Editor">
+      <SectionsVisualEditorInner
+        key={`${String(docId ?? "new")}-${docSlug}`}
+        path={path}
+        docSlug={docSlug}
+      />
+    </AdminComponentErrorBoundary>
   );
 }
 

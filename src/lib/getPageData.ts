@@ -1,5 +1,5 @@
 import { connection } from "next/server";
-import { getDbPool } from "./dbPool";
+import { queryWithRetry } from "./dbPool";
 
 export interface PageSection extends Record<string, unknown> {
   type: string;
@@ -148,9 +148,6 @@ export async function getPageData(
     // Allow non-request invocation safely
   }
 
-  const pool = getDbPool();
-  if (!pool) return null;
-
   try {
     const query = options?.allowDraft
       ? `SELECT id, title, slug, meta_description, hero_headline, hero_subheadline, status, sections, content, updated_at
@@ -162,8 +159,8 @@ export async function getPageData(
          WHERE slug = $1 AND (status = 'published' OR status IS NULL)
          LIMIT 1;`;
 
-    const res = await pool.query(query, [slug]);
-    if (res.rows.length > 0) {
+    const res = await queryWithRetry(query, [slug], `getPageData:${slug}`);
+    if (res && res.rows.length > 0) {
       return res.rows[0] as PageData;
     }
     return null;
@@ -210,17 +207,16 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
     // Allow non-request invocation safely
   }
 
-  const pool = getDbPool();
-  if (!pool) return DEFAULT_SITE_SETTINGS;
-
   try {
-    const res = await pool.query(
+    const res = await queryWithRetry(
       `SELECT company_name, tagline, official_email, location, address, phone, whatsapp_number, map_embed_url, selar_store_url, linkedin_url, instagram_url, twitter_url, facebook_url, tiktok_url, youtube_url, show_instagram, show_facebook, show_tiktok, show_linkedin, show_twitter, show_youtube, logo_light_url, logo_dark_url, header_cta_label, footer_copyright_suffix, nav_links, recaptcha_enabled, recaptcha_version, recaptcha_site_key
        FROM site_settings
        ORDER BY id ASC
-       LIMIT 1;`
+       LIMIT 1;`,
+      undefined,
+      "getSiteSettings"
     );
-    if (res.rows.length === 0) return DEFAULT_SITE_SETTINGS;
+    if (!res || res.rows.length === 0) return DEFAULT_SITE_SETTINGS;
 
     const r = res.rows[0];
     const parsedNav = Array.isArray(r.nav_links) && r.nav_links.length > 0

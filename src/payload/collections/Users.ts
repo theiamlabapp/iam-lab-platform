@@ -4,7 +4,7 @@ import { isAdminAccess, isAuthenticatedOrSelf } from "../access/roles";
 export const Users: CollectionConfig = {
   slug: "users",
   auth: {
-    tokenExpiration: 7200,
+    tokenExpiration: 43200, // 12 hours to avoid unexpected mid-session logouts
     maxLoginAttempts: 5,
     lockTime: 600 * 1000,
     forgotPassword: {

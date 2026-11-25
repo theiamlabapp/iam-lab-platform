@@ -1,8 +1,8 @@
 import path from "path";
 import { NextResponse } from "next/server";
 import sharp from "sharp";
-import { getDbPool } from "@/lib/dbPool";
-import { getAuthenticatedStaffUser, hasEditorialClearance } from "@/payload/access/serverAuth";
+import { getDbPool, queryWithRetry } from "@/lib/dbPool";
+import { getStaffSessionState, hasEditorialClearance } from "@/payload/access/serverAuth";
 
 const ALLOWED_MIME_TYPES = new Set([
   "image/jpeg",
@@ -29,43 +29,49 @@ function formatBytes(bytes: number): string {
  * Lists all media assets reconciled in Supabase along with where each asset is referenced.
  */
 export async function GET(req: Request) {
-  const user = await getAuthenticatedStaffUser(req.headers);
-  if (!user) {
+  const session = await getStaffSessionState(req.headers);
+  if (session.status === "db_error") {
+    return NextResponse.json(
+      { error: session.message, dbInterruption: true },
+      { status: 503 }
+    );
+  }
+  if (session.status === "unauthenticated") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const pool = getDbPool();
   if (!pool) {
     return NextResponse.json(
-      { error: "Database connection unavailable" },
-      { status: 500 }
+      { error: "Database connection unavailable", dbInterruption: true },
+      { status: 503 }
     );
   }
 
   try {
     const [mediaRes, pagesRes, usersRes] = await Promise.all([
-      pool.query(`
+      queryWithRetry(`
         SELECT id, filename, url, mime_type, filesize, width, height, alt, caption,
                category, source_type, created_at, updated_at
         FROM media
         ORDER BY CASE WHEN source_type = 'uploaded' THEN 0 ELSE 1 END, updated_at DESC, id DESC;
-      `),
-      pool.query(`SELECT slug, title, sections FROM pages;`),
-      pool.query(`SELECT name, email, avatar_url FROM users;`),
+      `, undefined, "media:list"),
+      queryWithRetry(`SELECT slug, title, sections FROM pages;`, undefined, "media:pages"),
+      queryWithRetry(`SELECT name, email, avatar_url FROM users;`, undefined, "media:users"),
     ]);
 
-    const pages = pagesRes.rows as Array<{
+    const pages = (pagesRes?.rows || []) as Array<{
       slug: string;
       title: string;
       sections?: unknown;
     }>;
-    const users = usersRes.rows as Array<{
+    const users = (usersRes?.rows || []) as Array<{
       name?: string;
       email: string;
       avatar_url?: string;
     }>;
 
-    const assets = mediaRes.rows.map((row) => {
+    const assets = (mediaRes?.rows || []).map((row) => {
       const assetUrl = String(row.url || "");
       const usedIn: string[] = [];
 
@@ -116,16 +122,23 @@ export async function GET(req: Request) {
  * Handles serverless-safe image upload directly into Supabase PostgreSQL BYTEA storage.
  */
 export async function POST(req: Request) {
-  const user = await getAuthenticatedStaffUser(req.headers);
-  if (!user) {
+  const session = await getStaffSessionState(req.headers);
+  if (session.status === "db_error") {
+    return NextResponse.json(
+      { error: session.message, dbInterruption: true },
+      { status: 503 }
+    );
+  }
+  if (session.status === "unauthenticated") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  const user = session.user;
 
   const pool = getDbPool();
   if (!pool) {
     return NextResponse.json(
-      { error: "Database connection unavailable" },
-      { status: 500 }
+      { error: "Database connection unavailable", dbInterruption: true },
+      { status: 503 }
     );
   }
 

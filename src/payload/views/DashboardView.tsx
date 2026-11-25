@@ -123,16 +123,16 @@ export async function DashboardView(props: DashboardViewProps) {
 
         {/* Shortcuts */}
         <div className="iam-dash-actions">
-          <Link href="/admin/collections/enquiries" className="iam-action-btn iam-action-primary">
+          <Link href="/admin/collections/enquiries" prefetch={false} className="iam-action-btn iam-action-primary">
             <span>Review Enquiries</span>
           </Link>
-          <Link href="/admin/collections/pages" className="iam-action-btn">
+          <Link href="/admin/collections/pages" prefetch={false} className="iam-action-btn">
             <span>Manage Pages</span>
           </Link>
-          <Link href="/admin/collections/media?action=upload" className="iam-action-btn">
+          <Link href="/admin/collections/media?action=upload" prefetch={false} className="iam-action-btn">
             <span>Upload Media</span>
           </Link>
-          <Link href="/admin/globals/site-settings" className="iam-action-btn">
+          <Link href="/admin/globals/site-settings" prefetch={false} className="iam-action-btn">
             <span>Site Settings</span>
           </Link>
         </div>
@@ -186,7 +186,7 @@ export async function DashboardView(props: DashboardViewProps) {
               Live consultation briefs and IAM Academy applicant submissions from the website.
             </p>
           </div>
-          <Link href="/admin/collections/enquiries" className="iam-table-all-link">
+          <Link href="/admin/collections/enquiries" prefetch={false} className="iam-table-all-link">
             View All ({totalEnquiries}) &rarr;
           </Link>
         </div>
@@ -258,6 +258,7 @@ export async function DashboardView(props: DashboardViewProps) {
                       <td style={{ textAlign: "right" }}>
                         <Link
                           href={`/admin/collections/enquiries/${enq.id}`}
+                          prefetch={false}
                           className="iam-btn-detail"
                         >
                           View Details &rarr;

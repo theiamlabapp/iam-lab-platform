@@ -312,6 +312,7 @@ export function NotificationBell() {
           <div className="iam-notify-footer">
             <Link
               href="/admin/notifications"
+              prefetch={false}
               onClick={() => setOpen(false)}
               className="iam-notify-viewall"
             >

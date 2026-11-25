@@ -231,6 +231,7 @@ export function EnquiriesFilterTable({ items }: { items: EnquiryItem[] }) {
                     <td style={{ textAlign: "right" }}>
                       <Link
                         href={`/admin/collections/enquiries/${enq.id}`}
+                        prefetch={false}
                         className="iam-btn-detail"
                         style={{ backgroundColor: "#0B1424", color: "#FFFFFF" }}
                       >

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@payloadcms/ui";
+import { AdminBackButton } from "./AdminBackButton";
 
 interface NavItem {
   label: string;
@@ -82,10 +83,40 @@ export function AdminNav(props: AdminNavProps) {
     };
     window.addEventListener("iam-profile-updated", onProfileUpdated);
     window.addEventListener("iam-notifications-updated", loadUnread);
+
+    // Passive sliding session renewal every 20 minutes during active console use.
+    // Ignores transient 5xx DB interruptions without destroying valid sessions.
+    const refreshSession = () => {
+      if (document.visibilityState !== "visible") return;
+      fetch("/api/users/refresh-token", {
+        method: "POST",
+        credentials: "include",
+      }).catch(() => {
+        // Ignore transient network drops; do not force logout
+      });
+    };
+    const refreshTimer = window.setInterval(refreshSession, 20 * 60 * 1000);
+
+    // Guard against rare stale deployment ChunkLoadError leaving a blank screen
+    const handleChunkRejection = (event: PromiseRejectionEvent) => {
+      const msg = String(event?.reason?.message || event?.reason || "").toLowerCase();
+      if (msg.includes("chunkloaderror") || msg.includes("loading chunk")) {
+        const key = "iam_chunk_reload_at";
+        const last = Number(sessionStorage.getItem(key) || "0");
+        if (Date.now() - last > 15000) {
+          sessionStorage.setItem(key, String(Date.now()));
+          window.location.reload();
+        }
+      }
+    };
+    window.addEventListener("unhandledrejection", handleChunkRejection);
+
     return () => {
       mounted = false;
       window.removeEventListener("iam-profile-updated", onProfileUpdated);
       window.removeEventListener("iam-notifications-updated", loadUnread);
+      window.clearInterval(refreshTimer);
+      window.removeEventListener("unhandledrejection", handleChunkRejection);
     };
   }, []);
 
@@ -262,6 +293,9 @@ export function AdminNav(props: AdminNavProps) {
         </svg>
       </button>
 
+      {/* Mobile Circular Back Button (internal pages only, hidden on Desktop & Dashboard) */}
+      <AdminBackButton />
+
       {/* Backdrop for Mobile */}
       {mobileOpen && (
         <div
@@ -274,7 +308,7 @@ export function AdminNav(props: AdminNavProps) {
       <aside className={`iam-sidebar ${mobileOpen ? "iam-sidebar-open" : ""}`}>
         {/* Brand Header */}
         <div className="iam-sidebar-brand">
-          <Link href="/admin" className="iam-sidebar-brand-link" onClick={() => setMobileOpen(false)}>
+          <Link href="/admin" prefetch={false} className="iam-sidebar-brand-link" onClick={() => setMobileOpen(false)}>
             <div className="iam-sidebar-logo-box">
               <Image
                 src="/brand/the-iam-lab-logo.png"
@@ -304,6 +338,7 @@ export function AdminNav(props: AdminNavProps) {
                     <li key={item.href} className="iam-nav-item">
                       <Link
                         href={item.href}
+                        prefetch={false}
                         onClick={() => setMobileOpen(false)}
                         className={`iam-nav-link ${active ? "iam-nav-link-active" : ""}`}
                       >
@@ -323,6 +358,7 @@ export function AdminNav(props: AdminNavProps) {
         <div className="iam-sidebar-footer">
           <Link
             href="/"
+            prefetch={false}
             target="_blank"
             rel="noopener noreferrer"
             className="iam-sidebar-public-link"
@@ -337,6 +373,7 @@ export function AdminNav(props: AdminNavProps) {
 
           <Link
             href="/admin/account"
+            prefetch={false}
             onClick={() => setMobileOpen(false)}
             className="iam-sidebar-user-card"
             title="Manage Administrator Profile"

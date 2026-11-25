@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { getDbPool } from "@/lib/dbPool";
+import { getDbPool, queryWithRetry } from "@/lib/dbPool";
 import {
-  getAuthenticatedStaffUser,
+  getStaffSessionState,
   hasEnquiryClearance,
 } from "@/payload/access/serverAuth";
 
@@ -37,10 +37,17 @@ export async function ensureNotificationsTable(
  * Restricted strictly to authenticated admin / enquiry staff.
  */
 export async function GET(req: Request) {
-  const user = await getAuthenticatedStaffUser(req.headers);
-  if (!user) {
+  const session = await getStaffSessionState(req.headers);
+  if (session.status === "db_error") {
+    return NextResponse.json(
+      { error: session.message, dbInterruption: true },
+      { status: 503 }
+    );
+  }
+  if (session.status === "unauthenticated") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  const user = session.user;
   if (!hasEnquiryClearance(user)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
@@ -48,8 +55,8 @@ export async function GET(req: Request) {
   const pool = getDbPool();
   if (!pool) {
     return NextResponse.json(
-      { error: "Database unavailable" },
-      { status: 500 }
+      { error: "Database unavailable", dbInterruption: true },
+      { status: 503 }
     );
   }
 
@@ -75,30 +82,35 @@ export async function GET(req: Request) {
     const offset = (page - 1) * limit;
 
     const [listRes, unreadRes, totalRes, filteredCountRes] = await Promise.all([
-      pool.query(
+      queryWithRetry(
         `SELECT id, enquiry_id, title, message, enquiry_name, enquiry_email, enquiry_type, is_read, read_at, created_at
          FROM notifications
          ${whereClause}
          ORDER BY created_at DESC, id DESC
          LIMIT $1 OFFSET $2;`,
-        [limit, offset]
+        [limit, offset],
+        "notifications:list"
       ),
-      pool.query(
-        `SELECT COUNT(*)::int AS count FROM notifications WHERE is_read = false;`
+      queryWithRetry(
+        `SELECT COUNT(*)::int AS count FROM notifications WHERE is_read = false;`,
+        undefined,
+        "notifications:unread"
       ),
-      pool.query(`SELECT COUNT(*)::int AS count FROM notifications;`),
-      pool.query(
-        `SELECT COUNT(*)::int AS count FROM notifications ${whereClause};`
+      queryWithRetry(`SELECT COUNT(*)::int AS count FROM notifications;`, undefined, "notifications:total"),
+      queryWithRetry(
+        `SELECT COUNT(*)::int AS count FROM notifications ${whereClause};`,
+        undefined,
+        "notifications:filteredCount"
       ),
     ]);
 
-    const unreadCount = Number(unreadRes.rows[0]?.count ?? 0);
-    const totalAll = Number(totalRes.rows[0]?.count ?? 0);
-    const totalFiltered = Number(filteredCountRes.rows[0]?.count ?? 0);
+    const unreadCount = Number(unreadRes?.rows[0]?.count ?? 0);
+    const totalAll = Number(totalRes?.rows[0]?.count ?? 0);
+    const totalFiltered = Number(filteredCountRes?.rows[0]?.count ?? 0);
     const totalPages = Math.max(1, Math.ceil(totalFiltered / limit));
 
     return NextResponse.json({
-      notifications: listRes.rows.map((r) => ({
+      notifications: (listRes?.rows || []).map((r) => ({
         id: Number(r.id),
         enquiryId: r.enquiry_id ? Number(r.enquiry_id) : null,
         title: String(r.title || ""),
@@ -132,10 +144,17 @@ export async function GET(req: Request) {
  * Marks individual or all notifications as read/unread.
  */
 export async function PATCH(req: Request) {
-  const user = await getAuthenticatedStaffUser(req.headers);
-  if (!user) {
+  const session = await getStaffSessionState(req.headers);
+  if (session.status === "db_error") {
+    return NextResponse.json(
+      { error: session.message, dbInterruption: true },
+      { status: 503 }
+    );
+  }
+  if (session.status === "unauthenticated") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  const user = session.user;
   if (!hasEnquiryClearance(user)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }

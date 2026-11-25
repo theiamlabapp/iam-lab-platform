@@ -144,28 +144,144 @@ export function LoginView() {
   return (
     <div className="iam-login-split">
       {/* ========================================================
-          LEFT: Full-height photograph of cybersecurity professionals
-          Subtle navy overlay so the authentic photograph remains visible.
-          NO logo, NO telemetry widgets, NO info panels.
+          LEFT: Enterprise IAM Governance & Security Composition
+          Deep Midnight Navy -> Royal Blue atmospheric composition
+          with connected security nodes, glassmorphic policy cards,
+          and restrained gold accents (self-contained SVG + CSS).
           ======================================================== */}
-      <div className="iam-login-photo-panel">
-        <Image
-          src="/brand/admin-login-office.jpg"
-          alt="Cybersecurity and enterprise identity specialists collaborating in modern office"
-          fill
-          priority
-          className="iam-login-photo"
-          sizes="(max-width: 1024px) 100vw, 50vw"
-        />
-        <div className="iam-login-photo-overlay" />
+      <div className="iam-login-visual-panel" aria-hidden="true">
+        {/* Atmospheric background grid & gold radial glow */}
+        <div className="iam-login-grid-bg" />
+        <div className="iam-login-glow-top" />
+        <div className="iam-login-glow-bottom" />
+
+        <div className="iam-login-visual-inner">
+          {/* Eyebrow */}
+          <div className="iam-login-visual-pill">
+            <span className="iam-login-pill-dot" />
+            <span>ENTERPRISE IDENTITY GOVERNANCE CONSOLE</span>
+          </div>
+
+          {/* Core Headline */}
+          <div className="iam-login-visual-copy">
+            <h2 className="iam-login-visual-title">
+              Centralised Identity Control &amp; Assurance
+            </h2>
+            <p className="iam-login-visual-desc">
+              Govern digital identities, access policies, client enquiries, and corporate platform operations from one unified console.
+            </p>
+          </div>
+
+          {/* Glassmorphic IAM Dashboard Composition */}
+          <div className="iam-login-stage">
+            {/* Connected Identity Fabric SVG Topology */}
+            <div className="iam-login-glass-card iam-login-card-primary">
+              <div className="iam-login-card-header">
+                <span className="iam-login-card-label">Connected Identity Fabric</span>
+                <span className="iam-login-card-badge">ZERO-TRUST POSTURE</span>
+              </div>
+
+              <svg
+                viewBox="0 0 420 150"
+                className="iam-login-topology-svg"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {/* Connecting gold & slate hairlines */}
+                <path
+                  d="M210 38 L78 106 M210 38 L166 106 M210 38 L254 106 M210 38 L342 106"
+                  stroke="rgba(216, 154, 67, 0.45)"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 4"
+                />
+                <path
+                  d="M78 106 H342"
+                  stroke="rgba(148, 163, 184, 0.25)"
+                  strokeWidth="1"
+                />
+
+                {/* Central Policy Hub */}
+                <rect x="136" y="14" width="148" height="36" rx="8" fill="#14243B" stroke="#D89A43" strokeWidth="1.4" />
+                <circle cx="154" cy="32" r="5" fill="#D89A43" />
+                <text x="166" y="36" fill="#FFFFFF" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">
+                  IAM Control Core
+                </text>
+
+                {/* Four Connected Governance Nodes */}
+                {[
+                  { x: 40, label: "IGA", sub: "Governance" },
+                  { x: 128, label: "SSO", sub: "Auth Policy" },
+                  { x: 216, label: "JML", sub: "Lifecycle" },
+                  { x: 304, label: "PAM", sub: "Privileged" },
+                ].map((node) => (
+                  <g key={node.label}>
+                    <rect
+                      x={node.x}
+                      y="92"
+                      width="76"
+                      height="46"
+                      rx="7"
+                      fill="rgba(11, 20, 36, 0.85)"
+                      stroke="rgba(148, 163, 184, 0.35)"
+                      strokeWidth="1"
+                    />
+                    <text
+                      x={node.x + 38}
+                      y="112"
+                      textAnchor="middle"
+                      fill="#D89A43"
+                      fontSize="11"
+                      fontWeight="700"
+                      fontFamily="monospace"
+                    >
+                      {node.label}
+                    </text>
+                    <text
+                      x={node.x + 38}
+                      y="127"
+                      textAnchor="middle"
+                      fill="#CBD5E1"
+                      fontSize="9.5"
+                      fontFamily="system-ui, sans-serif"
+                    >
+                      {node.sub}
+                    </text>
+                  </g>
+                ))}
+              </svg>
+            </div>
+
+            {/* Bottom Two Mini Security Control Cards */}
+            <div className="iam-login-mini-grid">
+              <div className="iam-login-glass-card">
+                <div className="iam-login-mini-top">
+                  <span className="iam-login-card-label">Access Verification</span>
+                  <span className="iam-login-status-ok">ENFORCED</span>
+                </div>
+                <div className="iam-login-mini-val">HTTP-Only &middot; CSRF</div>
+                <div className="iam-login-bar-track">
+                  <div className="iam-login-bar-fill" style={{ width: "92%" }} />
+                </div>
+              </div>
+
+              <div className="iam-login-glass-card">
+                <div className="iam-login-mini-top">
+                  <span className="iam-login-card-label">RBAC Hierarchy</span>
+                  <span className="iam-login-card-badge">6 TIERS</span>
+                </div>
+                <div className="iam-login-mini-val">Least-Privilege Scope</div>
+                <div className="iam-login-bar-track">
+                  <div className="iam-login-bar-fill" style={{ width: "84%" }} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ========================================================
           RIGHT: Clean white / warm-white authentication panel
           Display logo ONLY ONCE above login heading.
-          "Welcome back", short supporting sentence, email, password
-          with visibility toggle, remember email, forgot password,
-          one primary sign-in button.
           ======================================================== */}
       <div className="iam-login-card-panel">
         <div className="iam-login-card-inner">

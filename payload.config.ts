@@ -86,8 +86,12 @@ export default buildConfig({
         process.env.NODE_ENV === "production"
           ? { rejectUnauthorized: false }
           : undefined,
-      connectionTimeoutMillis: 10000,
-      max: 10,
+      max: 3,
+      idleTimeoutMillis: 10000,
+      connectionTimeoutMillis: 12000,
+      allowExitOnIdle: true,
+      keepAlive: true,
+      keepAliveInitialDelayMillis: 10000,
     },
     transactionOptions: false,
     push: false,

@@ -1,31 +1,42 @@
 import { NextResponse } from "next/server";
-import { getDbPool } from "@/lib/dbPool";
-import { getAuthenticatedStaffUser } from "@/payload/access/serverAuth";
+import { getDbPool, queryWithRetry } from "@/lib/dbPool";
+import { getStaffSessionState } from "@/payload/access/serverAuth";
 
 /**
  * Retrieves the authenticated staff/administrator profile directly from Supabase PostgreSQL.
  */
 export async function GET(req: Request) {
-  const sessionUser = await getAuthenticatedStaffUser(req.headers);
-  if (!sessionUser) {
+  const session = await getStaffSessionState(req.headers);
+  if (session.status === "db_error") {
+    return NextResponse.json(
+      { error: session.message, dbInterruption: true },
+      { status: 503 }
+    );
+  }
+  if (session.status === "unauthenticated") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  const sessionUser = session.user;
 
   const pool = getDbPool();
   if (!pool) {
-    return NextResponse.json({ error: "Database unavailable" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Database unavailable", dbInterruption: true },
+      { status: 503 }
+    );
   }
 
   try {
-    const res = await pool.query(
+    const res = await queryWithRetry(
       `SELECT id, email, name, role, job_title, phone, avatar_url, created_at, updated_at
        FROM users
        WHERE id = $1
        LIMIT 1;`,
-      [sessionUser.id]
+      [sessionUser.id],
+      "profile:get"
     );
 
-    if (res.rows.length === 0) {
+    if (!res || res.rows.length === 0) {
       return NextResponse.json({ error: "Account record not found." }, { status: 404 });
     }
 
@@ -54,10 +65,17 @@ export async function GET(req: Request) {
  * for the currently authenticated administrator/staff account. Never alters email or role.
  */
 export async function PATCH(req: Request) {
-  const sessionUser = await getAuthenticatedStaffUser(req.headers);
-  if (!sessionUser) {
+  const session = await getStaffSessionState(req.headers);
+  if (session.status === "db_error") {
+    return NextResponse.json(
+      { error: session.message, dbInterruption: true },
+      { status: 503 }
+    );
+  }
+  if (session.status === "unauthenticated") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  const sessionUser = session.user;
 
   const pool = getDbPool();
   if (!pool) {
