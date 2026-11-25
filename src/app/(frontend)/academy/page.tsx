@@ -115,7 +115,7 @@ export default async function AcademyPage({
               </span>
             </div>
 
-            <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 text-[1.9rem] leading-[1.14] font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
               {heroSec?.headline ||
                 pageData?.hero_headline ||
                 "Learn IAM. Practise with purpose. Build capability."}

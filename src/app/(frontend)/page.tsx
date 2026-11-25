@@ -154,7 +154,7 @@ export default async function HomePage({
               </span>
               <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
             </div>
-            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-[2.6rem]">
+            <h2 className="mt-4 text-[1.65rem] leading-[1.2] font-extrabold tracking-tight text-white sm:text-4xl lg:text-[2.6rem]">
               {challengesSec?.title || "Identity processes need clear control."}
             </h2>
             <p className="mt-4 text-base leading-relaxed text-slate-300">
@@ -219,7 +219,7 @@ export default async function HomePage({
                   {advisorySec?.badge || "A Practical, Accountable Approach"}
                 </span>
               </div>
-              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-[#0B1424] sm:text-4xl">
+              <h2 className="mt-4 text-[1.65rem] leading-[1.2] font-extrabold tracking-tight text-[#0B1424] sm:text-4xl">
                 {advisorySec?.headline ||
                   "We begin with the business problem, not software sales."}
               </h2>
@@ -257,7 +257,7 @@ export default async function HomePage({
                 </span>
               </div>
 
-              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-[#0B1424] sm:text-4xl">
+              <h2 className="mt-4 text-[1.65rem] leading-[1.2] font-extrabold tracking-tight text-[#0B1424] sm:text-4xl">
                 {workforceSec?.headline ||
                   "Controls built to operate, govern, and sustain."}
               </h2>
@@ -313,7 +313,7 @@ export default async function HomePage({
                   Six Core Practice Pillars
                 </span>
               </div>
-              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+              <h2 className="mt-4 text-[1.65rem] leading-[1.2] font-extrabold tracking-tight text-white sm:text-4xl">
                 Scoped IAM consulting &amp; implementation support.
               </h2>
               <p className="mt-3 text-base leading-relaxed text-slate-300">
@@ -346,7 +346,7 @@ export default async function HomePage({
               </span>
               <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
             </div>
-            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-[#0B1424] sm:text-4xl">
+            <h2 className="mt-4 text-[1.65rem] leading-[1.2] font-extrabold tracking-tight text-[#0B1424] sm:text-4xl">
               How we engage and deliver clarity.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-slate-600">
@@ -381,7 +381,7 @@ export default async function HomePage({
                 </span>
               </div>
 
-              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
+              <h2 className="mt-4 text-[1.75rem] leading-[1.16] font-extrabold tracking-tight text-white sm:text-5xl">
                 {academySec?.headline || "Build your IAM career with The IAM Lab."}
               </h2>
 
@@ -450,7 +450,7 @@ export default async function HomePage({
             <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
           </div>
 
-          <h2 className="mt-6 text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
+          <h2 className="mt-6 text-[1.75rem] leading-[1.18] font-extrabold tracking-tight text-white sm:text-5xl">
             {closingSec?.headline ||
               "Let’s discuss the identity challenge your organisation is trying to solve."}
           </h2>

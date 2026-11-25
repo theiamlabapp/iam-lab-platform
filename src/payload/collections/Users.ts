@@ -11,9 +11,21 @@ export const Users: CollectionConfig = {
       generateEmailSubject: () => "The IAM Lab — Administrator Password Reset",
       generateEmailHTML: (args) => {
         const token = args?.token || "";
+        const reqHdrs = args?.req?.headers as
+          | { get?: (k: string) => string | null }
+          | undefined;
+        const forwardedHost =
+          reqHdrs?.get?.("x-forwarded-host") || reqHdrs?.get?.("host") || "";
+        const forwardedProto = reqHdrs?.get?.("x-forwarded-proto") || "https";
+        const requestOrigin = forwardedHost
+          ? `${forwardedProto}://${forwardedHost}`
+          : "";
         const baseUrl = (
+          requestOrigin ||
           process.env.NEXT_PUBLIC_SERVER_URL ||
-          (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://www.theiamlab.com")
+          (process.env.VERCEL_URL
+            ? `https://${process.env.VERCEL_URL}`
+            : "https://www.theiamlab.com")
         ).replace(/\/+$/, "");
         const resetUrl = `${baseUrl}/admin/reset/${token}`;
         return `

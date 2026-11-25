@@ -70,7 +70,7 @@ export default async function ContactPage({
               </span>
             </div>
 
-            <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 text-[1.9rem] leading-[1.14] font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
               {heroSec?.headline ||
                 pageData?.hero_headline ||
                 "Let’s discuss your IAM needs."}
@@ -234,19 +234,10 @@ export default async function ContactPage({
               </p>
             </div>
 
-            <div className="flex shrink-0 flex-col gap-2.5 sm:items-end">
+            <div className="flex shrink-0 flex-col gap-2 sm:items-end">
               <span className="font-mono text-xs text-slate-600">
                 {settings.address}
               </span>
-              <a
-                href={`https://maps.google.com/?q=${encodeURIComponent(settings.address)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#0B1424] px-5 py-2.5 text-xs font-bold tracking-wider text-white uppercase transition-colors hover:bg-[#14243B]"
-              >
-                <span>Open in Google Maps</span>
-                <span>&rarr;</span>
-              </a>
             </div>
           </div>
         </div>

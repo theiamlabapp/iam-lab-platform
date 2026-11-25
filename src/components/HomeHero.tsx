@@ -1,15 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
+  ChevronLeft,
+  ChevronRight,
   Compass,
   GraduationCap,
   KeyRound,
   Users,
   Workflow,
+  type LucideIcon,
 } from "lucide-react";
 
 interface HomeHeroProps {
@@ -23,53 +26,56 @@ interface HomeHeroProps {
   ctaSecondaryHref?: string;
 }
 
-const SERVICE_SLIDER_ITEMS = [
+interface HeroServiceCard {
+  id: string;
+  label: string;
+  summary: string;
+  href: string;
+  Icon: LucideIcon;
+}
+
+const HERO_SERVICE_CARDS: HeroServiceCard[] = [
   {
-    num: "01",
+    id: "strategy",
     label: "IAM Strategy & Advisory",
     summary:
-      "Understand identity risks, access gaps, operating processes, and priorities for improvement.",
+      "Assess identity risks, governance maturity, and improvement priorities with a practical roadmap.",
     href: "/services#strategy",
-    ctaLabel: "View Strategy Scope",
     Icon: Compass,
   },
   {
-    num: "02",
+    id: "governance",
     label: "Identity Governance",
     summary:
-      "Improve access requests, approvals, access reviews, role design, and least-privilege oversight.",
+      "Strengthen access requests, approvals, access reviews, role models, and least-privilege oversight.",
     href: "/services#governance",
-    ctaLabel: "View Governance Scope",
     Icon: Users,
   },
   {
-    num: "03",
+    id: "lifecycle",
     label: "Lifecycle Automation",
     summary:
-      "Reduce manual work across joiner, mover, and leaver provisioning and offboarding workflows.",
+      "Streamline joiner, mover, and leaver provisioning across directories and business systems.",
     href: "/services#directory",
-    ctaLabel: "View Lifecycle Scope",
     Icon: Workflow,
   },
   {
-    num: "04",
+    id: "pam",
     label: "Privileged Access (PAM)",
     summary:
-      "Strengthen how users and administrators authenticate and govern sensitive privileged systems.",
+      "Introduce structured privileged access controls, role elevation workflows, and clear accountability.",
     href: "/services#pam",
-    ctaLabel: "View PAM Scope",
     Icon: KeyRound,
   },
   {
-    num: "05",
+    id: "academy",
     label: "IAM Academy",
     summary:
-      "Structured career pathways, hands-on platform practice, and mentorship from Foundation to Leadership.",
+      "Structured career pathways, practical scenario labs, mentorship, and curated IAM resources.",
     href: "/academy",
-    ctaLabel: "Explore IAM Academy",
     Icon: GraduationCap,
   },
-] as const;
+];
 
 export function HomeHero({
   badge,
@@ -81,7 +87,6 @@ export function HomeHero({
   ctaSecondaryLabel,
   ctaSecondaryHref,
 }: HomeHeroProps = {}) {
-  const [activeSlide, setActiveSlide] = useState(0);
   const shouldReduceMotion = useReducedMotion();
 
   const displayBadge =
@@ -97,8 +102,101 @@ export function HomeHero({
   const secondaryLabel = ctaSecondaryLabel || "Explore IAM Academy";
   const secondaryHref = ctaSecondaryHref || "/academy";
 
-  const currentItem = SERVICE_SLIDER_ITEMS[activeSlide] || SERVICE_SLIDER_ITEMS[0];
-  const ActiveIcon = currentItem.Icon;
+  // Smooth continuous auto-scrolling marquee state with pause-on-hover/focus & swipe/drag
+  const trackRef = useRef<HTMLDivElement>(null);
+  const firstSetRef = useRef<HTMLDivElement>(null);
+  const offsetRef = useRef(0);
+  const setWidthRef = useRef(0);
+  const isPausedRef = useRef(false);
+  const dragRef = useRef<{ active: boolean; startX: number; moved: boolean }>({
+    active: false,
+    startX: 0,
+    moved: false,
+  });
+  const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    const measure = () => {
+      if (firstSetRef.current) {
+        setWidthRef.current = firstSetRef.current.scrollWidth;
+      }
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  useEffect(() => {
+    if (shouldReduceMotion) return;
+
+    let rafId = 0;
+    let lastTime = performance.now();
+    const speedPxPerSec = 36;
+
+    const tick = (now: number) => {
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
+
+      const setWidth = setWidthRef.current;
+      if (
+        !isPausedRef.current &&
+        !dragRef.current.active &&
+        setWidth > 0 &&
+        trackRef.current
+      ) {
+        offsetRef.current += speedPxPerSec * dt;
+        if (offsetRef.current >= setWidth) {
+          offsetRef.current -= setWidth;
+        }
+        trackRef.current.style.transform = `translate3d(-${offsetRef.current}px, 0, 0)`;
+      }
+
+      rafId = requestAnimationFrame(tick);
+    };
+
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, [shouldReduceMotion]);
+
+  const applyOffset = (nextOffset: number) => {
+    const setWidth = setWidthRef.current;
+    if (setWidth > 0) {
+      let wrapped = nextOffset % setWidth;
+      if (wrapped < 0) wrapped += setWidth;
+      offsetRef.current = wrapped;
+    } else {
+      offsetRef.current = Math.max(0, nextOffset);
+    }
+    if (trackRef.current) {
+      trackRef.current.style.transform = `translate3d(-${offsetRef.current}px, 0, 0)`;
+    }
+  };
+
+  const stepCarousel = (direction: -1 | 1) => {
+    const stepSize = 336;
+    applyOffset(offsetRef.current + direction * stepSize);
+  };
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (shouldReduceMotion) return;
+    dragRef.current = { active: true, startX: e.clientX, moved: false };
+    setIsDragging(true);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragRef.current.active) return;
+    const dx = e.clientX - dragRef.current.startX;
+    if (Math.abs(dx) > 4) dragRef.current.moved = true;
+    dragRef.current.startX = e.clientX;
+    applyOffset(offsetRef.current - dx);
+  };
+
+  const handlePointerUpOrLeave = () => {
+    if (dragRef.current.active) {
+      dragRef.current.active = false;
+      setIsDragging(false);
+    }
+  };
 
   return (
     <section className="relative overflow-hidden border-b border-white/10 bg-[#0B1424]">
@@ -116,7 +214,7 @@ export function HomeHero({
         <div className="absolute inset-0 bg-gradient-to-t from-[#0B1424] via-transparent to-[#0B1424]/30" />
       </div>
 
-      {/* Subtle animated architectural wireframe meridian arc (right desktop accent) */}
+      {/* Subtle animated architectural wireframe meridian arc */}
       <div
         className="pointer-events-none absolute top-0 right-0 bottom-0 z-0 hidden w-1/2 overflow-hidden opacity-30 lg:block"
         aria-hidden="true"
@@ -150,8 +248,8 @@ export function HomeHero({
         </svg>
       </div>
 
-      {/* Main Content */}
-      <div className="relative z-10 mx-auto max-w-7xl px-5 pt-24 pb-16 sm:px-8 sm:pt-32 sm:pb-20 lg:px-12 lg:pt-36 lg:pb-24">
+      {/* Single Static Hero Content + Automated Service Card Carousel */}
+      <div className="relative z-10 mx-auto max-w-7xl px-5 pt-20 pb-14 sm:px-8 sm:pt-28 sm:pb-16 lg:px-12 lg:pt-32 lg:pb-20">
         <div className="max-w-3xl">
           <motion.div
             initial={shouldReduceMotion ? undefined : { opacity: 0, y: 12 }}
@@ -160,7 +258,7 @@ export function HomeHero({
             className="flex items-center gap-3"
           >
             <span className="h-px w-8 bg-[#D89A43]" aria-hidden="true" />
-            <span className="font-mono text-[11px] font-semibold tracking-[0.22em] text-[#D89A43] uppercase">
+            <span className="font-mono text-[11px] font-semibold tracking-[0.2em] text-[#D89A43] uppercase">
               {displayBadge}
             </span>
           </motion.div>
@@ -169,7 +267,7 @@ export function HomeHero({
             initial={shouldReduceMotion ? undefined : { opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-[3.75rem] lg:leading-[1.08]"
+            className="mt-5 text-[1.9rem] leading-[1.12] font-extrabold tracking-tight text-white sm:text-5xl lg:text-[3.75rem] lg:leading-[1.08]"
           >
             {displayHeadline}
           </motion.h1>
@@ -178,7 +276,7 @@ export function HomeHero({
             initial={shouldReduceMotion ? undefined : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-6 max-w-2xl text-base leading-relaxed text-slate-200 sm:text-lg"
+            className="mt-5 max-w-2xl text-[15px] leading-relaxed text-slate-200 sm:text-lg"
           >
             {displaySubheadline}
           </motion.p>
@@ -187,7 +285,7 @@ export function HomeHero({
             initial={shouldReduceMotion ? undefined : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-10 flex flex-col items-stretch gap-3.5 sm:flex-row sm:flex-nowrap sm:items-center sm:gap-4"
+            className="mt-9 flex flex-col items-stretch gap-3.5 sm:flex-row sm:flex-nowrap sm:items-center sm:gap-4"
           >
             <Link
               href={primaryHref}
@@ -204,97 +302,157 @@ export function HomeHero({
           </motion.div>
         </div>
 
-        {/* Manually Controlled Interactive Numbered Service Slider */}
-        <motion.div
-          initial={shouldReduceMotion ? undefined : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-14 border-t border-white/15 pt-7 lg:mt-18"
-          aria-label="Core Services & Academy Navigator"
+        {/* Continuous Horizontal Moving 5-Card Service Carousel */}
+        <div
+          className="mt-12 border-t border-white/15 pt-7 lg:mt-16"
+          aria-label="Core Services & Academy Carousel"
+          onMouseEnter={() => {
+            isPausedRef.current = true;
+          }}
+          onMouseLeave={() => {
+            isPausedRef.current = false;
+            handlePointerUpOrLeave();
+          }}
+          onFocusCapture={() => {
+            isPausedRef.current = true;
+          }}
+          onBlurCapture={() => {
+            isPausedRef.current = false;
+          }}
         >
-          <div
-            role="tablist"
-            aria-label="Select a capability area"
-            className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5"
-          >
-            {SERVICE_SLIDER_ITEMS.map((item, idx) => {
-              const isSelected = idx === activeSlide;
-              return (
-                <button
-                  key={item.num}
-                  type="button"
-                  role="tab"
-                  aria-selected={isSelected}
-                  aria-controls={`hero-slide-panel-${item.num}`}
-                  onClick={() => setActiveSlide(idx)}
-                  className={`group relative flex items-center gap-2.5 border px-3.5 py-3 text-left transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D89A43] ${
-                    isSelected
-                      ? "border-[#D89A43] bg-[#14243B] shadow-sm"
-                      : "border-white/10 bg-white/[0.02] hover:border-white/25 hover:bg-white/[0.05]"
-                  }`}
-                >
-                  <span
-                    className={`flex h-6 w-6 shrink-0 items-center justify-center font-mono text-[11px] font-bold transition-colors ${
-                      isSelected
-                        ? "bg-[#D89A43] text-[#0B1424]"
-                        : "bg-white/10 text-[#D89A43] group-hover:bg-white/15"
-                    }`}
-                  >
-                    {item.num}
-                  </span>
-                  <span
-                    className={`text-xs font-semibold leading-snug ${
-                      isSelected
-                        ? "text-white"
-                        : "text-slate-300 group-hover:text-white"
-                    }`}
-                  >
-                    {item.label}
-                  </span>
-                </button>
-              );
-            })}
+          <div className="mb-4 flex items-center justify-between gap-4">
+            <span className="font-mono text-[10px] font-bold tracking-[0.22em] text-[#D89A43] uppercase">
+              Practice Areas &amp; Capability
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => stepCarousel(-1)}
+                aria-label="Previous service card"
+                className="inline-flex h-8 w-8 items-center justify-center border border-white/20 bg-white/[0.04] text-white transition-colors hover:border-[#D89A43] hover:text-[#D89A43] focus-visible:outline-2 focus-visible:outline-[#D89A43]"
+              >
+                <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                onClick={() => stepCarousel(1)}
+                aria-label="Next service card"
+                className="inline-flex h-8 w-8 items-center justify-center border border-white/20 bg-white/[0.04] text-white transition-colors hover:border-[#D89A43] hover:text-[#D89A43] focus-visible:outline-2 focus-visible:outline-[#D89A43]"
+              >
+                <ChevronRight className="h-4 w-4" aria-hidden="true" />
+              </button>
+            </div>
           </div>
 
           <div
-            id={`hero-slide-panel-${currentItem.num}`}
-            role="tabpanel"
-            className="mt-3 border border-white/15 bg-[#08101E]/90 px-5 py-4 backdrop-blur-sm sm:px-6 sm:py-5"
+            className={`relative overflow-hidden select-none touch-pan-y ${
+              isDragging ? "cursor-grabbing" : "cursor-grab"
+            }`}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUpOrLeave}
+            onPointerCancel={handlePointerUpOrLeave}
           >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentItem.num}
-                initial={shouldReduceMotion ? undefined : { opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={shouldReduceMotion ? undefined : { opacity: 0, y: -6 }}
-                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center"
-              >
-                <div className="flex items-start gap-3.5">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-[#D89A43]/40 bg-[#14243B] text-[#D89A43]">
-                    <ActiveIcon className="h-4.5 w-4.5" aria-hidden="true" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-white">
-                      {currentItem.label}
-                    </p>
-                    <p className="mt-0.5 max-w-2xl text-xs leading-relaxed text-slate-300 sm:text-sm">
-                      {currentItem.summary}
-                    </p>
-                  </div>
+            {shouldReduceMotion ? (
+              <div className="flex gap-4 overflow-x-auto pb-2">
+                {HERO_SERVICE_CARDS.map((card) => {
+                  const CardIcon = card.Icon;
+                  return (
+                    <Link
+                      key={card.id}
+                      href={card.href}
+                      className="flex min-h-[168px] w-[275px] shrink-0 flex-col justify-between border border-white/15 bg-[#08101E]/85 p-5 transition-colors hover:border-[#D89A43]/70 sm:w-[300px]"
+                    >
+                      <div>
+                        <div className="flex h-9 w-9 items-center justify-center border border-[#D89A43]/40 bg-[#14243B] text-[#D89A43]">
+                          <CardIcon className="h-4 w-4" aria-hidden="true" />
+                        </div>
+                        <h3 className="mt-4 text-sm font-bold text-white">
+                          {card.label}
+                        </h3>
+                        <p className="mt-1.5 text-xs leading-relaxed text-slate-300">
+                          {card.summary}
+                        </p>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            ) : (
+              <div ref={trackRef} className="flex w-max will-change-transform">
+                <div ref={firstSetRef} className="flex shrink-0 gap-4 pr-4">
+                  {HERO_SERVICE_CARDS.map((card) => {
+                    const CardIcon = card.Icon;
+                    return (
+                      <Link
+                        key={`primary-${card.id}`}
+                        href={card.href}
+                        onClick={(e) => {
+                          if (dragRef.current.moved) e.preventDefault();
+                        }}
+                        className="group flex min-h-[172px] w-[272px] shrink-0 flex-col justify-between border border-white/15 bg-[#08101E]/85 p-5 backdrop-blur-sm transition-colors hover:border-[#D89A43]/75 hover:bg-[#14243B]/75 sm:w-[304px] lg:w-[320px]"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex h-9 w-9 items-center justify-center border border-[#D89A43]/40 bg-[#14243B] text-[#D89A43] transition-colors group-hover:bg-[#D89A43] group-hover:text-[#0B1424]">
+                              <CardIcon className="h-4 w-4" aria-hidden="true" />
+                            </div>
+                            <span
+                              className="font-mono text-xs text-slate-500 transition-transform group-hover:translate-x-0.5 group-hover:text-[#D89A43]"
+                              aria-hidden="true"
+                            >
+                              &rarr;
+                            </span>
+                          </div>
+                          <h3 className="mt-4 text-sm font-bold tracking-tight text-white sm:text-[15px]">
+                            {card.label}
+                          </h3>
+                          <p className="mt-1.5 text-xs leading-relaxed text-slate-300">
+                            {card.summary}
+                          </p>
+                        </div>
+                      </Link>
+                    );
+                  })}
                 </div>
 
-                <Link
-                  href={currentItem.href}
-                  className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap border border-[#D89A43]/50 bg-[#14243B] px-4 py-2 text-xs font-bold tracking-wider text-[#D89A43] uppercase transition-colors hover:bg-[#D89A43] hover:text-[#0B1424]"
-                >
-                  <span>{currentItem.ctaLabel}</span>
-                  <span aria-hidden="true">&rarr;</span>
-                </Link>
-              </motion.div>
-            </AnimatePresence>
+                <div className="flex shrink-0 gap-4 pr-4" aria-hidden="true">
+                  {HERO_SERVICE_CARDS.map((card) => {
+                    const CardIcon = card.Icon;
+                    return (
+                      <Link
+                        key={`clone-${card.id}`}
+                        href={card.href}
+                        tabIndex={-1}
+                        onClick={(e) => {
+                          if (dragRef.current.moved) e.preventDefault();
+                        }}
+                        className="group flex min-h-[172px] w-[272px] shrink-0 flex-col justify-between border border-white/15 bg-[#08101E]/85 p-5 backdrop-blur-sm transition-colors hover:border-[#D89A43]/75 hover:bg-[#14243B]/75 sm:w-[304px] lg:w-[320px]"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex h-9 w-9 items-center justify-center border border-[#D89A43]/40 bg-[#14243B] text-[#D89A43] transition-colors group-hover:bg-[#D89A43] group-hover:text-[#0B1424]">
+                              <CardIcon className="h-4 w-4" aria-hidden="true" />
+                            </div>
+                            <span className="font-mono text-xs text-slate-500 transition-transform group-hover:translate-x-0.5 group-hover:text-[#D89A43]">
+                              &rarr;
+                            </span>
+                          </div>
+                          <h3 className="mt-4 text-sm font-bold tracking-tight text-white sm:text-[15px]">
+                            {card.label}
+                          </h3>
+                          <p className="mt-1.5 text-xs leading-relaxed text-slate-300">
+                            {card.summary}
+                          </p>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

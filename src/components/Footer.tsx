@@ -179,11 +179,6 @@ export async function Footer() {
                   Ask About Academy
                 </Link>
               </li>
-              <li>
-                <Link href="/admin/login" className="text-slate-500 transition-colors hover:text-slate-300">
-                  Staff Console
-                </Link>
-              </li>
             </ul>
           </div>
         </div>

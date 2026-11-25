@@ -190,7 +190,7 @@ export default async function AboutPage({
               </span>
             </div>
 
-            <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 text-[1.9rem] leading-[1.14] font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
               {heroSec?.headline ||
                 pageData?.hero_headline ||
                 "Practical consulting and professional IAM development."}
@@ -217,7 +217,7 @@ export default async function AboutPage({
                     Our Mission
                   </span>
                 </div>
-                <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[#0B1424] sm:text-4xl">
+                <h2 className="mt-3 text-[1.65rem] leading-[1.2] font-extrabold tracking-tight text-[#0B1424] sm:text-4xl">
                   Secure access and capable professionals.
                 </h2>
                 <p className="mt-4 text-base leading-relaxed text-slate-700">

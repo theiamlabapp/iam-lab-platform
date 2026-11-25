@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 
 interface FadeInProps {
   children: React.ReactNode;
+  id?: string;
   delay?: number;
   duration?: number;
   className?: string;
@@ -13,6 +14,7 @@ interface FadeInProps {
 
 export function FadeIn({
   children,
+  id,
   delay = 0,
   duration = 0.6,
   className = "",
@@ -21,7 +23,11 @@ export function FadeIn({
   const shouldReduceMotion = useReducedMotion();
 
   if (shouldReduceMotion) {
-    return <div className={className}>{children}</div>;
+    return (
+      <div id={id} className={className}>
+        {children}
+      </div>
+    );
   }
 
   const offset = 22;
@@ -33,6 +39,7 @@ export function FadeIn({
 
   return (
     <motion.div
+      id={id}
       initial={initial}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
       viewport={{ once: true, amount: 0.04 }}
